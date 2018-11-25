@@ -1,0 +1,516 @@
+BSC_CR	3
+i2c_write_byte_data	function: 0x76cb21ac
+stop_script	function: 0x76cb0204
+MAX_I2C_ADDR	127
+i2c_read_word_data	function: 0x76cb2c88
+I2C_M_RECV_LEN	1024
+SET	1
+wave_chain	function: 0x76cae9a0
+wave_tx_stop	function: 0x76caeefc
+PUD_OFF	0
+MAX_CONNECT_ADDRESSES	256
+TIMEOUT	2
+i2c_write_quick	function: 0x76cb1964
+SER_READ_FAILED	-86
+SOCK_WRIT_FAILED	-60
+BAD_PARAM	-81
+MIN_GPIO	0
+MAX_SCRIPT_PARAMS	10
+MIN_MS	10
+FILE_CREATE	8
+serial_close	function: 0x76cb6cac
+BAD_LEVEL	-5
+BAD_USER_GPIO	-2
+notify_begin	function: 0x76caad34
+DISABLE_SOCK_IF	2
+FALLING_EDGE	1
+BSC_FR_TXFF	4
+NOT_HCLK_GPIO	-94
+OUTPUT	1
+WAVE_MODE_ONE_SHOT_SYNC	2
+bb_spi_xfer	function: 0x76cb53b4
+DEFAULT_UPDATE_MASK_PI2B	0x0080480FFFFFFCLL
+BAD_I2C_BUS	-74
+BAD_I2C_SEG	-106
+BAD_SCRIPT	-47
+BSC_MISO	20
+clear_bank_2	function: 0x76cac378
+BAD_WVSP_COMMND	-45
+EITHER_EDGE	2
+WAVE_MAX_CHARS	1200
+get_pigpio_version	function: 0x76cad3a4
+BAD_CHANNEL	-27
+set_bank_1	function: 0x76cac5a8
+TIMER_FAILED	-14
+SPI_OPEN_FAILED	-73
+file_seek	function: 0x76cb96dc
+BAD_SERIAL_BUF	-40
+TOO_MANY_TAGS	-54
+DEFAULT_CLK_PERIPHERAL	1
+BSC_CR_RXE	512
+FILE_WRITE	2
+DEFAULT_DMA_SECONDARY_CHANNEL	6
+WAVE_MODE_REPEAT_SYNC	3
+NTFY_FLAGS_EVENT	128
+MIN_WDOG_TIMEOUT	0
+FROM_END	2
+TOO_MANY_OOL	-68
+I2C_M_TEN	16
+wave_get_max_micros	function: 0x76caf2f8
+DEFAULT_DMA_CHANNEL	14
+custom_2	function: 0x76cb7e48
+FILE_NOT_WOPEN	-134
+BAD_POINTER	-90
+BSC_DEBUG_SPI	15
+BAD_BUF_MILLIS	-20
+BAD_MODE	-4
+BAD_PAD	-126
+MAX_ACTIVE	1000000
+DEFAULT_SOCKET_PORT_STR	8888
+CFG_STATS	512
+HIGH	1
+I2C_COMBINED_ON	2
+wave_delete	function: 0x76cae004
+DUP_TAG	-53
+pigif_bad_recv	-2001
+SPI_SLOTS	32
+i2c_read_byte	function: 0x76cb1f7c
+BB_I2C_MIN_BAUD	50
+NUM_STD_SPI_CHANNEL	2
+TOO_MANY_PARAM	-61
+MAX_SCRIPTS	32
+update_script	function: 0x76cbca90
+CHAIN_NESTING	-118
+read_bank_1	function: 0x76cabea0
+BAD_I2C_ADDR	-75
+BAD_SCRIPT_CMD	-55
+PUD_UP	2
+NOT_I2C_GPIO	-108
+BAD_SER_OFFSET	-49
+BAD_SECO_CHANNEL	-30
+SCRIPT_FAILED	4
+BB_SER_INVERT	1
+WAVE_MODE_REPEAT	1
+BSC_CE_N	21
+NO_FILE_MATCH	-136
+wave_get_max_cbs	function: 0x76cafaf0
+BAD_CLK_MICROS	-19
+FILE_SLOTS	16
+BAD_PULSELEN	-46
+BSC_FR_TXBUSY	1
+MIN_SIGNUM	0
+DEFAULT_IF_FLAGS	0
+wave_tx_at	function: 0x76caec54
+i2c_read_block_data	function: 0x76cbd5e4
+NOT_SPI_GPIO	-142
+bb_i2c_open	function: 0x76cb3fec
+TIME_ABSOLUTE	1
+BSC_RSR	1
+MAX_BUSY_DELAY	100
+I2C_READ	6
+BAD_HCLK_FREQ	-98
+SER_OPEN_FAILED	-72
+ALT5	2
+get_current_tick	function: 0x76cad0fc
+SER_SLOTS	16
+TOO_MANY_PULSES	-36
+read_bank_2	function: 0x76cabff4
+spi_xfer	function: 0x76cb6504
+HW_PWM_RANGE	1000000
+I2C_M_NO_RD_ACK	2048
+hardware_clock	function: 0x76caca08
+INIT_FAILED	-1
+NOT_PWM_GPIO	-92
+BAD_HPWM_DUTY	-97
+MAX_DUTYCYCLE_RANGE	40000
+FILE_IS_A_DIR	-138
+wave_get_high_cbs	function: 0x76caf99c
+CUSTOM_ERR_0	-3000
+BAD_SOCKET_PORT	-28
+NO_HANDLE	-24
+file_write	function: 0x76cb8fbc
+BAD_MICROS	-13
+i2c_read_device	function: 0x76cbd930
+wave_get_high_pulses	function: 0x76caf5a0
+pigif_bad_callback	-2008
+NOT_PERMITTED	-41
+ALT1	5
+SER_READ_NO_DATA	-87
+GPIO_IN_USE	-50
+NO_TX_WAVE	9999
+BAD_SPI_SPEED	-78
+wave_send_repeat	function: 0x76cae464
+BAD_PATHNAME	-23
+pigif_too_many_pis	-2012
+MAX_STEADY	300000
+BAD_STRENGTH	-127
+set_PWM_range	function: 0x76ca99fc
+MAX_PAD_STRENGTH	16
+FILE_TRUNC	16
+ALT3	7
+get_servo_pulsewidth	function: 0x76caa9b0
+file_open	function: 0x76cb8ad8
+BSC_CR_EN	1
+notify_close	function: 0x76cab270
+FIL_OPEN_FAILED	-128
+get_pad_strength	function: 0x76cb8340
+MAX_MILS_DELAY	60000
+BSC_SLV	2
+I2C_WRITE_FAILED	-82
+MIN_WAVE_DATABITS	1
+NOT_SERIAL_GPIO	-38
+MAX_SPI_DEVICE_COUNT	65536
+run_script	function: 0x76cbca04
+FROM_CURRENT	1
+BAD_HANDLE	-25
+BSC_CR_TESTFIFO	2048
+pigif_unconnected_pi	-2011
+wave_send_using_mode	function: 0x76cae694
+BAD_DUTYRANGE	-21
+I2C_ESC	1
+MAX_SIGNUM	63
+BAD_WVSM_COMMND	-44
+BAD_FILTER	-125
+spi_open	function: 0x76cb57cc
+CLEAR	0
+BAD_CHAIN_CMD	-116
+bb_serial_invert	function: 0x76cb1040
+I2C_M_RD	1
+SER_WRITE_FAILED	-85
+BSC_ICR	9
+FROM_START	0
+FILE_RW	3
+CFG_ILLEGAL_VAL	2048
+BSC_DEBUG_I2C	14
+BAD_SER_SPEED	-80
+BSC_IMSC	6
+BAD_EDGE	-122
+SCRIPT_INITING	0
+SPI_MAX_BAUD	125000000
+HPWM_ILLEGAL	-100
+bsc_xfer	function: 0x76cba7ac
+set_watchdog	function: 0x76cab4a0
+i2c_write_device	function: 0x76cb3c5c
+LOCALHOST_SOCK_IF	4
+TOO_MANY_CBS	-67
+stopThread	function: 0x76cbc490
+pigpio_stop	function: 0x76ca8610
+WAVE_MAX_PULSES	12000
+MAX_SOCKET_PORT	32000
+BAD_SER_DEVICE	-79
+BAD_FLAGS	-77
+BSC_FR_TXFE	16
+EVENT_BSC	31
+notify_pause	function: 0x76cab040
+BAD_HPWM_FREQ	-96
+NO_SCRIPT_ROOM	-57
+serial_write	function: 0x76cb7418
+CFG_DBG_LEVEL	0
+BAD_FILE_FLAG	-130
+DEFAULT_CLK_MICROS	5
+store_script	function: 0x76cb002c
+BAD_FOREVER	-124
+BB_I2C_MAX_BAUD	500000
+HW_CLK_MIN_FREQ	4689
+serial_read	function: 0x76cbd4e8
+MIN_SERVO_PULSEWIDTH	500
+gpio_write	function: 0x76ca91b4
+event_callback	function: 0x76cbd344
+BUF_MILLIS_MAX	10000
+wave_create	function: 0x76cadeb0
+set_noise_filter	function: 0x76cabab8
+WAVE_NOT_FOUND	9998
+I2C_START	2
+pigif_bad_getaddrinfo	-2002
+BB_SER_MAX_BAUD	250000
+bb_i2c_close	function: 0x76cb43d4
+SCRIPT_HALTED	1
+pigpio_start	function: 0x76ca843c
+SPI_MIN_BAUD	32000
+BAD_IF_FLAGS	-26
+BAD_FILE_READ	-131
+BAD_STOPBITS	-102
+wave_get_pulses	function: 0x76caf44c
+SCRIPT_RUNNING	2
+MAX_WDOG_TIMEOUT	60000
+BSC_FR	4
+I2C_RDRW_IOCTL_MAX_MSGS	42
+BAD_DUTY_RANGE	-21
+MIN_DUTYCYCLE_RANGE	25
+CMD_INTERRUPTED	-144
+get_PWM_real_range	function: 0x76ca9f38
+bsc_i2c	function: 0x76cbaa60
+MIN_DMA_CHANNEL	0
+set_pull_up_down	function: 0x76ca8c78
+custom_1	function: 0x76cb79d8
+NOT_SERVO_GPIO	-93
+BAD_SERIAL_COUNT	-51
+WAVE_MAX_BAUD	1000000
+BSC_RIS	7
+BAD_GPIO	-3
+file_list	function: 0x76cb9a1c
+HW_CLK_MAX_FREQ	250000000
+TIME_RELATIVE	0
+INITIALISED	-32
+BSC_MIS	8
+BAD_PULSEWIDTH	-7
+CHAIN_COUNTER	-115
+set_PWM_frequency	function: 0x76caa168
+I2C_ADDR	4
+bb_serial_read_open	function: 0x76cb0664
+wave_send_once	function: 0x76cae234
+get_PWM_range	function: 0x76ca9d08
+CHAIN_TOO_BIG	-119
+i2c_close	function: 0x76cb1734
+callback	function: 0x76cbd0dc
+ALT0	4
+I2C_END	0
+startThread	function: 0x76cbc0f0
+pigif_bad_connect	-2003
+MAX_SERVO_PULSEWIDTH	2500
+i2c_read_byte_data	function: 0x76cb297c
+spi_read	function: 0x76cb5de4
+pigif_bad_socket	-2004
+BAD_FILE_WRITE	-132
+get_hardware_revision	function: 0x76cad250
+OFF	0
+BAD_CHAIN_DELAY	-117
+MAX_WAVES	250
+DISABLE_FIFO_IF	1
+WAVE_COUNT_PAGES	10
+BAD_FILE_SEEK	-135
+bb_spi_open	function: 0x76cb4afc
+i2c_zip	function: 0x76cbda2c
+NO_FILE_ACCESS	-137
+PIGIF_ERR_99	-2099
+BAD_I2C_CMD	-111
+BAD_WAVE_BAUD	-35
+BSC_SCL_SCLK	19
+NO_WAVEFORM_ID	-70
+SCRIPT_WAITING	3
+CFG_NOSIGHANDLER	1024
+get_PWM_dutycycle	function: 0x76ca97cc
+wave_get_micros	function: 0x76caf050
+set_PWM_dutycycle	function: 0x76ca94c0
+BSC_DR	0
+BSC_TDR	11
+MAX_SCRIPT_VARS	150
+gpio_read	function: 0x76ca8f84
+sleep	function: 0x76ca8100
+MSG_TOOBIG	-103
+MAX_WAVE_HALFSTOPBITS	8
+i2c_write_word_data	function: 0x76cb2594
+BAD_SPI_CHANNEL	-76
+event_callback_cancel	function: 0x76cbb1e0
+serial_write_byte	function: 0x76cb6edc
+I2C_M_IGNORE_NAK	4096
+BSC_CR_TXE	256
+DEFAULT_CFG_INTERNALS	0
+INPUT	0
+DEFAULT_SOCKET_PORT	8888
+NO_MEMORY	-58
+PIGPIOD_IF2_VERSION	13
+BAD_MICS_DELAY	-64
+i2c_write_block_data	function: 0x76cb337c
+I2C_M_NOSTART	16384
+CLOCK_PCM	1
+MIN_TIMER	0
+MIN_PAD_STRENGTH	1
+BAD_SCRIPT_ID	-48
+DEFAULT_UPDATE_MASK_COMPUTE	0x00FFFFFFFFFFFFLL
+MAX_USER_GPIO	31
+DEFAULT_UPDATE_MASK_APLUS_BPLUS	0x0080480FFFFFFCLL
+BSC_CR_I2C	4
+hardware_PWM	function: 0x76cacd14
+NTFY_FLAGS_ALIVE	64
+BSC_CR_SPI	2
+I2C_FLAGS	5
+delete_script	function: 0x76cb0434
+set_bank_2	function: 0x76cac7d8
+pigif_notify_failed	-2009
+NOT_HPWM_GPIO	-95
+EMPTY_WAVEFORM	-69
+DEFAULT_MEM_ALLOC_MODE	0
+busyWait	function: 0x1452dd8
+wait	function: 0x144d6c0
+spi_write	function: 0x76cb6174
+wait_for_event	function: 0x76cbb388
+BAD_FILE_MODE	-129
+BAD_VAR_NUM	-56
+event_callback_ex	function: 0x76cbad9c
+BAD_WDOG_TIMEOUT	-15
+BAD_PARAM_NUM	-52
+callback_cancel	function: 0x76cba27c
+MAX_WAVE_CYCLES	65535
+callback_ex	function: 0x76cb9d54
+DEFAULT_BUFFER_MILLIS	120
+pigif_bad_noib	-2005
+i2c_open	function: 0x76cb134c
+file_read	function: 0x76cb934c
+BSC_CR_CPOL	16
+BAD_ISR_INIT	-123
+MAX_WAVE_DELAY	65535
+BAD_CHAIN_LOOP	-114
+I2C_COMBINED_OFF	3
+shell_	function: 0x76cb887c
+TOO_MANY_SEGS	-105
+set_pad_strength	function: 0x76cb8570
+serial_data_available	function: 0x76cb77a8
+wave_add_generic	function: 0x76cbc5e4
+MEM_ALLOC_PAGEMAP	1
+BAD_PRIM_CHANNEL	-27
+serial_read_byte	function: 0x76cb71e8
+serial_open	function: 0x76cb691c
+DEFAULT_SOCKET_ADDR_STR	127.0.0.1
+event_trigger	function: 0x76cbb634
+BAD_HCLK_PASS	-99
+MIN_WAVE_HALFSTOPBITS	2
+BAD_I2C_WLEN	-109
+spi_close	function: 0x76cb5bb4
+BUF_MILLIS_MIN	100
+BSC_FR_RXBUSY	32
+DEPRECATED	-120
+bb_spi_close	function: 0x76cb5184
+wave_get_high_micros	function: 0x76caf1a4
+WAVE_MIN_BAUD	50
+bb_i2c_zip	function: 0x76cb4604
+BSC_SDA_MOSI	18
+script_status	function: 0x76cbcb1c
+pigif_callback_not_found	-2010
+BAD_SECONDS	-12
+TOO_MANY_CHARS	-37
+i2c_write_i2c_block_data	function: 0x76cb37ec
+BAD_TIMER	-9
+MAX_DMA_CHANNEL	14
+RISING_EDGE	0
+MIN_SOCKET_PORT	1024
+BAD_SPI_COUNT	-84
+BAD_WVSC_COMMND	-43
+BAD_SCRIPT_NAME	-140
+BB_SER_NORMAL	0
+wave_add_new	function: 0x76cad64c
+MAX_PAD	2
+open	function: 0x1465cb8
+i2c_write_byte	function: 0x76cb1c70
+BAD_MS	-10
+BSC_HCTRL	13
+bb_serial_read_close	function: 0x76cb0e10
+bb_serial_read	function: 0x76cb0a4c
+BAD_DUTYCYCLE	-8
+BAD_SPI_BAUD	-141
+file_close	function: 0x76cb8d8c
+gpio_trigger	function: 0x76cafc44
+BAD_SMBUS_CMD	-107
+pigif_duplicate_callback	-2006
+MEM_ALLOC_AUTO	0
+BAD_FIFO_COMMAND	-29
+wave_get_cbs	function: 0x76caf848
+wave_get_max_pulses	function: 0x76caf6f4
+get_PWM_frequency	function: 0x76caa474
+wave_tx_busy	function: 0x76caeda8
+BSC_CR_BRK	128
+UNKNOWN_COMMAND	-88
+CUSTOM_ERR_999	-3999
+I2C_M_WR	0
+ON	1
+FILE_MAX	31
+time	function: 0x76ca8040
+CFG_ALERT_FREQ	4
+notify_open	function: 0x76caabe0
+wave_add_serial	function: 0x76cad7a0
+MAX_SCRIPT_TAGS	50
+BB_SPI_MAX_BAUD	250000
+FILE_READ	1
+SOME_PERMITTED	-42
+BSC_FR_RXFE	2
+NUM_AUX_SPI_CHANNEL	3
+FILE_APPEND	4
+WAVE_MAX_MICROS	1800000000
+DEFAULT_FOREGROUND	0
+PIGIF_ERR_0	-2000
+BAD_WAVE_ID	-66
+BAD_SHELL_STATUS	-139
+HW_PWM_MIN_FREQ	1
+clear_bank_1	function: 0x76cac148
+SPI_XFER_FAILED	-89
+DEFAULT_UPDATE_MASK_UNKNOWN	0x0000000FFFFFFCLL
+set_glitch_filter	function: 0x76cab7ac
+MEM_ALLOC_MAILBOX	2
+BAD_SERIAL_STRUC	-39
+set_servo_pulsewidth	function: 0x76caa6a4
+MAX_WAVE_DATABITS	32
+NTFY_FLAGS_WDOG	32
+wait_for_edge	function: 0x76cba424
+I2C_READ_FAILED	-83
+BAD_MALLOC_MODE	-104
+BAD_PUD	-6
+MAX_I2C_DEVICE_COUNT	65536
+set_mode	function: 0x76ca873c
+WAVE_BLOCKS	4
+FILE_NONE	0
+get_mode	function: 0x76ca8a48
+DEFAULT_UPDATE_MASK_ZERO	0x0080000FFFFFFCLL
+BSC_CR_CPHA	8
+SOCK_READ_FAILED	-59
+LOW	0
+ifVersion	function: 0x76ca8370
+perror	function: 0x76ca8220
+NOT_HALTED	-62
+BAD_SIGNUM	-22
+i2c_read_i2c_block_data	function: 0x76cbd818
+PUD_DOWN	1
+i2c_block_process_call	function: 0x76cbd6d8
+NOTIFY_SLOTS	32
+DEFAULT_UPDATE_MASK_PI3B	0x0000000FFFFFFCLL
+BAD_CLK_SOURCE	-18
+WAVE_MODE_ONE_SHOT	0
+FILE_MIN	1
+ALT2	6
+BSC_GPUSTAT	12
+BAD_I2C_BAUD	-112
+MAX_EVENT	31
+DEFAULT_UPDATE_MASK_B1	65523603
+DEFAULT_DMA_PRIMARY_CHANNEL	14
+BAD_SER_INVERT	-121
+MAX_MICS_DELAY	1000000
+CFG_RT_PRIORITY	256
+NO_ALERT_FUNC	-16
+FILE_NOT_ROPEN	-133
+NOT_INITIALISED	-31
+MAX_TIMER	9
+BAD_DATABITS	-101
+BAD_CLK_PERIPH	-17
+DISABLE_ALERT	8
+pigif_bad_malloc	-2007
+ALT4	3
+BAD_TAG	-63
+MAX_MS	60000
+wave_clear	function: 0x76cad4f8
+BAD_I2C_RLEN	-110
+DEFAULT_UPDATE_MASK_A_B2	-70791268
+MAX_GPIO	53
+DEFAULT_DUTYCYCLE_RANGE	255
+i2c_process_call	function: 0x76cb2f94
+HW_PWM_MAX_FREQ	125000000
+I2C_STOP	3
+BAD_EVENT_ID	-143
+I2C_SLOTS	64
+I2C_WRITE	7
+BAD_MILS_DELAY	-65
+NO_AUX_SPI	-91
+SERVO_OFF	0
+BSC_FR_RXFF	8
+BSC_DMACR	10
+pigif_bad_send	-2000
+SCRIPT_NOT_READY	-62
+I2C_M_REV_DIR_ADDR	8192
+BSC_IFLS	5
+PIGPIO_VERSION	67
+BAD_WAVE_MODE	-33
+CHAIN_LOOP_CNT	-113
+BB_SPI_MIN_BAUD	50
+I2C_OPEN_FAILED	-71
+CLOCK_PWM	0
+BAD_CFG_INTERNAL	-34
+BB_SER_MIN_BAUD	50
+BAD_TIMETYPE	-11
