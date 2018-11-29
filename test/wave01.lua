@@ -16,9 +16,7 @@ local pinp, pout = 20, 21
 local x = 1
 local last_tick
 local cbcnt = 1
----
---Alert callback.
----
+
 ---
 --Alert callback.
 ---
@@ -27,8 +25,8 @@ local function alert(pi, pin, level, tick)
    local tsnd = tick
    local tdel = trcv - tsnd
    local tper = tick - last_tick
-   printf("ALERT callback %d: tsnd=%d us, trcv=%d us, tdel=%d us, tper=%d us, gpio=%d (ok=%s), level=%d gc=%.1f (%d)",
-          cbcnt, tsnd, trcv, tdel, tper, pin, tostring(pin==pinp), level, collectgarbage("count"))
+   printf("ALERT callback %d: tsnd=%d us, trcv=%d us, tdel=%d us, tper=%d us, gpio=%d (ok=%s), level=%d wave=%s gc=%.1f (%d)",
+          cbcnt, tsnd, trcv, tdel, tper, pin, tostring(pin==pinp), level, pi:waveTxAt(), collectgarbage("count"))
    if level == last_level then
       printf("   NOTE: level change not detected - input frequency probably too high!")
    end
@@ -77,9 +75,9 @@ local waveform = {
 --sess:waveAddGeneric(waveform[1])
 --sess:waveAddGeneric(waveform[2])
 --local wave = sess:waveCreate()
-local wave, npuls = sess:waveOpen(waveform, "mywave")
+local wave = sess:waveOpen(waveform, "mywave")
 printf("   wave id:        %d", wave.handle)
-printf("   wave pulses:    %d", npuls)
+printf("   wave pulses:    %d", wave.npulses)
 printf("   wave name:      %q", wave.name)
 printf("   wave length:    %d us", sess:waveGetMicros())
 printf("   wave hi length: %d us", sess:waveGetHighMicros())
@@ -104,8 +102,8 @@ while sess:waveTxBusy() == 1 do
       break
    end
 end
-printf("Delete waveform ...")
-wave:delete()
+printf("Closing  waveform ...")
+wave:close()
 
 printf("Try to start deleted waveform ...")
 local res, err = wave:sendRepeat()

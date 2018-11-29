@@ -28,7 +28,11 @@ $(WRAPPER:.c=.o): $(WRAPPER)
 $(WRAPPER): $(IFILE) $(HFILE)
 	swig -I$(SWIG_IDIR) -lua $(IFILE)
 
-doc:
+doc::
+	ldoc $(MODULE).lua
+
+doc-clean::
+	rm -rf doc
 
 clean:
 	rm -f $(TARGET) $(WOBJS)

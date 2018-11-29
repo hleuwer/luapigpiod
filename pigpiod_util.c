@@ -256,7 +256,7 @@ int utlWaveAddGeneric(lua_State *L)
 }
 
 /*
- * Translate parameters given as list into uint32_t array.
+ * Translate parameters given as Lua list into uint32_t array.
  */
 static uint32_t *get_params(lua_State *L, int arg, int *nparam)
 {

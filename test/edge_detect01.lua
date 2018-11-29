@@ -59,7 +59,7 @@ printf("  callback ID: %d", cb.id)
 last_tick = sess:tick()
 printf("  tick: %d", last_tick)
 for i = 1, N/2 do
-   print("set 1")
+--   print("set 1")
    if bitmode == "yes" then
       assert(sess:write(pout, 1))
    else
@@ -67,13 +67,13 @@ for i = 1, N/2 do
    end
    wait(ton/1000)
    --   gpio.delay(ton*1000)
-   print("set 0")
+--   print("set 0")
    if bitmode == "yes" then
       assert(sess:write(pout, 0))
    else
       assert(sess:clearBank0(bit32.lshift(1, pout)))
    end
-   print("waiting ...", toff)
+--   print("waiting ...", toff)
    wait(toff/1000)
 --   gpio.delay(toff*1000)
 --   collectgarbage("collect")
