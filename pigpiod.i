@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "pigpiod_if2.h"
 #include "pigpiod_util.h"
+  struct eventstat *get_event_statistics(void);
+  int clear_event_statistics(void);
 %}
 %include <stdint.i>
 %include <typemaps.i>
@@ -37,3 +39,10 @@
 // Headers to parse
 %include /usr/local/include/pigpiod_if2.h
 %include pigpio_const.h
+struct eventstat {
+  unsigned long maxcount;
+  unsigned long drop;
+};
+%newobject getEventStatistics;
+struct eventstat *get_event_statistics(void);
+int clear_event_statistics(void);

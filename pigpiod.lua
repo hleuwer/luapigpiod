@@ -736,10 +736,22 @@ classSession.notifyOpen = function(self)
    return notify
 end
 
+---
+-- Set watchdog for the specified pin.
+-- @param self Session.
+-- @param pin GPIO number.
+-- @param timeout Timeout in milliseconds.
+-- @return true on success, nil + errormsg on failure.
 classSession.setWatchdog = function(self, pin, timeout)
    return tryB(set_watchdog(self.handle, pin, timeout))
 end
 
+---
+-- Set glitch filter for given pin.
+-- @param self Session.
+-- @param pin GPIO number.
+-- @param steady Minimum time of stable level in order to report state change.
+-- @return true on success, nil + errormsg on failure.
 classSession.setGlitchFilter = function(self, pin, steady)
    return tryB(set_glitch_filter(self.handle, pin, steady))
 end
@@ -1193,30 +1205,56 @@ end
 -- blocking calls to gpio.sleep(ts) with ts = 1 ms by default.
 -- @param t time to sleep in seconds.
 -- @param ts time step to use - optional.
--- @return none
+-- @return true
 function wait(t, ts)
    local ts = (ts or tsleep)
    local n = t / ts
    for i = 1, n do
       sleep(ts)
    end
+   return true
 end
 
 ---
 -- Busy wait for a while.
 -- @param t time to sleep in seconds.
--- @return none.
----
+-- @return true.
 function busyWait(t)
    local n = t * 3 * 1e7
    for i = 1, n do
    end
+   return true
 end
 
 ---
 -- Returns info string.
+-- @param none.
+-- @return Info string.
 function info()
    return infostring
+end
+
+---
+-- Get event handling statistics in the form.
+-- <code>{drop = DROP, maxcount = MAXCOUNT}</code>
+-- The function captures a snapshot.
+-- @param none.
+-- @return Event statics on success, nil + errormsg on failure
+function getEventStats()
+   local ustat = get_event_statistics()
+   local t = {
+      drop = ustat.drop,
+      maxcount = ustat.maxcount
+   }
+   return t
+end
+
+---
+-- Clear event statistics.
+-- @param none.
+-- @return true on success, nil + errormsg on failure.
+function clearEventStats()
+   return tryB(clear_event_statistics())
 end
 
 return _ENV

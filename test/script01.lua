@@ -18,7 +18,7 @@ local last_tick
 local last_level = -1
 
 ---
--- Alert callback.
+--Alert callback.
 ---
 local function alert(pi, pin, level, tick)
    local trcv = pi:tick()
@@ -47,10 +47,14 @@ sess:setMode(pout, gpio.OUTPUT)
 local N = util.getNumber("Number of transitions: ", 10)
 local ton = util.getNumber("T_on [ms]: ", 10)
 local toff = util.getNumber("T_off [ms] ", 10)
-local bitmode = util.getString("Bit mode (yes/no): ", "yes")
 printf("T_on: %d", ton)
 printf("T_off: %d", toff)
-printf("Bitmode: %s", bitmode)
+
+printf("open and store script ...")
+local script, err = assert(sess:scriptOpen("tag 999 w 21 1 mils ".. ton .." w 21 0 mils " ..toff .. " dcr p0 jp 999"), err)
+printf("  handle: %d", script.handle)
+
+printf("  script status: %q", script:status())
 
 printf("set alert func ...")
 
@@ -58,41 +62,35 @@ local cb, err = assert(sess:callback(pinp, gpio.EITHER_EDGE, alert))
 printf("  callback ID: %d", cb.id)
 last_tick = sess:tick()
 printf("  tick: %d", last_tick)
-for i = 1, N/2 do
---   print("set 1")
-   if bitmode == "yes" then
-      assert(sess:write(pout, 1))
-   else
-      assert(sess:setBank1(bit32.lshift(1,pout)))
+
+printf("run script ...")
+local res, err = script:run({N/2})
+printf("  res: %s", tostring(res))
+
+local stat, param = script:status()
+printf("  script status: %q", stat)
+while stat == "running" do
+   stat = script:status()
+   if stat == "waiting" then
+      printf("  script status: %q", stat)
    end
-   wait(ton/1000)
-   --   gpio.delay(ton*1000)
---   print("set 0")
-   if bitmode == "yes" then
-      assert(sess:write(pout, 0))
-   else
-      assert(sess:clearBank0(bit32.lshift(1, pout)))
-   end
---   print("waiting ...", toff)
-   wait(toff/1000)
---   gpio.delay(toff*1000)
---   collectgarbage("collect")
 end
 
-printf("wait a second ...")
-gpio.wait(1)
+--printf("wait a second ...")
+--gpio.wait(1)
+
+printf("  stop script ...")
+script:stop()
+printf("  script status: %q", script:status())
+
+printf("cleanup ...")
+printf("  delete script ...")
+script:delete()
 
 printf("Capture event stats ...")
 local stat, err = gpio.getEventStats()
 printf("  drop: %d events", stat.drop)
 printf("  maxcount: %d events in queue", stat.maxcount)
 
-printf("Clear event stats and read again ...")
-local stat, err = gpio.clearEventStats()
-local stat, err = gpio.getEventStats()
-printf("  drop: %d events", stat.drop)
-printf("  maxcount: %d events in queue", stat.maxcount)
-
-
-print("cleanup ...")
+printf("  pin cleanup ...")
 sess:setMode(pout, gpio.INPUT)

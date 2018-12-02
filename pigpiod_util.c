@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 //#define DEBUG
 #if DEBUG == 1
@@ -21,8 +22,11 @@
 #define dprintf2(...)
 #endif
 
+#if DEBUG1 == 1
 #define eprintf(...) fprintf(stderr, __VA_ARGS__)
-
+#else
+#define eprintf(...)
+#endif
 /*
  * Forward declaration.
  */
@@ -41,6 +45,8 @@ static lua_Hook oldhook = NULL;
 static int oldmask = 0;
 static int oldcount = 0;
 static anchor_t anchor = {NULL, NULL, 0, LIMIT_EVENT_QUEUE};
+static eventstat_t eventstat = {0, 0};
+pthread_mutex_t eventmutex = PTHREAD_MUTEX_INITIALIZER;
 
 /*
  * Process gpio argument.
@@ -416,6 +422,7 @@ static void handler(lua_State *L, lua_Debug *ar)
  */
 static int enqueue(anchor_t* anchor, event_t* event)
 {
+  pthread_mutex_lock(&eventmutex);
   if (anchor->count < anchor->limit){
     if (anchor->count++ == 0)
       /* list empty: event becomes first in queue */
@@ -425,11 +432,15 @@ static int enqueue(anchor_t* anchor, event_t* event)
       anchor->last->next = event;
       anchor->last = event;
     }
-    dprintf2("eq: %d\n", anchor->count);
+    if (anchor->count > eventstat.maxcount)
+      eventstat.maxcount = anchor->count;
+    dprintf2("eq: cnt=%d max=%d\n", anchor->count, eventstat.maxcount);
+    pthread_mutex_unlock(&eventmutex);
     return 0;
   } else {
-    anchor->drop++;
-    eprintf("Warning: event drop at %d.\n", anchor->count);
+    eventstat.drop++;
+    eprintf("Warning: event drop=%lu at count=%d.\n", eventstat.drop, anchor->count);
+    pthread_mutex_unlock(&eventmutex);
     return -1;
   }  
 }
@@ -440,13 +451,16 @@ static int enqueue(anchor_t* anchor, event_t* event)
 static event_t* dequeue(anchor_t* anchor)
 {
   event_t* current;
+  pthread_mutex_lock(&eventmutex);
   if (anchor->count-- == 0){
     anchor->count = 0;
+    pthread_mutex_unlock(&eventmutex);
     return NULL;
   }
   current = anchor->first;
   anchor->first = current->next;
   dprintf2("dq: %d\n", anchor->count);
+  pthread_mutex_unlock(&eventmutex);
   return current;
 }
 
@@ -699,5 +713,19 @@ int utlI2CZip(lua_State *L)
   luaL_addlstring(&lbuf, cbuf, nbytes);
   free(cbuf);
   luaL_pushresult(&lbuf);
+  return 1;
+}
+
+struct eventstat *get_event_statistics(void)
+{
+  struct eventstat *stat = malloc(sizeof(struct eventstat));
+  *stat = eventstat;
+  return stat;
+}
+
+int clear_event_statistics(void)
+{
+  eventstat.drop = 0;
+  eventstat.maxcount = 0;
   return 1;
 }

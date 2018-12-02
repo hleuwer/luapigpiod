@@ -45,6 +45,7 @@ printf("set pout to output ...")
 sess:setMode(pout, gpio.OUTPUT)
 
 local N = util.getNumber("Number of transitions: ", 10)
+local tglitch = util.getNumber("T_glitch [ms]: ", 5)
 local ton = util.getNumber("T_on [ms]: ", 10)
 local toff = util.getNumber("T_off [ms] ", 10)
 local bitmode = util.getString("Bit mode (yes/no): ", "yes")
@@ -53,9 +54,12 @@ printf("T_off: %d", toff)
 printf("Bitmode: %s", bitmode)
 
 printf("set alert func ...")
-
 local cb, err = assert(sess:callback(pinp, gpio.EITHER_EDGE, alert))
 printf("  callback ID: %d", cb.id)
+
+printf("set glitch filter ...")
+assert(sess:setGlitchFilter(pinp, tglitch*1000))
+
 last_tick = sess:tick()
 printf("  tick: %d", last_tick)
 for i = 1, N/2 do

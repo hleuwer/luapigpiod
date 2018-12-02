@@ -72,5 +72,10 @@ sess:hardwarePwm(pout, freq, dutymax * 0.01)
 gpio.wait(wait/1000)
 sess:setMode(pout, gpio.INPUT)
 
+printf("Capture event stats ...")
+local stat, err = gpio.getEventStats()
+printf("  drop: %d events", stat.drop)
+printf("  maxcount: %d events in queue", stat.maxcount)
+
 print("cleanup ...")
 sess:setMode(pout, gpio.INPUT)

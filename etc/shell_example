@@ -1,0 +1,1 @@
+echo `date` "-" "Hello World!" "-" $1 |tee  /tmp/shell_example_log

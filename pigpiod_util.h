@@ -6,6 +6,7 @@
 #include "pigpiod_if2.h"
 
 #define DEBUG (0)
+#define DEBUG1 (0)
 #define DEBUG2 (0)
 
 #define TRUE (1)
@@ -80,6 +81,12 @@ struct anchor {
   unsigned long drop;
 };
 typedef struct anchor anchor_t;
+
+struct eventstat {
+  unsigned long maxcount;
+  unsigned long drop;
+};
+typedef struct eventstat eventstat_t;
 
 
 int utlStartThread(lua_State *L);
