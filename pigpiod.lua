@@ -14,6 +14,7 @@
 
 local gpio = require "pigpiod.core"
 
+-- some optimizations
 local strbyte = string.byte
 
 ---
@@ -35,6 +36,8 @@ local scriptStati = {
    [gpio.SCRIPT_FAILED] = "failed"
 }
 
+--
+-- Pinnings of various Raspberry Pi models.
 local pinnings = {
    [1] = [[
 * Type 1 - Model B (original model)
@@ -115,6 +118,8 @@ miso 	19 	35 	36 	16 	ce2
 Ground 	- 	39 	40 	21 	sclk]]
 }
 
+---
+-- Info string showing special pin functions.
 local infostring = [[
 Raspberry Pi 3 GPIO information:
 ===================================================================================================
@@ -133,10 +138,7 @@ Raspberry Pi 3 GPIO information:
    
 _ENV = setmetatable(gpio, {__index = _G})
 
-tsleep = 0.001
-sec = 1e6
-msec = 1000
-us = 1
+local tsleep = 0.001
 
 --------------------------------------------------------------------------------
 -- Check result and return true upon success.
@@ -162,6 +164,21 @@ local function tryV(retval)
       return nil, perror(retval), retval
    end
    return retval
+end
+
+---
+-- Convert a notification sample given in binary coded form in a Lua string
+-- into a table.
+-- @param s Encoded notification sample.
+-- @return Decoded notification sample as Lua table of form
+-- <code>{seqno=SEGNO, flags=FLAGS, tick=TICK, level=LEVEL}</code>
+local function decodeNotificationSample(s)
+   local t = {}
+   t.seqno = strbyte(s,2) * 256 + strbyte(s,1)
+   t.flags = strbyte(s,4) * 256 + strbyte(s,3)
+   t.tick = strbyte(s,8) * 0x1000000 + strbyte(s,7) * 0x10000 + strbyte(s,6) * 0x100 + strbyte(s,5)
+   t.level = strbyte(s,12) * 0x1000000 + strbyte(s,11) * 0x10000 + strbyte(s,10) * 0x100 + strbyte(s,9)
+   return t
 end
 
 ---
@@ -307,6 +324,47 @@ local classEventCallback = {}
 -- @return true on success, nil + errormsg on failure.
 function classEventCallback.cancel(self)
    return tryB(event_callback_cancel(self.id))
+end
+
+--------------------------------------------------------------------------------
+-- Notifications.
+-- @type classNotify.
+--------------------------------------------------------------------------------
+local classNotify = {}
+---
+-- Start notification operation.
+-- @param self Notification channel.
+-- @param bits Bitmask defining the GPIOs to monitor.
+-- @return true on success, nil + errormsg on failure.
+classNotify.begin = function(self, bits)
+   return tryB(notify_begin(self.pihandle, self.handle, bits))
+end
+
+---
+-- Pause notification monitoring.
+-- @param self Notification channel.
+-- @return true on success, nil + errormsg on failure.
+classNotify.pause = function(self)
+   return tryB(notify_pause(self.pihandle, self.handle))
+end
+
+---
+-- Convert a notification sample given in binary coded form in a Lua string
+-- into a table.
+-- @param self Notification channel.
+-- @param s Encoded notification sample.
+-- @return Decoded notification sample as Lua table of form
+-- <code>{seqno=SEGNO, flags=FLAGS, tick=TICK, level=LEVEL}</code>
+classNotify.decode = function(self, s)
+   return decodeNotificationSample(s)
+end
+
+---
+-- Close notification channel.
+-- @param self Notification channel.
+-- @return true on success, nil + errormsg on failure.
+classNotify.close = function(self)
+   return tryB(notify_close(self.pihandle, self.handle))
 end
 
 --------------------------------------------------------------------------------
@@ -518,10 +576,7 @@ local classSession = {}
 -- @param self Session.
 -- @return true on success, nil + errormsg on error.
 classSession.close = function(self)
-   local res, err = tryB(pigpio_stop(self.handle))
-   if not res then
-      return nil, err
-   end
+   pigpio_stop(self.handle)
    _G._PIGPIOD_SESSIONS[self.handle] = nil
    self.handle = nil
    return true
@@ -666,32 +721,19 @@ end
 -- @param self Session.
 -- @return Notifcation channel handle.
 classSession.notifyOpen = function(self)
-   return tryV(notify_open(self.handle))
-end
-
----
--- Start notification operation.
--- @param self Session.
--- @param handle Handle of notification channel.
--- @param bits Bitmask defining the GPIOs to monitor.
--- @return true on success, nil + errormsg on failure.
-classSession.notifyBegin = function(self, handle, bits)
-   return tryB(notify_begin(self.handle, handle, bits))
-end
-
----
--- Pause notification monitoring.
--- @param self Session.
--- @param handle Handle of notification channel.
--- @return true on success, nil + errormsg on failure.
-classSession.notifyPause = function(self, handle)
-   return tryB(notify_pause(self.handle, handle))
-end
-
----
---
-classSession.notifyClose = function(self, handle)
-   return tryB(notify_close(self.handle, handle))
+   local notify = {}
+   notify.handle = notify_open(self.handle)
+   notify.pihandle = self.handle
+   if notify.handle < 0  then
+      return nil, perror(notify.handle), notify.handle
+   end
+   setmetatable(notify, {
+                   __index = classNotify,
+                   __gc = function(self) self:close() end
+   })
+   notify.filename = "/dev/pigpio"..notify.handle
+   notify.decode = decodeNotificationSample
+   return notify
 end
 
 classSession.setWatchdog = function(self, pin, timeout)
@@ -792,15 +834,15 @@ end
 -- @param self Session.
 -- @param waveform List of waveforms in the following format:
 -- <ul>
--- <li>{typ, WF1, WF2, ..., WFn}.
+-- <li><code>{typ, WF1, WF2, ..., WFn}</code>.
 -- <li>typ is either 'generic' or 'serial'.
 -- <li>WFi is a table in one of the following formats:
 -- <ul>
--- <li>generic: {on=PINMASK, off=PINMASK, delay=TIME_in_us}.
--- <li>serial: {baud=BAUDRATE, nbits=NBITS, stopbits=STOPBITS, timeoffs=TIME_in_us, STRING}.
+-- <li>generic: <code>{on=PINMASK, off=PINMASK, delay=TIME_in_us}</code>.
+-- <li>serial: <code>{baud=BAUDRATE, nbits=NBITS, stopbits=STOPBITS, timeoffs=TIME_in_us, STRING}</code>.
 -- </ul></ul>
 -- @param name Name of the waveform (optional).
--- @return wave object handle.
+-- @return Wave objec on success; nil + errormsg on failure.
 classSession.waveOpen = function(self, waveform, name)
    local wave = {}
    local npulses = 0
@@ -831,24 +873,6 @@ classSession.waveOpen = function(self, waveform, name)
    _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
    return wave
 end
-
---[[
-classSession.waveCreate = function(self, name)
-   local wave = {}
-   wave.handle = wave_create(self.handle)
-   wave.name = name or ("wave-"..wave.handle)
-   wave.pihandle = self.handle
-   if wave.handle < 0 then
-      return nil, perror(wave.handle), wave.handle
-   end
-   setmetatable(wave, {
-                   __index = classWave,
-                   __gc = function(self) self:delete() end
-   })
-   _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
-   return wave
-end
-]]
 
 ---
 -- Clear all waveforms.
@@ -972,6 +996,13 @@ classSession.trigger = function(self, pin, pulselen, level)
    return tryB(gpio_trigger(self.handle, pin, pulselen, level)) 
 end
 
+---
+-- Open a gpiod script.
+-- See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a> for details
+-- on gpiod scripting.
+-- @param self Session.
+-- @param code Scipt code.
+-- @return Script object on success; nil + errormsg on failure.
 classSession.scriptOpen = function(self, code)
    local script = {}
    script.handle = store_script(self.handle, code)
@@ -987,6 +1018,17 @@ classSession.scriptOpen = function(self, code)
 end
 classSession.storeScript = classSession.storeScript
 
+---
+-- Define a pin event callback function.
+-- The callback function has the following signature:<br>
+-- <code>cbfunc(sess, pin, level, tick, [userdata])</code>
+-- @param self Session.
+-- @param pin GPIO number.
+-- @param edge Type of edge:
+--        <code>gpio.RISING_EDGE, gpio.FALLING_EDGE, gpio.EITHER_EDGE</code>
+-- @param func Lua callback function.
+-- @param userdata Any Lua value as user parameter.
+-- @return Callback object.
 classSession.callback = function(self, pin, edge, func, userdata)
    local callback = {}
    callback.id = gpio.callback(self.handle, pin, edge, func, userdata)
@@ -1021,7 +1063,13 @@ classSession.triggerEvent = function(self, event)
    return tryB(event_trigger(self.handle, event))
 end
 
-classSession.openSerial = function(self, baud, tty)
+---
+-- Open serial device.
+-- @param self Session.
+-- @param baud Baudrate in bits per second.
+-- @param tty Serial device file name starting with
+--            /dev/serial or /dev/tty
+classSession.serialOpen = function(self, baud, tty)
    local serial = {}
    local baud = baud or 9600
    local tty = tty or "/dev/serial"
@@ -1035,6 +1083,16 @@ classSession.openSerial = function(self, baud, tty)
    return serial
 end
 
+---
+-- Get a pads signal strength in mA.
+-- @param self Session.
+-- @param pad Pad (pin)
+-- <ul>
+-- <li>pad = 0: GPIO[0..27]
+-- <li>pad = 1: GPIO[28..45]
+-- <li>pad = 2: GPIO[46 .. 53]
+-- </ul>
+-- @return Signal strength in mA.
 classSession.getPadStrength = function(self, pad)
    if pad < 0 or pad > 3 then
       return nil, "invalid pad index."
@@ -1042,6 +1100,17 @@ classSession.getPadStrength = function(self, pad)
    return tryV(get_pad_strength(self.handle, pad))
 end
 
+---
+-- Set strength of a pad.
+-- @param self Session.
+-- @param pad Pad (pin) 
+-- <ul>
+-- <li>pad = 0: GPIO[0..27]
+-- <li>pad = 1: GPIO[28..45]
+-- <li>pad = 2: GPIO[46 .. 53]
+-- </ul>
+-- @param mamps Strength in mA
+-- @return true on success, nil + errormsg on failure.
 classSession.setPadStrength = function(self, pad, mamps)
    if pad < 0 or pad > 3 then
       return nil, "invalid pad index."
@@ -1052,14 +1121,27 @@ classSession.setPadStrength = function(self, pad, mamps)
    return tryB(set_pad_strength(self.handle, pad, mamps))
 end
 
-classSession.shell = function(self, name, script)
-   local status = shell_(self.handle, name, script)
+---
+-- Execute a shell script  on connected host.
+-- The script name may contain '-' and '_' and alphanumeric characters.
+-- @param self Session.
+-- @param name Name of the script.
+-- @param scriptparam Parameters for the script.
+-- @return 0 on success, nil + error message on failure.
+classSession.shell = function(self, name, scriptparam)
+   local status = shell_(self.handle, name, scriptparam)
    if status == 32512 then
       return nil, "script not found."
    end
-   return status / 256
+   return status
 end
 
+---
+-- Open I2C device.
+-- @param self Session.
+-- @param bus Bus index.
+-- @param address Address of the device.
+-- @return I2C device object; nil + errormsg on failure.
 classSession.openI2C = function(self, bus, address)
    local i2c = {}
    local flags = 0
@@ -1132,17 +1214,7 @@ function busyWait(t)
 end
 
 ---
--- Convert a notification sample into a table.
----
-function decodeNotificationSample(s)
-   local t = {}
-   t.seqno = strbyte(s,2) * 256 + strbyte(s,1)
-   t.flags = strbyte(s,4) * 256 + strbyte(s,3)
-   t.tick = strbyte(s,8) * 0x1000000 + strbyte(s,7) * 0x10000 + strbyte(s,6) * 0x100 + strbyte(s,5)
-   t.level = strbyte(s,12) * 0x1000000 + strbyte(s,11) * 0x10000 + strbyte(s,10) * 0x100 + strbyte(s,9)
-   return t
-end
-
+-- Returns info string.
 function info()
    return infostring
 end

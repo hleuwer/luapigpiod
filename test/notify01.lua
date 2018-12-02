@@ -19,8 +19,8 @@ local x = 1
 local last_tick
 local cbcnt = 1
 
-local handle = sess:notifyOpen()
-local fname = "/dev/pigpio"..handle
+local notify = sess:notifyOpen()
+local fname = notify.filename
 --local fh = io.open(fname, "r")
 local fd = posix.open(fname, posix.O_RDONLY)
 
@@ -64,7 +64,7 @@ print("set alert func ...")
 local cb, err = assert(sess:callback(pinp, gpio.EITHER_EDGE, alert))
 printf("  callback ID: %d", cb.id)
 
-sess:notifyBegin(handle, bit32.lshift(1, pinp))
+notify:begin(bit32.lshift(1, pinp))
 
 last_tick = sess:tick()
 local last_tick2 = last_tick
@@ -84,8 +84,8 @@ for i = 1, N do
       sess:clearBank1(bit32.lshift(1, pout))
    end
    wait(toff/1000)
-   if i == 5 then sess:notifyPause(handle) end
-   if i == N - 5 then sess:notifyBegin(handle, bit32.lshift(1,pinp)) end
+   if i == 5 then notify:pause() end
+   if i == N - 5 then notify:begin(bit32.lshift(1,pinp)) end
    
 end
 
@@ -94,14 +94,14 @@ print("Reading notification buffer ...")
 --       the number of total transitions.
 while posix.rpoll(fd, 100) == 1 do
    local s = posix.read(fd, 12)
-   local t = gpio.decodeNotificationSample(s)
+   local t = notify:decode(s)
    print(string.format("sample %d: flags=%04X tick=%d level=%08X dt=%d",
                        t.seqno, t.flags, t.tick, t.level, t.tick - last_tick2))
    last_tick2 = t.tick
 end
 
 print("close notification ...")
-sess:notifyClose(handle)
+notify:close()
 
 print("wait a second ...")
 wait(1)

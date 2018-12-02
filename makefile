@@ -14,6 +14,7 @@ INDEXFILE=index.txt
 TARGET=$(MODULE)/core.so
 LUALIBDIR=/usr/local/lib/lua/$(LUAV)
 SWIG_IDIR=/usr/share/swig3.0
+SHELL_CMD=shell_example
 
 .SUFFIXES: .c .o
 
@@ -41,11 +42,14 @@ uclean:
 	$(MAKE) clean
 	rm -f $(WRAPPER)
 
-install:
+install: install_shell
 	mkdir -p $(LUALIBDIR) && cp -f $(TARGET) $(LUALIBDIR)
 
 uninstall:
 	rm -rf $(LUALIBDIR)/$(TARGET)
+
+install-shell:
+	cp etc/$(SHELL_CMD) /opt/pigpio/cgi
 
 index::
 	lua -l $(MODULE) -e 'for k,v in pairs(pigpiod) do print(k,v) end' > etc/$(INDEXFILE)
