@@ -47,3 +47,6 @@ Events may receive an arbitrary Lua value as an opaque parameter defined by the 
 ## Thread Handling
 The pigpiod c i/f library provides a simple interface for starting and stopping threads. LuaPIGPIOD associates a separate Lua state with each thread. The new state receives an arbitrary number of arguments which must be of type number, string or boolean. Tables and function must first be externally serialized into a string.
 
+## Status
+Nost of simple pin IO related stuff is available. Interface support for I2C, SPI and Serial under development.
+
