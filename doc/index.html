@@ -1,0 +1,2451 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Class_classWave">Class classWave </a></li>
+<li><a href="#Class_classScript">Class classScript </a></li>
+<li><a href="#Class_classCallback">Class classCallback </a></li>
+<li><a href="#Class_classEventCallback_">Class classEventCallback. </a></li>
+<li><a href="#Class_classNotify_">Class classNotify. </a></li>
+<li><a href="#Class_classI2C_">Class classI2C. </a></li>
+<li><a href="#Class_classSession_">Class classSession. </a></li>
+<li><a href="#Module_functions">Module functions </a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>pigpiod</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>pigpiod</code></h1>
+<p>A Lua wrapper for the pigpiod C interface.</p>
+<p>
+ luapigpiod allows control of Raspberry Pi GPIO pins from userspace.
+ All operation are handled in the context of sessions (aka connections) or
+ in the context of subusidiary classes like waves, scripts, callbacks,
+ eventCallback, I2C, Serial or SPI devices.
+ Multiple sessions and thus multiple sets of GPIO pins or interfaces (one set
+ per session) are supported.</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: (c) Herbert Leuwer, 2018</li>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: Herbert Leuwer</li>
+    </ul>
+
+
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#_G._PIGPIOD_SESSIONS">_G._PIGPIOD_SESSIONS</a></td>
+	<td class="summary">Active sessions are maintained in a global table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#_G._PIGPIOD_WAVEFORMS">_G._PIGPIOD_WAVEFORMS</a></td>
+	<td class="summary">Active waveforms are maintained in a global table.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classWave">Class classWave </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classWave.close">classWave.close (self)</a></td>
+	<td class="summary">Close given waveform.<br>
+ This will delete all waveforms intermediately stored.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classWave.sendOnce">classWave.sendOnce (self)</a></td>
+	<td class="summary">Send waveform once.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classWave.sendRepeat">classWave.sendRepeat (self)</a></td>
+	<td class="summary">Send waveform repeatedly until cancelled.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classWave.sendUsingMode">classWave.sendUsingMode (self, mode)</a></td>
+	<td class="summary">Send the given waveform with given mode.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classScript">Class classScript </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classScript.run">classScript.run (self, param)</a></td>
+	<td class="summary">Run a script.<br>
+ Scripts are executed in a specialized VM in the pigpiod daemon and provides
+ a means to produce very high toggling rates.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classScript.update">classScript.update (self, param)</a></td>
+	<td class="summary">Update parameters of a script, which may already run.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classScript.status">classScript.status (self)</a></td>
+	<td class="summary">Retrieve the run status and the parameters of given script.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classScript.stop">classScript.stop (self)</a></td>
+	<td class="summary">Stop the given  running script.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classScript.delete">classScript.delete (self)</a></td>
+	<td class="summary">Delete the given script.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classCallback">Class classCallback </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classCallback.cancel">classCallback.cancel (self)</a></td>
+	<td class="summary">Cancel callback.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classEventCallback_">Class classEventCallback. </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classEventCallback.cancel">classEventCallback.cancel (self)</a></td>
+	<td class="summary">Cancel event callback.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classNotify_">Class classNotify. </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classNotify.begin">classNotify.begin (self, bits)</a></td>
+	<td class="summary">Start notification operation.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classNotify.pause">classNotify.pause (self)</a></td>
+	<td class="summary">Pause notification monitoring.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classNotify.decode">classNotify.decode (self, s)</a></td>
+	<td class="summary">Convert a notification sample given in binary coded form in a Lua string
+ into a table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classNotify.close">classNotify.close (self)</a></td>
+	<td class="summary">Close notification channel.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classI2C_">Class classI2C. </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.close">classI2C.close (self)</a></td>
+	<td class="summary">Close the given I2C device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeQuick">classI2C.writeQuick (self, bit)</a></td>
+	<td class="summary">Send a single bit (0 or 1) via the given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.sendByte">classI2C.sendByte (self, byte)</a></td>
+	<td class="summary">Send a byte via the given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.receiveByte">classI2C.receiveByte (self)</a></td>
+	<td class="summary">Receive  a byte via given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeByte">classI2C.writeByte (self, reg, byte)</a></td>
+	<td class="summary">Write the given byte to the given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeWord">classI2C.writeWord (self, reg, word)</a></td>
+	<td class="summary">Write the given 16 bit word to the given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.readByte">classI2C.readByte (self, reg)</a></td>
+	<td class="summary">Read a byte from the given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.readWord">classI2C.readWord (self, reg)</a></td>
+	<td class="summary">Read a 16 bit word from the given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.processCall">classI2C.processCall (self, reg, val)</a></td>
+	<td class="summary">Write + read (process) given 16 bit value to/freom given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeBlockData">classI2C.writeBlockData (self, reg, data)</a></td>
+	<td class="summary">Write a block of bytes into given register of given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.readBlockData">classI2C.readBlockData (self, reg)</a></td>
+	<td class="summary">Read a block of bytes from given register of given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.blockProcessCall">classI2C.blockProcessCall (self, reg, data)</a></td>
+	<td class="summary">Send + receive a block of data to/from given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeI2CBlockData">classI2C.writeI2CBlockData (self, reg, data)</a></td>
+	<td class="summary">Write 1 to 32 bytes to given register on given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.readI2CBlockData">classI2C.readI2CBlockData (self, reg, nbytes)</a></td>
+	<td class="summary">Read given number of bytes from given register in given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.readDevice">classI2C.readDevice (self, nbytes)</a></td>
+	<td class="summary">Read given number bytes from given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.writeDevice">classI2C.writeDevice (self, data)</a></td>
+	<td class="summary">Write given data to given device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2C.zip">classI2C.zip (self, inbuf, nbytes)</a></td>
+	<td class="summary">Write and read given amount of  data to/from given device.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classSession_">Class classSession. </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classSession.close">classSession.close (self)</a></td>
+	<td class="summary">Close session.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setMode">classSession.setMode (self, pin, mode)</a></td>
+	<td class="summary">Set pin mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getMode">classSession.getMode (self, pin)</a></td>
+	<td class="summary">Get pin mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setPullUpDown">classSession.setPullUpDown (self, pin, pud)</a></td>
+	<td class="summary">Set pull-up/down configuration of pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.read">classSession.read (self, pin)</a></td>
+	<td class="summary">Read pin level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.write">classSession.write (self, pin, val)</a></td>
+	<td class="summary">Write pin level.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setPwmDutycycle">classSession.setPwmDutycycle (self, pin, dutycycle)</a></td>
+	<td class="summary">Start Software controlled PWM on given pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getPwmDutycycle">classSession.getPwmDutycycle (self, pin)</a></td>
+	<td class="summary">Get the PWM duty cycle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setPwmRange">classSession.setPwmRange (self, pin, range)</a></td>
+	<td class="summary">Set the dutycycle range for PWM on given pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getPwmRange">classSession.getPwmRange (self, pin)</a></td>
+	<td class="summary">Get current PWM range for given pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getPwmRealRange">classSession.getPwmRealRange (self, pin)</a></td>
+	<td class="summary">Get current PWM real range for given pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setPwmFrequency">classSession.setPwmFrequency (self, pin, frequency)</a></td>
+	<td class="summary">Set PWM frequency.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getPwmFrequency">classSession.getPwmFrequency (self, pin)</a></td>
+	<td class="summary">Get PWM frequency.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setServoPulsewidth">classSession.setServoPulsewidth (self, pin, pulsewidth)</a></td>
+	<td class="summary">Start servo pulses.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getServoPulsewidth">classSession.getServoPulsewidth (self, pin)</a></td>
+	<td class="summary">Get servo pulsewidth.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.notifyOpen">classSession.notifyOpen (self)</a></td>
+	<td class="summary">Open a notification channel.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setWatchdog">classSession.setWatchdog (self, pin, timeout)</a></td>
+	<td class="summary">Set watchdog for the specified pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setGlitchFilter">classSession.setGlitchFilter (self, pin, steady)</a></td>
+	<td class="summary">Set glitch filter for given pin.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.openWave">classSession.openWave (self, waveform, name)</a></td>
+	<td class="summary">Open a waveform as defined by parameter 'waveform'.<br>
+ An optional user defined name can be provided.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.waveClear">classSession.waveClear (self)</a></td>
+	<td class="summary">Clear all waveforms.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.waveChain">classSession.waveChain (self, list)</a></td>
+	<td class="summary">Define and start a chain of waveforms.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.OpenScript">classSession.OpenScript (self, code)</a></td>
+	<td class="summary">Open a gpiod script.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.callback">classSession.callback (self, pin, edge, func, userdata)</a></td>
+	<td class="summary">Define a pin event callback function.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.waitEdge">classSession.waitEdge (self, pin, edge, timeout)</a></td>
+	<td class="summary">Wait for an edge to occur.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.serialOpen">classSession.serialOpen (self, baud, tty)</a></td>
+	<td class="summary">Open serial device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.getPadStrength">classSession.getPadStrength (self, pad)</a></td>
+	<td class="summary">Get a pads signal strength in mA.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.setPadStrength">classSession.setPadStrength (self, pad, mamps)</a></td>
+	<td class="summary">Set strength of a pad.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.shell">classSession.shell (self, name, scriptparam)</a></td>
+	<td class="summary">Execute a shell script  on connected host.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.openI2C">classSession.openI2C (self, bus, address, name)</a></td>
+	<td class="summary">Open I2C device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.scanI2C">classSession.scanI2C (self, bus)</a></td>
+	<td class="summary">Scan an I2C bus for present devices.</td>
+	</tr>
+</table>
+<h2><a href="#Module_functions">Module functions </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#open">open (host, port, name)</a></td>
+	<td class="summary">Open a session with given host on given port.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#wait">wait (t, ts)</a></td>
+	<td class="summary">Wait for a while.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#busyWait">busyWait (t)</a></td>
+	<td class="summary">Busy wait for a while.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#info">info ()</a></td>
+	<td class="summary">Returns info string.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getEventStats">getEventStats ()</a></td>
+	<td class="summary">Get event handling statistics in the form.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#clearEventStats">clearEventStats ()</a></td>
+	<td class="summary">Clear event statistics.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "_G._PIGPIOD_SESSIONS"></a>
+    <strong>_G._PIGPIOD_SESSIONS</strong>
+    </dt>
+    <dd>
+    Active sessions are maintained in a global table.
+ Used to retrieve session object from handle in callbacks and for finalization
+ during object garbage collection.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "_G._PIGPIOD_WAVEFORMS"></a>
+    <strong>_G._PIGPIOD_WAVEFORMS</strong>
+    </dt>
+    <dd>
+    Active waveforms are maintained in a global table.
+ Used to retrieve session object from handle in callbacks and for finalization
+ during object garbage collection.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classWave"></a>Class classWave </h2>
+
+          <div class="section-description">
+          Waveforms
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classWave.close"></a>
+    <strong>classWave.close (self)</strong>
+    </dt>
+    <dd>
+    Close given waveform.<br>
+ This will delete all waveforms intermediately stored.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Waveform.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classWave.sendOnce"></a>
+    <strong>classWave.sendOnce (self)</strong>
+    </dt>
+    <dd>
+    Send waveform once.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Waveform.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of DMA block in waveform.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classWave.sendRepeat"></a>
+    <strong>classWave.sendRepeat (self)</strong>
+    </dt>
+    <dd>
+    Send waveform repeatedly until cancelled.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Waveform.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of DMA blocks.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classWave.sendUsingMode"></a>
+    <strong>classWave.sendUsingMode (self, mode)</strong>
+    </dt>
+    <dd>
+    Send the given waveform with given mode.
+ The mode is by a textstring:<br>
+ 'oneshot', 'repeat', 'oneshotsync', 'repeatsync'
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Waveform.
+        </li>
+        <li><span class="parameter">mode</span>
+         Mode to be used for sending.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of DMA blocks.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classScript"></a>Class classScript </h2>
+
+          <div class="section-description">
+          Scripting
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classScript.run"></a>
+    <strong>classScript.run (self, param)</strong>
+    </dt>
+    <dd>
+    Run a script.<br>
+ Scripts are executed in a specialized VM in the pigpiod daemon and provides
+ a means to produce very high toggling rates.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Script.
+        </li>
+        <li><span class="parameter">param</span>
+         List of up to 10 parameters for the script.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classScript.update"></a>
+    <strong>classScript.update (self, param)</strong>
+    </dt>
+    <dd>
+    Update parameters of a script, which may already run.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Script.
+        </li>
+        <li><span class="parameter">param</span>
+         List of up to 10 parameters replacing the corresponding
+              subset of previous parameters.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classScript.status"></a>
+    <strong>classScript.status (self)</strong>
+    </dt>
+    <dd>
+    Retrieve the run status and the parameters of given script.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Script.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Run status and list of parameters on success; nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classScript.stop"></a>
+    <strong>classScript.stop (self)</strong>
+    </dt>
+    <dd>
+    Stop the given  running script.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Script.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classScript.delete"></a>
+    <strong>classScript.delete (self)</strong>
+    </dt>
+    <dd>
+    Delete the given script.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Script.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classCallback"></a>Class classCallback </h2>
+
+          <div class="section-description">
+          Pin event callback
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classCallback.cancel"></a>
+    <strong>classCallback.cancel (self)</strong>
+    </dt>
+    <dd>
+    Cancel callback.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Callback.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classEventCallback_"></a>Class classEventCallback. </h2>
+
+          <div class="section-description">
+          User event callback.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classEventCallback.cancel"></a>
+    <strong>classEventCallback.cancel (self)</strong>
+    </dt>
+    <dd>
+    Cancel event callback.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Eventcallback
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classNotify_"></a>Class classNotify. </h2>
+
+          <div class="section-description">
+          Notifications.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classNotify.begin"></a>
+    <strong>classNotify.begin (self, bits)</strong>
+    </dt>
+    <dd>
+    Start notification operation.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Notification channel.
+        </li>
+        <li><span class="parameter">bits</span>
+         Bitmask defining the GPIOs to monitor.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classNotify.pause"></a>
+    <strong>classNotify.pause (self)</strong>
+    </dt>
+    <dd>
+    Pause notification monitoring.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Notification channel.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classNotify.decode"></a>
+    <strong>classNotify.decode (self, s)</strong>
+    </dt>
+    <dd>
+    Convert a notification sample given in binary coded form in a Lua string
+ into a table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Notification channel.
+        </li>
+        <li><span class="parameter">s</span>
+         Encoded notification sample.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Decoded notification sample as Lua table of form
+ <code>{seqno=SEGNO, flags=FLAGS, tick=TICK, level=LEVEL}</code>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classNotify.close"></a>
+    <strong>classNotify.close (self)</strong>
+    </dt>
+    <dd>
+    Close notification channel.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Notification channel.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classI2C_"></a>Class classI2C. </h2>
+
+          <div class="section-description">
+          Class: i2c.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classI2C.close"></a>
+    <strong>classI2C.close (self)</strong>
+    </dt>
+    <dd>
+    Close the given I2C device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        I2C interface instance as table.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeQuick"></a>
+    <strong>classI2C.writeQuick (self, bit)</strong>
+    </dt>
+    <dd>
+    Send a single bit (0 or 1) via the given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">bit</span>
+         Bit to send.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.sendByte"></a>
+    <strong>classI2C.sendByte (self, byte)</strong>
+    </dt>
+    <dd>
+    Send a byte via the given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">byte</span>
+         Byte to send.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.receiveByte"></a>
+    <strong>classI2C.receiveByte (self)</strong>
+    </dt>
+    <dd>
+    Receive  a byte via given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Byte received on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeByte"></a>
+    <strong>classI2C.writeByte (self, reg, byte)</strong>
+    </dt>
+    <dd>
+    Write the given byte to the given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">byte</span>
+         Byte to write.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeWord"></a>
+    <strong>classI2C.writeWord (self, reg, word)</strong>
+    </dt>
+    <dd>
+    Write the given 16 bit word to the given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">word</span>
+          Word to write.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.readByte"></a>
+    <strong>classI2C.readByte (self, reg)</strong>
+    </dt>
+    <dd>
+    Read a byte from the given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Byte read on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.readWord"></a>
+    <strong>classI2C.readWord (self, reg)</strong>
+    </dt>
+    <dd>
+    Read a 16 bit word from the given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Word read on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.processCall"></a>
+    <strong>classI2C.processCall (self, reg, val)</strong>
+    </dt>
+    <dd>
+    Write + read (process) given 16 bit value to/freom given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">val</span>
+         Word to write.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Value read on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeBlockData"></a>
+    <strong>classI2C.writeBlockData (self, reg, data)</strong>
+    </dt>
+    <dd>
+    Write a block of bytes into given register of given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">data</span>
+         Binary data stored in Lua string allowing embedded zeros.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Binary data from device on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.readBlockData"></a>
+    <strong>classI2C.readBlockData (self, reg)</strong>
+    </dt>
+    <dd>
+    Read a block of bytes from given register of given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Binary data stored in Lua string allowing embedded zeros on success
+         nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.blockProcessCall"></a>
+    <strong>classI2C.blockProcessCall (self, reg, data)</strong>
+    </dt>
+    <dd>
+    Send + receive a block of data to/from given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">data</span>
+         Lua string with data to be written.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read in a Lua string allowing embedded zeros.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeI2CBlockData"></a>
+    <strong>classI2C.writeI2CBlockData (self, reg, data)</strong>
+    </dt>
+    <dd>
+    Write 1 to 32 bytes to given register on given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">data</span>
+         Lua string with data to be written.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.readI2CBlockData"></a>
+    <strong>classI2C.readI2CBlockData (self, reg, nbytes)</strong>
+    </dt>
+    <dd>
+    Read given number of bytes from given register in given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">reg</span>
+         Register number.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to be read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of byte read.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.readDevice"></a>
+    <strong>classI2C.readDevice (self, nbytes)</strong>
+    </dt>
+    <dd>
+    Read given number bytes from given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to be read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Lua string with read data.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.writeDevice"></a>
+    <strong>classI2C.writeDevice (self, data)</strong>
+    </dt>
+    <dd>
+    Write given data to given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">data</span>
+         Lua string with data to write.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2C.zip"></a>
+    <strong>classI2C.zip (self, inbuf, nbytes)</strong>
+    </dt>
+    <dd>
+    Write and read given amount of  data to/from given device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">inbuf</span>
+         Lua String with data to be sent.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of Byte transfers.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Bytes read in a Lua string.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classSession_"></a>Class classSession. </h2>
+
+          <div class="section-description">
+          All GPIO control and status operations occurs in the context of a session.
+ A session is create by connecting to a remote Raspberry Pi instance via
+ network or locally.
+ A session is created with a call to open(host, port)
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classSession.close"></a>
+    <strong>classSession.close (self)</strong>
+    </dt>
+    <dd>
+    Close session.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on error.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setMode"></a>
+    <strong>classSession.setMode (self, pin, mode)</strong>
+    </dt>
+    <dd>
+    Set pin mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">mode</span>
+         gpio.INPUT or gpio.OUTPUT.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        ture on success, nil + errormsg on error.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getMode"></a>
+    <strong>classSession.getMode (self, pin)</strong>
+    </dt>
+    <dd>
+    Get pin mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on error.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setPullUpDown"></a>
+    <strong>classSession.setPullUpDown (self, pin, pud)</strong>
+    </dt>
+    <dd>
+    Set pull-up/down configuration of pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">pud</span>
+         gpio.PUD_UP, gpio.PUD_DOWN or gpio.PUD_OFF
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on error.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.read"></a>
+    <strong>classSession.read (self, pin)</strong>
+    </dt>
+    <dd>
+    Read pin level.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Pin level.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.write"></a>
+    <strong>classSession.write (self, pin, val)</strong>
+    </dt>
+    <dd>
+    Write pin level.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">val</span>
+         Level to set, 0 or 1.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setPwmDutycycle"></a>
+    <strong>classSession.setPwmDutycycle (self, pin, dutycycle)</strong>
+    </dt>
+    <dd>
+    Start Software controlled PWM on given pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">dutycycle</span>
+         Dutycycle to use (0..range) default: 0..255.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getPwmDutycycle"></a>
+    <strong>classSession.getPwmDutycycle (self, pin)</strong>
+    </dt>
+    <dd>
+    Get the PWM duty cycle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Active dutycycle: 0..range
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setPwmRange"></a>
+    <strong>classSession.setPwmRange (self, pin, range)</strong>
+    </dt>
+    <dd>
+    Set the dutycycle range for PWM on given pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">range</span>
+         Range between 25 and 40000.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success; nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getPwmRange"></a>
+    <strong>classSession.getPwmRange (self, pin)</strong>
+    </dt>
+    <dd>
+    Get current PWM range for given pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Dutycycle range for given pin.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getPwmRealRange"></a>
+    <strong>classSession.getPwmRealRange (self, pin)</strong>
+    </dt>
+    <dd>
+    Get current PWM real range for given pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        PWM real range.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setPwmFrequency"></a>
+    <strong>classSession.setPwmFrequency (self, pin, frequency)</strong>
+    </dt>
+    <dd>
+    Set PWM frequency.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">frequency</span>
+         Frequency in Hz.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getPwmFrequency"></a>
+    <strong>classSession.getPwmFrequency (self, pin)</strong>
+    </dt>
+    <dd>
+    Get PWM frequency.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Frequency in Hz.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setServoPulsewidth"></a>
+    <strong>classSession.setServoPulsewidth (self, pin, pulsewidth)</strong>
+    </dt>
+    <dd>
+    Start servo pulses.  Can be alternatively called via classSession.servo(...).
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">pulsewidth</span>
+         Pulsewidth between 500 and 2500, default: 1500.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getServoPulsewidth"></a>
+    <strong>classSession.getServoPulsewidth (self, pin)</strong>
+    </dt>
+    <dd>
+    Get servo pulsewidth.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Servo pulsewidth.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.notifyOpen"></a>
+    <strong>classSession.notifyOpen (self)</strong>
+    </dt>
+    <dd>
+    Open a notification channel.
+ Data can be read from file /dev/pigpio<handle> with <handle>
+ as returned by this function.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Notifcation channel handle.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setWatchdog"></a>
+    <strong>classSession.setWatchdog (self, pin, timeout)</strong>
+    </dt>
+    <dd>
+    Set watchdog for the specified pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">timeout</span>
+         Timeout in milliseconds.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setGlitchFilter"></a>
+    <strong>classSession.setGlitchFilter (self, pin, steady)</strong>
+    </dt>
+    <dd>
+    Set glitch filter for given pin.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">steady</span>
+         Minimum time of stable level in order to report state change.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.openWave"></a>
+    <strong>classSession.openWave (self, waveform, name)</strong>
+    </dt>
+    <dd>
+    Open a waveform as defined by parameter 'waveform'.<br>
+ An optional user defined name can be provided.  If nil, a name 'wave-<wave.handle>' is
+ automatically created.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">waveform</span>
+         List of waveforms in the following format:
+ <ul>
+ <li><code>{typ, WF1, WF2, ..., WFn}</code>.
+ <li>typ is either 'generic' or 'serial'.
+ <li>WFi is a table in one of the following formats:
+ <ul>
+ <li>generic: <code>{on=PINMASK, off=PINMASK, delay=TIME_in_us}</code>.
+ <li>serial: <code>{baud=BAUDRATE, nbits=NBITS, stopbits=STOPBITS, timeoffs=TIME_in_us, STRING}</code>.
+ </ul></ul>
+        </li>
+        <li><span class="parameter">name</span>
+         Name of the waveform (optional).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Wave objec on success; nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.waveClear"></a>
+    <strong>classSession.waveClear (self)</strong>
+    </dt>
+    <dd>
+    Clear all waveforms.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.waveChain"></a>
+    <strong>classSession.waveChain (self, list)</strong>
+    </dt>
+    <dd>
+    Define and start a chain of waveforms.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">list</span>
+         Lua list with commands defining the chain.
+ <ul>
+ <li>Each list entry presents on line of a chain micro program.
+ <li>Syntax:
+ <li>table interpreted as wave object reference.
+     <ul>
+     <li>'delay m':                     delay m microseconds.
+     <li>'start' ... 'repeat N':        repeat loop N times.
+     <li>'start' ... 'repeat forever':  repeat forever.
+ </ul></ul>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.OpenScript"></a>
+    <strong>classSession.OpenScript (self, code)</strong>
+    </dt>
+    <dd>
+    Open a gpiod script.
+ See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a> for details
+ on gpiod scripting.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">code</span>
+         Scipt code.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Script object on success; nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.callback"></a>
+    <strong>classSession.callback (self, pin, edge, func, userdata)</strong>
+    </dt>
+    <dd>
+    Define a pin event callback function.
+ The callback function has the following signature:<br>
+ <code>cbfunc(sess, pin, level, tick, [userdata])</code>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">edge</span>
+         Type of edge:
+        <code>gpio.RISING_EDGE, gpio.FALLING_EDGE, gpio.EITHER_EDGE</code>
+        </li>
+        <li><span class="parameter">func</span>
+         Lua callback function.
+        </li>
+        <li><span class="parameter">userdata</span>
+         Any Lua value as user parameter.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Callback object.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.waitEdge"></a>
+    <strong>classSession.waitEdge (self, pin, edge, timeout)</strong>
+    </dt>
+    <dd>
+    Wait for an edge to occur.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pin</span>
+         GPIO number.
+        </li>
+        <li><span class="parameter">edge</span>
+         Type of edge:
+        <code>gpio.RISING_EDGE, gpio.FALLING_EDGE, gpio.EITHER_EDGE</code>
+        </li>
+        <li><span class="parameter">timeout</span>
+         Timeout in seconds.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true if edge occured, nil + "timeout" if edge is not detected.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.serialOpen"></a>
+    <strong>classSession.serialOpen (self, baud, tty)</strong>
+    </dt>
+    <dd>
+    Open serial device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">baud</span>
+         Baudrate in bits per second.
+        </li>
+        <li><span class="parameter">tty</span>
+         Serial device file name starting with
+            /dev/serial or /dev/tty
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.getPadStrength"></a>
+    <strong>classSession.getPadStrength (self, pad)</strong>
+    </dt>
+    <dd>
+    Get a pads signal strength in mA.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pad</span>
+         Pad (pin)
+ <ul>
+ <li>pad = 0: GPIO[0..27]
+ <li>pad = 1: GPIO[28..45]
+ <li>pad = 2: GPIO[46 .. 53]
+ </ul>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Signal strength in mA.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.setPadStrength"></a>
+    <strong>classSession.setPadStrength (self, pad, mamps)</strong>
+    </dt>
+    <dd>
+    Set strength of a pad.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pad</span>
+         Pad (pin)
+ <ul>
+ <li>pad = 0: GPIO[0..27]
+ <li>pad = 1: GPIO[28..45]
+ <li>pad = 2: GPIO[46 .. 53]
+ </ul>
+        </li>
+        <li><span class="parameter">mamps</span>
+         Strength in mA
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.shell"></a>
+    <strong>classSession.shell (self, name, scriptparam)</strong>
+    </dt>
+    <dd>
+    Execute a shell script  on connected host.
+ The script name may contain '-' and '_' and alphanumeric characters.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">name</span>
+         Name of the script.
+        </li>
+        <li><span class="parameter">scriptparam</span>
+         Parameters for the script.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        0 on success, nil + error message on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.openI2C"></a>
+    <strong>classSession.openI2C (self, bus, address, name)</strong>
+    </dt>
+    <dd>
+    Open I2C device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">bus</span>
+         Bus index.
+        </li>
+        <li><span class="parameter">address</span>
+         Address of the device.
+        </li>
+        <li><span class="parameter">name</span>
+         Optional name.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        I2C device object; nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSession.scanI2C"></a>
+    <strong>classSession.scanI2C (self, bus)</strong>
+    </dt>
+    <dd>
+    Scan an I2C bus for present devices.
+ Returns a list of table in the following form:
+ <code>{{addr=ADDR, status="ok"|"used", data=DATA}, ... {addr, ...}}</code>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">bus</span>
+         Bus index 0 or 1.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        List of connect and usable or not usable devices on success,
+         nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Module_functions"></a>Module functions </h2>
+
+          <div class="section-description">
+           Most important: the function 'open(...)' is used to open
+ a session with a connectivity to the local or a remote pigpiod daemon.
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "open"></a>
+    <strong>open (host, port, name)</strong>
+    </dt>
+    <dd>
+    Open a session with given host on given port.  An optional user defined name
+ can be defined; if nil a name 'sess-<sess.handle>' is created automatically.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">host</span>
+         Hostname of target system. Default: localhost.
+        </li>
+        <li><span class="parameter">port</span>
+         Port to be used. Default: 8888.
+        </li>
+        <li><span class="parameter">name</span>
+         Name of this session (optional).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Session object of class classSession.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "wait"></a>
+    <strong>wait (t, ts)</strong>
+    </dt>
+    <dd>
+    Wait for a while.
+ This function blocks in time chunks allowing Lua callbacks to be called
+ by the pigpiod library. The given waiting time t is split into n=t/ts
+ blocking calls to gpio.sleep(ts) with ts = 1 ms by default.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+         time to sleep in seconds.
+        </li>
+        <li><span class="parameter">ts</span>
+         time step to use - optional.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "busyWait"></a>
+    <strong>busyWait (t)</strong>
+    </dt>
+    <dd>
+    Busy wait for a while.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+         time to sleep in seconds.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "info"></a>
+    <strong>info ()</strong>
+    </dt>
+    <dd>
+    Returns info string.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Info string.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getEventStats"></a>
+    <strong>getEventStats ()</strong>
+    </dt>
+    <dd>
+    Get event handling statistics in the form.
+ <code>{drop = DROP, maxcount = MAXCOUNT}</code>
+ The function captures a snapshot.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Event statics on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clearEventStats"></a>
+    <strong>clearEventStats ()</strong>
+    </dt>
+    <dd>
+    Clear event statistics.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2018-12-07 08:11:22 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
