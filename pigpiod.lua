@@ -423,7 +423,7 @@ end
 -- @param self Device.
 -- @param byte Byte to send.
 -- @return true on success, nil + errormsg on failure
-function classI2C.writeByte(self, byte)
+function classI2C.sendByte(self, byte)
    return tryB(i2c_write_byte(self.pihandle, self.handle, byte))
 end
 
@@ -431,7 +431,7 @@ end
 -- Receive  a byte via given device.
 -- @param self Device.
 -- @return Byte received on success, nil + errormsg on failure
-function classI2C.readByte(self)
+function classI2C.receiveByte(self)
    return tryV(i2c_read_byte(self.pihandle, self.handle))
 end
 
@@ -441,7 +441,7 @@ end
 -- @param reg Register number.
 -- @param byte Byte to write.
 -- @return true on success, nil + errormsg on failure
-function classI2C.writeByteData(self, reg, byte)
+function classI2C.writeByte(self, reg, byte)
    return tryB(i2c_write_byte_data(self.pihandle, self.handle, reg, byte))
 end
 
@@ -451,8 +451,8 @@ end
 -- @param reg Register number.
 -- @param word  Word to write.
 -- @return true on success, nil + errormsg on failure
-function classI2C.writeWordData(self, reg, word)
-   return tryB(i2c_write_word_data(self.pihandle, self.handle, reg, byte))
+function classI2C.writeWord(self, reg, word)
+   return tryB(i2c_write_word_data(self.pihandle, self.handle, reg, word))
 end
 
 ---
@@ -460,7 +460,7 @@ end
 -- @param self Device.
 -- @param reg Register number.
 -- @return Byte read on success, nil + errormsg on failure.
-function classI2C.readByteData(self, reg)
+function classI2C.readByte(self, reg)
    return tryV(i2c_read_byte_data(self.pihandle, self.handle, reg))
 end
 
@@ -469,7 +469,7 @@ end
 -- @param self Device.
 -- @param reg Register number.
 -- @return Word read on success, nil + errormsg on failure.
-function classI2C.readWordData(self, reg)
+function classI2C.readWord(self, reg)
    return tryV(i2c_read_word_data(self.pihandle, self.handle, reg))
 end
 
@@ -490,18 +490,21 @@ end
 -- @param data Binary data stored in Lua string allowing embedded zeros.
 -- @return Binary data from device on success, nil + errormsg on failure.
 function classI2C.writeBlockData(self, reg, data)
-   return tryB(write_block_data(self.pihandle, self.handle, reg, data, #data))
+   return tryB(i2c_write_block_data(self.pihandle, self.handle, reg, data, #data))
 end
 
 ---
 -- Read a block of bytes from given register of given device.
 -- @param self Device.
 -- @param reg Register number.
--- @param nbytes Number of bytes to read.
 -- @return Binary data stored in Lua string allowing embedded zeros on success
 --         nil + errormsg on failure.
-function classI2C.readBlockData(self, reg, nbytes)
-   return tryV(read_block_data(self.pihandle, self.handle, reg))
+function classI2C.readBlockData(self, reg)
+   local res, errno = i2c_read_block_data(self.pihandle, self.handle, reg)
+   if res == nil then
+      return nil, perror(errno)
+   end
+   return res
 end
 
 ---
@@ -531,7 +534,11 @@ end
 -- @param nbytes Number of bytes to be read.
 -- @return Number of byte read.
 function classI2C.readI2CBlockData(self, reg, nbytes)
-   return tryV(i2c_read_i2c_block_data(self.pihandle, self.handle, reg, nbytes))
+   local res, errno = i2c_read_i2c_block_data(self.pihandle, self.handle, reg, nbytes)
+   if res == nil then
+      return nil, perror(errno)
+   end
+   return res
 end
 
 ---
@@ -855,7 +862,7 @@ end
 -- </ul></ul>
 -- @param name Name of the waveform (optional).
 -- @return Wave objec on success; nil + errormsg on failure.
-classSession.waveOpen = function(self, waveform, name)
+classSession.openWave = function(self, waveform, name)
    local wave = {}
    local npulses = 0
    -- 1. add waveforms
@@ -885,7 +892,7 @@ classSession.waveOpen = function(self, waveform, name)
    _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
    return wave
 end
-
+classSession.waveOpen = classSession.openWave
 ---
 -- Clear all waveforms.
 -- @param self Session.
@@ -1015,7 +1022,7 @@ end
 -- @param self Session.
 -- @param code Scipt code.
 -- @return Script object on success; nil + errormsg on failure.
-classSession.scriptOpen = function(self, code)
+classSession.OpenScript = function(self, code)
    local script = {}
    script.handle = store_script(self.handle, code)
    script.pihandle = self.handle
@@ -1028,7 +1035,8 @@ classSession.scriptOpen = function(self, code)
    })
    return script
 end
-classSession.storeScript = classSession.storeScript
+classSession.storeScript = classSession.openScript
+classSession.scriptOpen = classSession.openScript
 
 ---
 -- Define a pin event callback function.
@@ -1170,19 +1178,50 @@ end
 -- @param self Session.
 -- @param bus Bus index.
 -- @param address Address of the device.
+-- @param name Optional name.
 -- @return I2C device object; nil + errormsg on failure.
-classSession.openI2C = function(self, bus, address)
+classSession.openI2C = function(self, bus, address, name)
    local i2c = {}
    local flags = 0
    if bus < 0 then return nil, "invalid bus index." end
    if address < 0 or address > 0x7f then return nil, "invalid address." end
    i2c.handle = i2c_open(self.handle, bus, address, flags)
+   if i2c.handle < 0 then
+      return nil, perror(i2c.handle)
+   end
    i2c.pihandle = self.handle
    setmetatable(i2c, {
                    __index = classI2C,
                    __gc = function(self) self:close() end
    })
+   i2c.name = name or ("i2cdev-"..i2c.handle)
    return i2c
+end
+
+---
+-- Scan an I2C bus for present devices.
+-- Returns a list of table in the following form:
+-- <code>{{addr=ADDR, status="ok"|"used", data=DATA}, ... {addr, ...}}</code>
+-- @param self Session.
+-- @param bus Bus index 0 or 1.
+-- @return List of connect and usable or not usable devices on success,
+--         nil + errormsg on failure.
+classSession.scanI2C = function(self, bus)
+   local devlist = {}
+   for addr = 0x00, 0x7f do
+      local dev, err = self:openI2C(bus, addr, "none")
+      if not dev then
+         if err == "bad I2C bus" then return nil, err end
+         table.insert(devlist, {addr=addr, data=0xFF, status="used"})
+      else
+         local data, err = dev:receiveByte()
+         if data then
+            table.insert(devlist, {addr=addr, data=data, status="ok"})
+         end
+         dev:close()
+      end
+   end
+   return devlist
 end
 
 --------------------------------------------------------------------------------
