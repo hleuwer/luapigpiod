@@ -1067,6 +1067,23 @@ classSession.eventCallback = function(self, event, func, userdata)
    return callback
 end
 
+---
+-- Wait for an edge to occur.
+-- @param self Session.
+-- @param pin GPIO number.
+-- @param edge Type of edge:
+--        <code>gpio.RISING_EDGE, gpio.FALLING_EDGE, gpio.EITHER_EDGE</code>
+-- @param timeout Timeout in seconds.
+-- @return true if edge occured, nil + "timeout" if edge is not detected.
+classSession.waitEdge = function(self, pin, edge, timeout)
+   local ret = wait_for_edge(self.handle, pin, edge, timeout)
+   if ret == 1 then
+      return true
+   else
+      return nil, "timoeut"
+   end
+end
+
 classSession.waitEvent = function(self, event, timeout)
    return tryV(wait_for_event(self.handle, event, timeout))
 end
@@ -1228,7 +1245,6 @@ end
 
 ---
 -- Returns info string.
--- @param none.
 -- @return Info string.
 function info()
    return infostring
@@ -1238,7 +1254,6 @@ end
 -- Get event handling statistics in the form.
 -- <code>{drop = DROP, maxcount = MAXCOUNT}</code>
 -- The function captures a snapshot.
--- @param none.
 -- @return Event statics on success, nil + errormsg on failure
 function getEventStats()
    local ustat = get_event_statistics()
@@ -1251,7 +1266,6 @@ end
 
 ---
 -- Clear event statistics.
--- @param none.
 -- @return true on success, nil + errormsg on failure.
 function clearEventStats()
    return tryB(clear_event_statistics())

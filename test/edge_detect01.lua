@@ -18,7 +18,7 @@ local last_tick
 local last_level = -1
 
 ---
--- Alert callback.
+--Alert callback.
 ---
 local function alert(pi, pin, level, tick)
    local trcv = pi:tick()
@@ -53,7 +53,6 @@ printf("T_off: %d", toff)
 printf("Bitmode: %s", bitmode)
 
 printf("set alert func ...")
-
 local cb, err = assert(sess:callback(pinp, gpio.EITHER_EDGE, alert))
 printf("  callback ID: %d", cb.id)
 last_tick = sess:tick()

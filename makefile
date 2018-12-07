@@ -27,7 +27,7 @@ $(TARGET): $(OBJS)
 $(WRAPPER:.c=.o): $(WRAPPER)
 
 $(WRAPPER): $(IFILE) $(HFILE)
-	swig -I$(SWIG_IDIR) -lua $(IFILE)
+	swig -w302 -I$(SWIG_IDIR) -lua $(IFILE)
 
 doc::
 	ldoc $(MODULE).lua
