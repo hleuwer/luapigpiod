@@ -619,6 +619,12 @@ int utlI2CReadBlockData(lua_State *L)
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(32 * sizeof(char));
   nbytes = i2c_read_block_data(pi, handle, reg, cbuf);
+  if (nbytes < 0){
+    free(cbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
   luaL_addlstring(&lbuf, cbuf, nbytes);
   free(cbuf);
   luaL_pushresult(&lbuf);
@@ -666,6 +672,12 @@ int utlI2CReadI2CBlockData(lua_State *L)
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(32 * sizeof(char));
   nbytes = i2c_read_i2c_block_data(pi, handle, reg, cbuf, n);
+  if (nbytes < 0){
+    free(cbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
   luaL_addlstring(&lbuf, cbuf, nbytes);
   free(cbuf);
   luaL_pushresult(&lbuf);
