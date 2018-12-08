@@ -972,7 +972,7 @@ classSession.openWave = function(self, waveform, name)
                  __gc = function(self) self:delete() end
    })
    _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
-   self.waves[wave.handle] = wave
+   self.waveforms[wave.handle] = wave
    wave.session = self
    return wave
 end
