@@ -602,7 +602,7 @@ local classSession = {}
 -- @param self Session.
 -- @return true on success, nil + errormsg on error.
 classSession.close = function(self)
-   pigpio_stop(self.handle)
+
    for _, item in pairs(self.waveforms) do item:close() end
    for _, item in pairs(self.scripts) do item:delete() end
    for _, item in pairs(self.notifychannels) do item:close() end
@@ -611,6 +611,7 @@ classSession.close = function(self)
    for _, item in pairs(self.i2cdevs) do item:close() end
    for _, item in pairs(self.serialdevs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
+   pigpio_stop(self.handle)
    self.handle = nil
    return true
 end

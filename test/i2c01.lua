@@ -40,6 +40,9 @@ printf("  dev2: handle=%d, name=%q", dev2.handle, dev2.name)
 local dev3 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lsm90s1_m.addr, "LSM90S1 Magentometer"))
 printf("  dev3: handle=%d, name=%q", dev3.handle, dev3.name)
 
+print("=====")
+for k,x in pairs(sess.i2cdevs) do print(k, x.name) end
+print("+++++")
 
 printf("reading ID registers ...")
 local dev0_id = assert(dev0:readByte(ID_REG))
@@ -61,27 +64,36 @@ printf("  dev0..3: id (word)=0x%04x 0x%04x 0x%04x 0x%04x",
        dev2:readWord(ID_REG),
        dev3:readWord(ID_REG))
 
-printf("write/read pressure sensor register (byte) " .. 0x08 .. " ...")
+printf("write/read register (byte) " .. 0x08 .. " ...")
 local defval = assert(dev1:readByte(REF_P_XL_REG))
-printf("  dev read 1: ref_p=0x%0x", defval)
+printf("  dev read 1: ref_p=0x%02x", defval)
 assert(dev1:writeByte(REF_P_XL_REG, 0x55))
 local newval = assert(dev1:readByte(REF_P_XL_REG))
-printf("  dev read 2: ref_p=0x%0x ok=%s", newval, tostring(newval == 0x55))
+printf("  dev read 2: ref_p=0x%02x ok=%s", newval, tostring(newval == 0x55))
 assert(dev1:writeByte(REF_P_XL_REG, defval))
 local newval = assert(dev1:readByte(REF_P_XL_REG))
-printf("  dev read 2: ref_p=0x%0x ok=%s", newval, tostring(newval == defval))
+printf("  dev read 2: ref_p=0x%02x ok=%s", newval, tostring(newval == defval))
 
-printf("write/read  pressure sensor register (word) (will fail) " .. 0x08 .. " ...")
+printf("write/read register (word) (will fail on this device) " .. 0x08 .. " ...")
 local defval = assert(dev1:readWord(REF_P_XL_REG))
-printf("  dev read 1: ref_p=0x%0x", defval)
+printf("  dev read 1: ref_p=0x%04x", defval)
 assert(dev1:writeWord(REF_P_XL_REG, 0x55aa))
 local newval = assert(dev1:readWord(REF_P_XL_REG))
-printf("  dev read 2: ref_p=0x%0x ok=%s", newval, tostring(newval == 0x55aa))
+printf("  dev read 2: ref_p=0x%04x ok=%s", newval, tostring(newval == 0x55aa))
 assert(dev1:writeWord(REF_P_XL_REG, defval))
 local newval = assert(dev1:readWord(REF_P_XL_REG))
-printf("  dev read 2: ref_p=0x%0x ok=%s", newval, tostring(newval == defval))
+printf("  dev read 2: ref_p=0x%04x ok=%s", newval, tostring(newval == defval))
 
-
+local reg = 0x05
+printf("write/read register (word) (works on this device) " .. reg .. " on inertial sensor ...")
+local defval = assert(dev3:readWord(reg))
+printf("  dev read 1: ref_p=0x%04x", defval)
+assert(dev3:writeWord(reg, 0x55aa))
+local newval = assert(dev3:readWord(reg))
+printf("  dev read 2: ref_p=0x%04x ok=%s", newval, tostring(newval == 0x55aa))
+assert(dev3:writeWord(reg, defval))
+local newval = assert(dev3:readWord(reg))
+printf("  dev read 2: ref_p=0x%04x ok=%s", newval, tostring(newval == defval))
 
 printf("I2C performance test ...")
 local t1 = os.clock()
@@ -93,9 +105,9 @@ printf("i2c reads per second: %d", N/(t2-t1))
 printf("Closing I2C devices ...")
 
 dev0:close()
-dev1:close()
+--dev1:close()
 dev2:close()
-dev3:close()
+--dev3:close()
 
 printf("Closing session ...")
 sess:close()
