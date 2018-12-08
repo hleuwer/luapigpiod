@@ -19,7 +19,7 @@ local x = 1
 local last_tick
 local cbcnt = 1
 
-local notify = sess:notifyOpen()
+local notify = sess:openNotify()
 local fname = notify.filename
 --local fh = io.open(fname, "r")
 local fd = posix.open(fname, posix.O_RDONLY)

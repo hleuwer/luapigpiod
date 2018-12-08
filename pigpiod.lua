@@ -210,6 +210,7 @@ classWave.close = function(self)
       return ret, err
    end
    _G._PIGPIOD_WAVEFORMS[self.handle] = nil
+   self.session.waveforms[self.handle] = nil
    return true
 end
 classWave.delete = classWave.close
@@ -297,7 +298,10 @@ end
 -- @param self Script.
 -- @return true on success, nil + errormsg on failure.
 classScript.delete = function(self)
-   return tryB(delete_script(self.pihandle, self.handle))
+   local res, err = tryB(delete_script(self.pihandle, self.handle))
+   if not res then return nil, err end
+   self.session.scripts[self.handle] = nil
+   return res
 end
 
 --------------------------------------------------------------------------------
@@ -310,7 +314,10 @@ local classCallback = {}
 -- @param self Callback.
 -- @return true on success, nil + errormsg on failure.
 function classCallback.cancel(self)
-   return tryB(callback_cancel(self.id))
+   local res, err = tryB(callback_cancel(self.id))
+   if not res then return nil, err end
+   self.session.callbacks[self.id] = nil
+   return res
 end
 
 --------------------------------------------------------------------------------
@@ -323,7 +330,10 @@ local classEventCallback = {}
 -- @param self Eventcallback
 -- @return true on success, nil + errormsg on failure.
 function classEventCallback.cancel(self)
-   return tryB(event_callback_cancel(self.id))
+   local res, err = tryB(event_callback_cancel(self.id))
+   if not res then return nil, err end
+   self.session.eventcallbacks[self.id] = nil
+   return res
 end
 
 --------------------------------------------------------------------------------
@@ -364,7 +374,10 @@ end
 -- @param self Notification channel.
 -- @return true on success, nil + errormsg on failure.
 classNotify.close = function(self)
-   return tryB(notify_close(self.pihandle, self.handle))
+   local res, err = tryB(notify_close(self.pihandle, self.handle))
+   if not res then return nil, err end
+   self.session.notifychannels[self.handle] = nil
+   return res
 end
 
 --------------------------------------------------------------------------------
@@ -377,7 +390,10 @@ function classSerial.close(self)
 end
 
 function classSerial.writeByte(self, val)
-   return tryB(serial_write_byte(self.pihandle, self.handle, val))
+   local res, err = tryB(serial_write_byte(self.pihandle, self.handle, val))
+   if not err then return nil, err end
+   self.session.serialdevs[self.handle] = nil
+   return res
 end
 
 function classSerial.readByte(self)
@@ -406,7 +422,10 @@ local classI2C = {}
 -- @param self Device.
 -- @return I2C interface instance as table.
 function classI2C.close(self)
-   return tryB(i2c_close(self.pihandle, self.handle))
+   local ret, err = tryB(i2c_close(self.pihandle, self.handle))
+   if not ret then return nil, err end
+   self.session.i2cdevs[self.handle] = nil
+   return ret
 end
 
 ---
@@ -584,6 +603,13 @@ local classSession = {}
 -- @return true on success, nil + errormsg on error.
 classSession.close = function(self)
    pigpio_stop(self.handle)
+   for _, item in pairs(self.waveforms) do item:close() end
+   for _, item in pairs(self.scripts) do item:delete() end
+   for _, item in pairs(self.notifychannels) do item:close() end
+   for _, item in pairs(self.callbacks) do item:cancel() end
+   for _, item in pairs(self.eventcallbacks) do item:cancel() end
+   for _, item in pairs(self.i2cdevs) do item:close() end
+   for _, item in pairs(self.serialdevs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
    self.handle = nil
    return true
@@ -727,7 +753,7 @@ end
 -- as returned by this function.
 -- @param self Session.
 -- @return Notifcation channel handle.
-classSession.notifyOpen = function(self)
+classSession.openNotify = function(self)
    local notify = {}
    notify.handle = notify_open(self.handle)
    notify.pihandle = self.handle
@@ -740,11 +766,15 @@ classSession.notifyOpen = function(self)
    })
    notify.filename = "/dev/pigpio"..notify.handle
    notify.decode = decodeNotificationSample
+   notify.session = self
+   self.notifychannels[notify.handle] = notify
    return notify
 end
+classSession.notifyOpen = classSession.openNotify
 
 ---
 -- Set watchdog for the specified pin.
+-- A timeout of 0 cancels the watchdog.
 -- @param self Session.
 -- @param pin GPIO number.
 -- @param timeout Timeout in milliseconds.
@@ -890,6 +920,8 @@ classSession.openWave = function(self, waveform, name)
                  __gc = function(self) self:delete() end
    })
    _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
+   self.waves[wave.handle] = wave
+   wave.session = self
    return wave
 end
 classSession.waveOpen = classSession.openWave
@@ -1022,7 +1054,7 @@ end
 -- @param self Session.
 -- @param code Scipt code.
 -- @return Script object on success; nil + errormsg on failure.
-classSession.OpenScript = function(self, code)
+classSession.openScript = function(self, code)
    local script = {}
    script.handle = store_script(self.handle, code)
    script.pihandle = self.handle
@@ -1033,6 +1065,8 @@ classSession.OpenScript = function(self, code)
                    __index = classScript,
                    __gc = function(self) self:delete() end
    })
+   self.scripts[script.handle] = script
+   script.session = self
    return script
 end
 classSession.storeScript = classSession.openScript
@@ -1059,6 +1093,8 @@ classSession.callback = function(self, pin, edge, func, userdata)
                    __index = classCallback,
                    __gc = function(self) self:cancel() end
    })
+   self.callbacks[callback.id] = callback
+   callback.session = self
    return callback
 end
 
@@ -1072,6 +1108,8 @@ classSession.eventCallback = function(self, event, func, userdata)
                    __index = classEventCallback,
                    __gc = function(self) self:cancel() end
    })
+   self.eventcallbacks[callback.id] = callback
+   callback.session = self
    return callback
 end
 
@@ -1106,7 +1144,7 @@ end
 -- @param baud Baudrate in bits per second.
 -- @param tty Serial device file name starting with
 --            /dev/serial or /dev/tty
-classSession.serialOpen = function(self, baud, tty)
+classSession.openSerialOpen = function(self, baud, tty)
    local serial = {}
    local baud = baud or 9600
    local tty = tty or "/dev/serial"
@@ -1117,6 +1155,8 @@ classSession.serialOpen = function(self, baud, tty)
                    __index = classSerial,
                    __gc = function(self) self:close() end
    })
+   self.serialdevs[serial.handle] = serial
+   self.session = self
    return serial
 end
 
@@ -1195,6 +1235,8 @@ classSession.openI2C = function(self, bus, address, name)
                    __gc = function(self) self:close() end
    })
    i2c.name = name or ("i2cdev-"..i2c.handle)
+   i2c.session = self
+   self.i2cdevs[i2c.handle] = i2c
    return i2c
 end
 
@@ -1251,6 +1293,13 @@ function open(host, port, name)
                    __index = classSession,
                    __gc = function(self) self:close() end
    })
+   sess.i2cdevs={}
+   sess.serialdevs={}
+   sess.waveforms={}
+   sess.scripts={}
+   sess.notifychannels={}
+   sess.callbacks={}
+   sess.eventcallbacks={}
    return sess
 end
 

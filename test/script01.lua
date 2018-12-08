@@ -51,7 +51,7 @@ printf("T_on: %d", ton)
 printf("T_off: %d", toff)
 
 printf("open and store script ...")
-local script, err = assert(sess:scriptOpen("tag 999 w 21 1 mils ".. ton .." w 21 0 mils " ..toff .. " dcr p0 jp 999"), err)
+local script, err = assert(sess:openScript("tag 999 w 21 1 mils ".. ton .." w 21 0 mils " ..toff .. " dcr p0 jp 999"), err)
 printf("  handle: %d", script.handle)
 
 printf("  script status: %q", script:status())

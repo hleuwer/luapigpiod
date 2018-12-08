@@ -21,14 +21,26 @@ local sensehat_i2c_devices = {
    lps25h = {
       addr = 0x5c
    },
+   lsm90s1_a = {
+      addr = 0x6a
+   },
+   lsm90s1_m = {
+      addr = 0x1c
+   },
    other = {
       addr = 0x1c
    }
 }
 
 printf("Open I2C devices ...")
-local dev0 = assert(sess:openI2C(BUS, sensehat_i2c_devices.hts221.addr, "HTS221"))
+local dev0 = assert(sess:openI2C(BUS, sensehat_i2c_devices.hts221.addr, "HTS221 Humidity"))
 printf("  dev0: handle=%d, name=%q", dev0.handle, dev0.name)
+local dev1 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lps25h.addr, "LPS25H Pressure"))
+printf("  dev1: handle=%d, name=%q", dev1.handle, dev1.name)
+local dev2 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lsm90s1_a.addr, "LSM90S1 Accelerometer"))
+printf("  dev2: handle=%d, name=%q", dev2.handle, dev2.name)
+local dev3 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lsm90s1_m.addr, "LSM90S1 Magentometer"))
+printf("  dev3: handle=%d, name=%q", dev3.handle, dev3.name)
 
 printf("Reading block data SMBUS format (should fail)...")
 local bdata, err = dev0:readBlockData(ID_REG)
@@ -38,8 +50,8 @@ end
 
 printf("Reading block data I2C format...")
 for i = 1, 32 do
-   local bdata = assert(dev0:readI2CBlockData(ID_REG, i))
-   io.stdout:write(string.format("  dev0: len=%d", #bdata))
+   local bdata = assert(dev3:readI2CBlockData(ID_REG, i))
+   io.stdout:write(string.format("  dev3: len=%d", #bdata))
    io.stdout:write("  ")
    for j = 1, #bdata do
       io.stdout:write(string.format("%0x ", string.byte(string.sub(bdata, j))))
@@ -49,6 +61,9 @@ end
 printf("Closing I2C devices ...")
 
 dev0:close()
+dev1:close()
+dev2:close()
+dev3:close()
 
 printf("Closing session ...")
 sess:close()

@@ -41,7 +41,7 @@ local dev3 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lsm90s1_m.addr, "LSM9
 printf("  dev3: handle=%d, name=%q", dev3.handle, dev3.name)
 
 
-printf("Reading ID registers ...")
+printf("reading ID registers ...")
 local dev0_id = assert(dev0:readByte(ID_REG))
 printf("  dev0: id=0x%0x", dev0_id)
 
@@ -53,6 +53,13 @@ printf("  dev2: id=0x%0x", dev2_id)
 
 local dev3_id = assert(dev3:readByte(ID_REG))
 printf("  dev3: id=0x%0x", dev3_id)
+
+print("read ID register as words ...")
+printf("  dev0..3: id (word)=0x%04x 0x%04x 0x%04x 0x%04x",
+       dev0:readWord(ID_REG),
+       dev1:readWord(ID_REG),
+       dev2:readWord(ID_REG),
+       dev3:readWord(ID_REG))
 
 printf("write/read pressure sensor register (byte) " .. 0x08 .. " ...")
 local defval = assert(dev1:readByte(REF_P_XL_REG))
@@ -87,6 +94,8 @@ printf("Closing I2C devices ...")
 
 dev0:close()
 dev1:close()
+dev2:close()
+dev3:close()
 
 printf("Closing session ...")
 sess:close()
