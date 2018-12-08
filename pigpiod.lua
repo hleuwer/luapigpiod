@@ -766,7 +766,6 @@ classSession.openNotify = function(self)
                    __gc = function(self) self:close() end
    })
    notify.filename = "/dev/pigpio"..notify.handle
-   notify.decode = decodeNotificationSample
    notify.session = self
    self.notifychannels[notify.handle] = notify
    return notify
