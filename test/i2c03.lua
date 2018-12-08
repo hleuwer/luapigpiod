@@ -42,7 +42,7 @@ printf("  dev2: handle=%d, name=%q", dev2.handle, dev2.name)
 local dev3 = assert(sess:openI2C(BUS, sensehat_i2c_devices.lsm90s1_m.addr, "LSM90S1 Magentometer"))
 printf("  dev3: handle=%d, name=%q", dev3.handle, dev3.name)
 
-printf("Reading block data SMBUS format (should fail)...")
+printf("Reading block data SMBUS format (should fail: block read on SMBUS device not supported) ...")
 local bdata, err = dev0:readBlockData(ID_REG)
 if not bdata then
    printf("  err = %q", err)
@@ -51,13 +51,27 @@ end
 printf("Reading block data I2C format...")
 for i = 1, 32 do
    local bdata = assert(dev3:readI2CBlockData(ID_REG, i))
-   io.stdout:write(string.format("  dev3: len=%d", #bdata))
+   io.stdout:write(string.format("  dev3: len=%2d", #bdata))
    io.stdout:write("  ")
    for j = 1, #bdata do
-      io.stdout:write(string.format("%0x ", string.byte(string.sub(bdata, j))))
+      io.stdout:write(string.format("%02x ", string.byte(string.sub(bdata, j))))
    end
    print()
 end
+
+printf("Writing block data I2C format...")
+local reg = 0x05
+local tdata = "abcdefg"
+local ddata = assert(dev3:readI2CBlockData(reg, 6))
+printf("  read len: %d ddata: %q", #ddata, ddata)
+assert(dev3:writeI2CBlockData(reg, tdata))
+local rdata, err = assert(dev3:readI2CBlockData(reg, 6))
+printf("  read len: %d rdata: %q", #rdata, rdata)
+assert(dev3:writeI2CBlockData(reg, ddata))
+local rdata, err = assert(dev3:readI2CBlockData(reg, 6))
+printf("  read len: %d rdata: %q", #rdata, rdata)
+--assert(dev3:writeI2CBlockData(reg, string.char(0,0,0,0,0,0)))
+
 printf("Closing I2C devices ...")
 
 dev0:close()

@@ -33,10 +33,11 @@
 <li><a href="#Class_classWave">Class classWave </a></li>
 <li><a href="#Class_classScript">Class classScript </a></li>
 <li><a href="#Class_classCallback">Class classCallback </a></li>
-<li><a href="#Class_classEventCallback_">Class classEventCallback. </a></li>
-<li><a href="#Class_classNotify_">Class classNotify. </a></li>
-<li><a href="#Class_classI2C_">Class classI2C. </a></li>
-<li><a href="#Class_classSession_">Class classSession. </a></li>
+<li><a href="#Class_classEventCallback">Class classEventCallback </a></li>
+<li><a href="#Class_classNotify">Class classNotify </a></li>
+<li><a href="#Class_classI2C">Class classI2C </a></li>
+<li><a href="#Class_classI2Cbb">Class classI2Cbb </a></li>
+<li><a href="#Class_classSession">Class classSession </a></li>
 <li><a href="#Module_functions">Module functions </a></li>
 </ul>
 
@@ -102,9 +103,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#classScript.run">classScript.run (self, param)</a></td>
-	<td class="summary">Run a script.<br>
- Scripts are executed in a specialized VM in the pigpiod daemon and provides
- a means to produce very high toggling rates.</td>
+	<td class="summary">Run a script.<br></td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#classScript.update">classScript.update (self, param)</a></td>
@@ -130,14 +129,14 @@
 	<td class="summary">Cancel callback.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classEventCallback_">Class classEventCallback. </a></h2>
+<h2><a href="#Class_classEventCallback">Class classEventCallback </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#classEventCallback.cancel">classEventCallback.cancel (self)</a></td>
 	<td class="summary">Cancel event callback.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classNotify_">Class classNotify. </a></h2>
+<h2><a href="#Class_classNotify">Class classNotify </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#classNotify.begin">classNotify.begin (self, bits)</a></td>
@@ -157,7 +156,7 @@
 	<td class="summary">Close notification channel.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classI2C_">Class classI2C. </a></h2>
+<h2><a href="#Class_classI2C">Class classI2C </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#classI2C.close">classI2C.close (self)</a></td>
@@ -224,11 +223,22 @@
 	<td class="summary">Write given data to given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.zip">classI2C.zip (self, inbuf, nbytes)</a></td>
-	<td class="summary">Write and read given amount of  data to/from given device.</td>
+	<td class="name" nowrap><a href="#classI2C.zip">classI2C.zip (self, inbuf, outlen)</a></td>
+	<td class="summary">Execute a sequence of I2C commands.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classSession_">Class classSession. </a></h2>
+<h2><a href="#Class_classI2Cbb">Class classI2Cbb </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classI2Cbb.zip">classI2Cbb.zip (self, inbuf, outlen)</a></td>
+	<td class="summary">Execute a sequence of I2C commands.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classI2Cbb.close">classI2Cbb.close (self)</a></td>
+	<td class="summary">Close I2C bit bang device.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classSession">Class classSession </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#classSession.close">classSession.close (self)</a></td>
@@ -291,7 +301,7 @@
 	<td class="summary">Get servo pulsewidth.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.notifyOpen">classSession.notifyOpen (self)</a></td>
+	<td class="name" nowrap><a href="#classSession.openNotify">classSession.openNotify (self)</a></td>
 	<td class="summary">Open a notification channel.</td>
 	</tr>
 	<tr>
@@ -316,7 +326,7 @@
 	<td class="summary">Define and start a chain of waveforms.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.OpenScript">classSession.OpenScript (self, code)</a></td>
+	<td class="name" nowrap><a href="#classSession.openScript">classSession.openScript (self, code)</a></td>
 	<td class="summary">Open a gpiod script.</td>
 	</tr>
 	<tr>
@@ -328,7 +338,7 @@
 	<td class="summary">Wait for an edge to occur.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.serialOpen">classSession.serialOpen (self, baud, tty)</a></td>
+	<td class="name" nowrap><a href="#classSession.openSerial">classSession.openSerial (self, baud, tty)</a></td>
 	<td class="summary">Open serial device.</td>
 	</tr>
 	<tr>
@@ -423,7 +433,11 @@
     <h2 class="section-header has-description"><a name="Class_classWave"></a>Class classWave </h2>
 
           <div class="section-description">
-          Waveforms
+          <h3>Waveforms</h3>
+ Waveforms allow to define waveforms to be output on a number of
+ GPIO pins in a programmable way.  Once defined the waveform can be sent
+ once or repeatedly.<br>
+ Constructor: <code>session:openWave(waveform, name)</code>
           </div>
     <dl class="function">
     <dt>
@@ -536,7 +550,12 @@
     <h2 class="section-header has-description"><a name="Class_classScript"></a>Class classScript </h2>
 
           <div class="section-description">
-          Scripting
+          <h3>Scripting</h3>
+ A script is a  microcode program to be executed in a specialized virtual
+ machine in the pigpiod daemon.
+ They allow very high pin toggling rates.
+ See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a><br>
+ Constructor: <code>script=session:openScript(code, name)</code>
           </div>
     <dl class="function">
     <dt>
@@ -545,8 +564,6 @@
     </dt>
     <dd>
     Run a script.<br>
- Scripts are executed in a specialized VM in the pigpiod daemon and provides
- a means to produce very high toggling rates.
 
 
     <h3>Parameters:</h3>
@@ -677,7 +694,11 @@
     <h2 class="section-header has-description"><a name="Class_classCallback"></a>Class classCallback </h2>
 
           <div class="section-description">
-          Pin event callback
+          <h3>Pin event callback</h3>
+ Callbacks are executed when a the state of a certain pin changes.  If a
+ watchdog is configured on the pin, the callback is also called with a pseudo
+ level indication.<br>
+ Constructor: <code>cb=session:callback(pin, edge, func, userdata)</code>
           </div>
     <dl class="function">
     <dt>
@@ -706,10 +727,12 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classEventCallback_"></a>Class classEventCallback. </h2>
+    <h2 class="section-header has-description"><a name="Class_classEventCallback"></a>Class classEventCallback </h2>
 
           <div class="section-description">
-          User event callback.
+          <h3>User initiated event callback</h3>
+ Up to 32 event (0 to 31) are supported.<br>
+ Constructor: <code>cb=session:eventCallback(event, func, userdata)</code>
           </div>
     <dl class="function">
     <dt>
@@ -738,10 +761,13 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classNotify_"></a>Class classNotify. </h2>
+    <h2 class="section-header has-description"><a name="Class_classNotify"></a>Class classNotify </h2>
 
           <div class="section-description">
-          Notifications.
+          <h3>Notification channels</h3>
+ Notification channels record pin changes in a FIFO which is readable by a
+ file.<br>
+ Constructor:<code>notify=session:openNotify()</code>
           </div>
     <dl class="function">
     <dt>
@@ -853,10 +879,12 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classI2C_"></a>Class classI2C. </h2>
+    <h2 class="section-header has-description"><a name="Class_classI2C"></a>Class classI2C </h2>
 
           <div class="section-description">
-          Class: i2c.
+          <h3>I2C Device</h3>
+ This is a master I2C device.<br>
+ Constructor: <code>dev=session:openI2C(bus, address, name)</code>
           </div>
     <dl class="function">
     <dt>
@@ -1325,10 +1353,11 @@
 </dd>
     <dt>
     <a name = "classI2C.zip"></a>
-    <strong>classI2C.zip (self, inbuf, nbytes)</strong>
+    <strong>classI2C.zip (self, inbuf, outlen)</strong>
     </dt>
     <dd>
-    Write and read given amount of  data to/from given device.
+    Execute a sequence of I2C commands.
+ For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
 
 
     <h3>Parameters:</h3>
@@ -1339,15 +1368,15 @@
         <li><span class="parameter">inbuf</span>
          Lua String with data to be sent.
         </li>
-        <li><span class="parameter">nbytes</span>
-         Number of Byte transfers.
+        <li><span class="parameter">outlen</span>
+         Number of Byte to be returned.
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-        Bytes read in a Lua string.
+        Bytes read in a Lua string on success, nil + errormsg on failure.
     </ol>
 
 
@@ -1355,13 +1384,79 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classSession_"></a>Class classSession. </h2>
+    <h2 class="section-header has-description"><a name="Class_classI2Cbb"></a>Class classI2Cbb </h2>
+
+          <div class="section-description">
+          <h3>I2C Bit Banging Device</h3>
+ This device is a GPIO based I2C device allowing special service primitives.
+ Constructor: <code>dev=session:openI2Cbb(sda, scl, baud)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classI2Cbb.zip"></a>
+    <strong>classI2Cbb.zip (self, inbuf, outlen)</strong>
+    </dt>
+    <dd>
+    Execute a sequence of I2C commands.
+ For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">inbuf</span>
+         Lua String with data to be sent.
+        </li>
+        <li><span class="parameter">outlen</span>
+         Number of Byte to be returned.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Bytes read in a Lua string on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classI2Cbb.close"></a>
+    <strong>classI2Cbb.close (self)</strong>
+    </dt>
+    <dd>
+    Close I2C bit bang device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classSession"></a>Class classSession </h2>
 
           <div class="section-description">
           All GPIO control and status operations occurs in the context of a session.
  A session is create by connecting to a remote Raspberry Pi instance via
- network or locally.
- A session is created with a call to open(host, port)
+ network or locally.<br>
+ Constructor: <code>session=pigpiod.open(host, port, name)</code>
           </div>
     <dl class="function">
     <dt>
@@ -1793,8 +1888,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.notifyOpen"></a>
-    <strong>classSession.notifyOpen (self)</strong>
+    <a name = "classSession.openNotify"></a>
+    <strong>classSession.openNotify (self)</strong>
     </dt>
     <dd>
     Open a notification channel.
@@ -1825,6 +1920,7 @@
     </dt>
     <dd>
     Set watchdog for the specified pin.
+ A timeout of 0 cancels the watchdog.
 
 
     <h3>Parameters:</h3>
@@ -1985,12 +2081,11 @@
 
 </dd>
     <dt>
-    <a name = "classSession.OpenScript"></a>
-    <strong>classSession.OpenScript (self, code)</strong>
+    <a name = "classSession.openScript"></a>
+    <strong>classSession.openScript (self, code)</strong>
     </dt>
     <dd>
     Open a gpiod script.
- See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a> for details
  on gpiod scripting.
 
 
@@ -2090,8 +2185,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.serialOpen"></a>
-    <strong>classSession.serialOpen (self, baud, tty)</strong>
+    <a name = "classSession.openSerial"></a>
+    <strong>classSession.openSerial (self, baud, tty)</strong>
     </dt>
     <dd>
     Open serial device.
@@ -2286,8 +2381,16 @@
     <h2 class="section-header has-description"><a name="Module_functions"></a>Module functions </h2>
 
           <div class="section-description">
-           Most important: the function 'open(...)' is used to open
- a session with a connectivity to the local or a remote pigpiod daemon.
+
+ The pigpio module provides the following functions in the modules name space:
+ <code>open()</code> - opens a session with local or remote host.<br>
+ <code>tick()</code> - returns hosts tick time in microseconds.<br>
+ <code>time()</code> - returns hosts time in seconcs sincd last epoche a floating point.<br>
+ <code>getEventStats()</code> - returns event statistics.<br>
+ <code>clearEventStats()</code> - clears event statistics.<br>
+ <code>wait()</code> - wait a certain time with possibility for lua event callbacks.<br>
+ <code>busyWait()</code> - wait without any process blocking call.<br>
+ <code>perror()</code> - returns a textual description of an error code.<br>
           </div>
     <dl class="function">
     <dt>
@@ -2444,7 +2547,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-12-07 08:11:22 </i>
+<i style="float:right;">Last updated 2018-12-08 22:09:31 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

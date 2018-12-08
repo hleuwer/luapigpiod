@@ -194,7 +194,11 @@ _G._PIGPIOD_SESSIONS = {}
 _G._PIGPIOD_WAVEFORMS = {}
 
 --------------------------------------------------------------------------------
---- Waveforms
+--- <h3>Waveforms</h3>
+-- Waveforms allow to define waveforms to be output on a number of
+-- GPIO pins in a programmable way. Once defined the waveform can be sent
+-- once or repeatedly.<br>
+-- Constructor: <code>session:openWave(waveform, name)</code>
 -- @type classWave
 --------------------------------------------------------------------------------
 local classWave = {}
@@ -247,15 +251,18 @@ classWave.sendUsingMode = function(self, mode)
 end
 
 --------------------------------------------------------------------------------
---- Scripting
+--- <h3>Scripting</h3>
+-- A script is a  microcode program to be executed in a specialized virtual
+-- machine in the pigpiod daemon.
+-- They allow very high pin toggling rates.
+-- See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a><br>
+-- Constructor: <code>script=session:openScript(code, name)</code>
 -- @type classScript
 --------------------------------------------------------------------------------
 local classScript = {}
 
 ---
 -- Run a script.<br>
--- Scripts are executed in a specialized VM in the pigpiod daemon and provides
--- a means to produce very high toggling rates. 
 -- @param self Script.
 -- @param param List of up to 10 parameters for the script.
 -- @return true on success, nil + errormsg on failure.
@@ -305,7 +312,11 @@ classScript.delete = function(self)
 end
 
 --------------------------------------------------------------------------------
---- Pin event callback
+--- <h3>Pin event callback</h3>
+-- Callbacks are executed when a the state of a certain pin changes. If a
+-- watchdog is configured on the pin, the callback is also called with a pseudo
+-- level indication.<br>
+-- Constructor: <code>cb=session:callback(pin, edge, func, userdata)</code>
 -- @type classCallback
 --------------------------------------------------------------------------------
 local classCallback = {}
@@ -321,8 +332,10 @@ function classCallback.cancel(self)
 end
 
 --------------------------------------------------------------------------------
---- User event callback.
--- @type classEventCallback.
+--- <h3>User initiated event callback</h3>
+-- Up to 32 event (0 to 31) are supported.<br>
+-- Constructor: <code>cb=session:eventCallback(event, func, userdata)</code>
+-- @type classEventCallback
 --------------------------------------------------------------------------------
 local classEventCallback = {}
 ---
@@ -337,8 +350,11 @@ function classEventCallback.cancel(self)
 end
 
 --------------------------------------------------------------------------------
--- Notifications.
--- @type classNotify.
+-- <h3>Notification channels</h3>
+-- Notification channels record pin changes in a FIFO which is readable by a
+-- file.<br>
+-- Constructor:<code>notify=session:openNotify()</code>
+-- @type classNotify
 --------------------------------------------------------------------------------
 local classNotify = {}
 ---
@@ -381,7 +397,9 @@ classNotify.close = function(self)
 end
 
 --------------------------------------------------------------------------------
--- Class: serial.
+-- <h3>Serial Device</h3>
+-- Serial (RS232) Devices.<br>
+-- Constructor:<code>device=session:openSerial(baud, tty)</code>
 -- @type classSerial.
 --------------------------------------------------------------------------------
 local classSerial = {}
@@ -413,8 +431,10 @@ function classSerial.dataAvailable(self)
 end
 
 --------------------------------------------------------------------------------
--- Class: i2c.
--- @type classI2C.
+-- <h3>I2C Device</h3>
+-- This is a master I2C device.<br>
+-- Constructor: <code>dev=session:openI2C(bus, address, name)</code>
+-- @type classI2C
 --------------------------------------------------------------------------------
 local classI2C = {}
 ---
@@ -579,21 +599,52 @@ function classI2C.writeDevice(self, data)
 end
 
 ---
--- Write and read given amount of  data to/from given device.
+-- Execute a sequence of I2C commands.
+-- For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
 -- @param self Device.
 -- @param inbuf Lua String with data to be sent.
--- @param nbytes Number of Byte transfers.
--- @return Bytes read in a Lua string.
-function classI2C.zip(self, inbuf, nbytes)
-   return tryV(i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, nbytes))
+-- @param outlen Number of Byte to be returned.
+-- @return Bytes read in a Lua string on success, nil + errormsg on failure.
+function classI2C.zip(self, inbuf, outlen)
+   return tryV(i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
+end
+
+--------------------------------------------------------------------------------
+-- <h3>I2C Bit Banging Device</h3>
+-- This device is a GPIO based I2C device allowing special service primitives.
+-- Constructor: <code>dev=session:openI2Cbb(sda, scl, baud)</code>
+-- @type classI2Cbb
+--------------------------------------------------------------------------------
+local classI2Cbb = {}
+
+---
+-- Execute a sequence of I2C commands.
+-- For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
+-- @param self Device.
+-- @param inbuf Lua String with data to be sent.
+-- @param outlen Number of Byte to be returned.
+-- @return Bytes read in a Lua string on success, nil + errormsg on failure.
+function classI2Cbb.zip(self, inbuf, outlen)
+   return tryV(bb_i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
+end
+
+---
+-- Close I2C bit bang device.
+-- @param self Device.
+-- @return true on success, nil + errormsg on failure.
+function classI2Cbb.close(self)
+   local res, err = tryB(bb_i2c_close(self.pihandle, self.handle))
+   if not res then return nil, err end
+   self.session.bbi2cdevs[self.handle] = nil
+   return res
 end
 
 --------------------------------------------------------------------------------
 -- All GPIO control and status operations occurs in the context of a session.
 -- A session is create by connecting to a remote Raspberry Pi instance via
--- network or locally.
--- A session is created with a call to open(host, port)
--- @type classSession.
+-- network or locally.<br>
+-- Constructor: <code>session=pigpiod.open(host, port, name)</code>
+-- @type classSession
 --------------------------------------------------------------------------------
 local classSession = {}
 
@@ -610,6 +661,7 @@ classSession.close = function(self)
    for _, item in pairs(self.eventcallbacks) do item:cancel() end
    for _, item in pairs(self.i2cdevs) do item:close() end
    for _, item in pairs(self.serialdevs) do item:close() end
+   for _, item in pairs(self.bbi2cdevs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
    pigpio_stop(self.handle)
    self.handle = nil
@@ -1049,7 +1101,6 @@ end
 
 ---
 -- Open a gpiod script.
--- See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a> for details
 -- on gpiod scripting.
 -- @param self Session.
 -- @param code Scipt code.
@@ -1144,7 +1195,7 @@ end
 -- @param baud Baudrate in bits per second.
 -- @param tty Serial device file name starting with
 --            /dev/serial or /dev/tty
-classSession.openSerialOpen = function(self, baud, tty)
+classSession.openSerial = function(self, baud, tty)
    local serial = {}
    local baud = baud or 9600
    local tty = tty or "/dev/serial"
@@ -1240,6 +1291,21 @@ classSession.openI2C = function(self, bus, address, name)
    return i2c
 end
 
+classSession.openI2Cbb = function(self, sda, scl, baud)
+   local i2c = {}
+   local res, err = tryB(bb_i2c_open(self.handle, sda, scl, baud))
+   if not res then return nil, err end
+   i2c.handle = sda
+   i2c.pihandle = i2c.handle
+   setmetatable(i2c, {
+                   __index = classI2Cbb,
+                   __gc = function(self) self:close() end
+   })
+   i2c.session = self
+   i2c.bbi2cdevs[i2c.handle] = i2c
+   return i2c
+end
+
 ---
 -- Scan an I2C bus for present devices.
 -- Returns a list of table in the following form:
@@ -1267,8 +1333,16 @@ classSession.scanI2C = function(self, bus)
 end
 
 --------------------------------------------------------------------------------
--- Module functions. Most important: the function 'open(...)' is used to open
--- a session with a connectivity to the local or a remote pigpiod daemon.
+-- Module functions.
+-- The pigpio module provides the following functions in the modules name space:
+-- <code>open()</code> - opens a session with local or remote host.<br>
+-- <code>tick()</code> - returns hosts tick time in microseconds.<br>
+-- <code>time()</code> - returns hosts time in seconcs sincd last epoche a floating point.<br>
+-- <code>getEventStats()</code> - returns event statistics.<br>
+-- <code>clearEventStats()</code> - clears event statistics.<br>
+-- <code>wait()</code> - wait a certain time with possibility for lua event callbacks.<br>
+-- <code>busyWait()</code> - wait without any process blocking call.<br>
+-- <code>perror()</code> - returns a textual description of an error code.<br>
 -- @section Functions
 --------------------------------------------------------------------------------
 
@@ -1300,6 +1374,8 @@ function open(host, port, name)
    sess.notifychannels={}
    sess.callbacks={}
    sess.eventcallbacks={}
+   sess.bbi2cdevs = {}
+   sess.bbserialdevs = {}
    return sess
 end
 
