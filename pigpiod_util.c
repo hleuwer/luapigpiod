@@ -598,6 +598,12 @@ int utlSerialRead(lua_State *L)
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
   nbytes = serial_read(pi, handle, cbuf, n);
+  if (nbytes < 0){
+    free(cbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
   luaL_addlstring(&lbuf, cbuf, nbytes);
   free(cbuf);
   luaL_pushresult(&lbuf);

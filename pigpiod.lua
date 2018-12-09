@@ -403,29 +403,61 @@ end
 -- @type classSerial.
 --------------------------------------------------------------------------------
 local classSerial = {}
+
+---
+-- Close serial device.
+-- @param self Device.
+-- @return true on success, nil + errormsg on failure.
 function classSerial.close(self)
    local res, err = tryB(serial_close(self.pihandle, self.handle))
-   if not err then return nil, err end
+   if not res then return nil, err end
    self.session.serialdevs[self.handle] = nil
    return res
 end
 
+---
+-- Write a single byte to serial interface.
+-- @param self Device.
+-- @param val Value to write.
+-- @return true on success, nil + errormsg on failure.
 function classSerial.writeByte(self, val)
    return tryB(serial_write_byte(self.pihandle, self.handle, val))
 end
 
+---
+-- Read a single byte from serial interface.
+-- @param self Device.
+-- @return Byte read on success, nil + errormsg on failure.
 function classSerial.readByte(self)
    return tryV(serial_read_byte(self.pihandle, self.handle))
 end
 
+---
+-- Write data to serial interface.
+-- @param self Device.
+-- @param data Data to send as Lua string.
+-- @return true on success, nil + errormsg on failure.
 function classSerial.write(self, data)
    return tryB(serial_write(self.pihandle, self.handle, data, #data))
 end
 
+---
+-- Read data from serial interface. Up to nbytes are read.
+-- @param self Device.
+-- @param nbytes Number of bytes to read.
+-- @return Data read.
 function classSerial.read(self, nbytes)
-   return tryV(serial_read(self.pihandle, self.handle, nbytes))
+   local res, errno = serial_read(self.pihandle, self.handle, nbytes)
+   if res == nil then
+      return nil, perror(errno)
+   end
+   return res
 end
 
+---
+-- Check whether data is available in the bufffer.
+-- @param self Device.
+-- @return Number of available data on success, nil + errormsg on failure.
 function classSerial.dataAvailable(self)
    return tryV(serial_data_available(self.pihandle, self.handle))
 end
@@ -1198,7 +1230,7 @@ end
 classSession.openSerial = function(self, baud, tty)
    local serial = {}
    local baud = baud or 9600
-   local tty = tty or "/dev/serial"
+   local tty = tty or "/dev/serial0"
    local flags = 0
    serial.handle = serial_open(self.handle, tty, baud, flags)
    serial.pihandle = self.handle
