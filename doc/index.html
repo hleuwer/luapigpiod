@@ -35,6 +35,7 @@
 <li><a href="#Class_classCallback">Class classCallback </a></li>
 <li><a href="#Class_classEventCallback">Class classEventCallback </a></li>
 <li><a href="#Class_classNotify">Class classNotify </a></li>
+<li><a href="#Class_classSerial_">Class classSerial. </a></li>
 <li><a href="#Class_classI2C">Class classI2C </a></li>
 <li><a href="#Class_classI2Cbb">Class classI2Cbb </a></li>
 <li><a href="#Class_classSession">Class classSession </a></li>
@@ -154,6 +155,33 @@
 	<tr>
 	<td class="name" nowrap><a href="#classNotify.close">classNotify.close (self)</a></td>
 	<td class="summary">Close notification channel.</td>
+	</tr>
+</table>
+<h2><a href="#Class_classSerial_">Class classSerial. </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.close">classSerial.close (self)</a></td>
+	<td class="summary">Close serial device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.writeByte">classSerial.writeByte (self, val)</a></td>
+	<td class="summary">Write a single byte to serial interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.readByte">classSerial.readByte (self)</a></td>
+	<td class="summary">Read a single byte from serial interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.write">classSerial.write (self, data)</a></td>
+	<td class="summary">Write data to serial interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.read">classSerial.read (self, nbytes)</a></td>
+	<td class="summary">Read data from serial interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSerial.dataAvailable">classSerial.dataAvailable (self)</a></td>
+	<td class="summary">Check whether data is available in the bufffer.</td>
 	</tr>
 </table>
 <h2><a href="#Class_classI2C">Class classI2C </a></h2>
@@ -872,6 +900,174 @@
     <ol>
 
         true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_classSerial_"></a>Class classSerial. </h2>
+
+          <div class="section-description">
+          <h3>Serial Device</h3>
+ Serial (RS232) Devices.<br>
+ Constructor:<code>device=session:openSerial(baud, tty)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classSerial.close"></a>
+    <strong>classSerial.close (self)</strong>
+    </dt>
+    <dd>
+    Close serial device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSerial.writeByte"></a>
+    <strong>classSerial.writeByte (self, val)</strong>
+    </dt>
+    <dd>
+    Write a single byte to serial interface.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">val</span>
+         Value to write.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSerial.readByte"></a>
+    <strong>classSerial.readByte (self)</strong>
+    </dt>
+    <dd>
+    Read a single byte from serial interface.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Byte read on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSerial.write"></a>
+    <strong>classSerial.write (self, data)</strong>
+    </dt>
+    <dd>
+    Write data to serial interface.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">data</span>
+         Data to send as Lua string.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSerial.read"></a>
+    <strong>classSerial.read (self, nbytes)</strong>
+    </dt>
+    <dd>
+    Read data from serial interface.  Up to nbytes are read.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSerial.dataAvailable"></a>
+    <strong>classSerial.dataAvailable (self)</strong>
+    </dt>
+    <dd>
+    Check whether data is available in the bufffer.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of available data on success, nil + errormsg on failure.
     </ol>
 
 
@@ -2547,7 +2743,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-12-08 22:09:31 </i>
+<i style="float:right;">Last updated 2018-12-09 23:00:33 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
