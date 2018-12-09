@@ -404,14 +404,14 @@ end
 --------------------------------------------------------------------------------
 local classSerial = {}
 function classSerial.close(self)
-   return tryB(serial_close(self.pihandle, self.handle))
-end
-
-function classSerial.writeByte(self, val)
-   local res, err = tryB(serial_write_byte(self.pihandle, self.handle, val))
+   local res, err = tryB(serial_close(self.pihandle, self.handle))
    if not err then return nil, err end
    self.session.serialdevs[self.handle] = nil
    return res
+end
+
+function classSerial.writeByte(self, val)
+   return tryB(serial_write_byte(self.pihandle, self.handle, val))
 end
 
 function classSerial.readByte(self)
