@@ -1207,7 +1207,7 @@ classSession.openSerial = function(self, baud, tty)
                    __gc = function(self) self:close() end
    })
    self.serialdevs[serial.handle] = serial
-   self.session = self
+   serial.session = self
    return serial
 end
 
