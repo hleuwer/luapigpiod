@@ -1227,7 +1227,7 @@ end
 -- @param baud Baudrate in bits per second.
 -- @param tty Serial device file name starting with
 --            /dev/serial or /dev/tty
-classSession.openSerial = function(self, baud, tty)
+classSession.openSerial = function(self, baud, tty, name)
    local serial = {}
    local baud = baud or 9600
    local tty = tty or "/dev/serial0"
@@ -1240,6 +1240,7 @@ classSession.openSerial = function(self, baud, tty)
    })
    self.serialdevs[serial.handle] = serial
    serial.session = self
+   serial.name = name or ("serial-"..serial.handle)
    return serial
 end
 

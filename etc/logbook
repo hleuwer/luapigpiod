@@ -1,0 +1,32 @@
+ouput of i2cdetect -y 1:
+
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- 1c -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- UU -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- 5c -- -- 5f
+60: -- -- -- -- -- -- -- -- -- -- 6a -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+
+0x5f: x101 1111
+      1011 1110 0xbe write to device 0x5f
+      1011 1111 0xbf read from device 0x5f
+This is the humidity detector HTS221
+
+0x5c: x101 1100
+      1011 1000 0xb8 write to device 0x5c
+      1011 1001 0xb9 read from device 0x5c
+This is the pressure sensor LPS25H
+
+
+0x6a  x110 1010
+      1101 0100 0xd4 write to device 0x6a
+      1101 0101 0xd5 read from device 0x6a
+This is the accelerometer sensor in inertial module LSM9DS1
+
+0x1c  x001 1100      
+      0011 1000 0x38 write to device 0x1c
+      0011 1001 0x39 read from device 0x1c
+This is the magnetometer sensor in inertial module LSM9DS1
