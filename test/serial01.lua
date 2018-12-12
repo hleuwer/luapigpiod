@@ -2,7 +2,7 @@ local gpio = require "pigpiod"
 local wait = gpio.wait
 
 local TTYDEV = "/dev/serial0"
-local baudrates = {9600, 19200, 38400, 57600, 115200, 230400}
+local baudrates = gpio.baudrates
 
 local dest = {
    me = {host = "localhost", port = 8888},
@@ -13,6 +13,11 @@ local function printf(fmt, ...)
 end
 
 local sess = {}
+
+local sendbuf = ""
+for i = 1, 16*1024 do
+   sendbuf = sendbuf .. string.char(0x55) .. string.char(0xaa)
+end
 
 printf("Open sessions ...")
 
@@ -42,26 +47,26 @@ for _, baudrate in ipairs(baudrates) do
    end
    assert(dev.you:readByte() == 0x55)
    
-   printf("Send messages of different length ...")
-   for _, len in ipairs{1,32,64} do
-      local ds = ""
-      for i = 1, len do ds = ds .. "a" end
+   printf("Send messages of different length (note: 4095 is max possible burst len) ...")
+   local fmt = string.format
+   for _, len in ipairs{1,32,64,256,512,1024,2048,4095} do
+      local ds = string.sub(sendbuf, 1, len)
       local ns = #ds
-      printf("  Send %d bytes ...", ns)
+      local te = len * 10 / baudrate 
+      io.stdout:write(fmt("  Send %d bytes (%.2f sec) ...", ns, te)) io.stdout:flush()
+      local t0 = gpio.time()
       assert(dev.me:write(ds))
       local nr = assert(dev.you:dataAvailable())
-      local t0 = gpio.time()
       while nr < ns do
          nr = dev.you:dataAvailable()
-         assert(gpio.time() - t0 < 5)
       end
-      local dr = assert(dev.you:read(nr))
-      printf("  Recv %d bytes", #dr)
+      local dr = assert(dev.you:read(ns))
+      dt = gpio.time() - t0
+      printf(" recv %d bytes (%.2f sec) gc: %d %d", #dr, dt, collectgarbage("count"))
    end
    printf("  Closing serial devices ...")
    dev.me:close()
    dev.you:close()
-   wait(1)
 end
 print("Cleanup ...")
 

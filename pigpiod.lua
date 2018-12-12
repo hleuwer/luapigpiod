@@ -193,6 +193,10 @@ _G._PIGPIOD_SESSIONS = {}
 -- during object garbage collection.
 _G._PIGPIOD_WAVEFORMS = {}
 
+---
+-- Supported baudrates serial built-in serial interface.
+baudrates = {9600, 19200, 38400, 57600, 115200, 230400}
+
 --------------------------------------------------------------------------------
 --- <h3>Waveforms</h3>
 -- Waveforms allow to define waveforms to be output on a number of
