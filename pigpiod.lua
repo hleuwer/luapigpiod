@@ -1218,7 +1218,9 @@ classSession.waitEdge = function(self, pin, edge, timeout)
 end
 
 classSession.waitEvent = function(self, event, timeout)
-   return tryV(wait_for_event(self.handle, event, timeout))
+   local res, err = tryV(wait_for_event(self.handle, event, timeout))
+   if not res then return nil, err end
+   return true
 end
 
 classSession.triggerEvent = function(self, event)
@@ -1470,6 +1472,26 @@ end
 -- @return true on success, nil + errormsg on failure.
 function clearEventStats()
    return tryB(clear_event_statistics())
+end
+
+---
+-- Start a new thrad.
+-- @param code Lua code in a string.
+-- @param name Name of the thread.
+-- @param ... Paramters passed to the given Lua code as arguments.
+-- @return pthread user data on success, nil + errormsg on failure.
+function startThread(code, name, ...)
+   local ret, err = start_thread(code, name, ...)
+   if not ret then return nil, err end
+   return ret
+end
+
+---
+-- Stop given thread.
+-- @param pthread Name or pthread userdata of thread.
+-- @return true on success, nil + errormsg on failure.
+function stopThread(pthread)
+   return tryB(stop_thread(pthread))
 end
 
 return _ENV

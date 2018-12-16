@@ -14,8 +14,8 @@
 %rename(sleep) time_sleep;
 %rename(perror) pigpio_error;
 %rename(ifVersion) pigpiod_if_version;
-%rename(startThread) start_thread;
-%rename(stopThread) stop_thread;
+//%rename(startThread) start_thread;
+//%rename(stopThread) stop_thread;
 
 // Replacements of native calls
 %native (start_thread) int utlStartThread(lua_State *L);
