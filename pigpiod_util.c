@@ -747,3 +747,58 @@ int clear_event_statistics(void)
   eventstat.maxcount = 0;
   return 1;
 }
+
+/*
+ * Lua binding: str = spi:read(n)
+ */
+int utlSPIRead(lua_State *L)
+{
+  int pi, n, nbytes;
+  lua_Unsigned handle;
+  luaL_Buffer lbuf;
+  char *cbuf;
+  pi = luaL_checkint(L, 1);
+  handle = luaL_checkunsigned(L, 2);
+  n = (int) luaL_checkunsigned(L, 3);
+  luaL_buffinit(L, &lbuf);
+  cbuf = malloc(n * sizeof(char));
+  nbytes = spi_read(pi, handle, cbuf, n);
+  if (nbytes < 0){
+    free(cbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
+  luaL_addlstring(&lbuf, cbuf, nbytes);
+  free(cbuf);
+  luaL_pushresult(&lbuf);
+  return 1;  
+}
+
+/*
+ * Lua binding: str = spi:transfer(data)
+ */
+int utlSPITransfer(lua_State *L)
+{
+  int pi, n, nbytes;
+  lua_Unsigned handle;
+  luaL_Buffer lbuf;
+  char *rxbuf, *txbuf;
+  pi = luaL_checkint(L, 1);
+  handle = luaL_checkunsigned(L, 2);
+  txbuf = (char *)luaL_checkstring(L, 3);
+  n = (int) luaL_checkunsigned(L, 4);
+  luaL_buffinit(L, &lbuf);
+  rxbuf = malloc(n * sizeof(char));
+  nbytes = spi_xfer(pi, handle, txbuf, rxbuf, n);
+  if (nbytes < 0){
+    free(rxbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
+  luaL_addlstring(&lbuf, rxbuf, nbytes);
+  free(rxbuf);
+  luaL_pushresult(&lbuf);
+  return 1;  
+}

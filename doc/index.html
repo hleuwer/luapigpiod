@@ -38,7 +38,9 @@
 <li><a href="#Class_classSerial_">Class classSerial. </a></li>
 <li><a href="#Class_classI2C">Class classI2C </a></li>
 <li><a href="#Class_classI2Cbb">Class classI2Cbb </a></li>
+<li><a href="#Class_classSPI">Class classSPI </a></li>
 <li><a href="#Class_classSession">Class classSession </a></li>
+<li><a href="#Class_spiFlags">Class spiFlags </a></li>
 <li><a href="#Module_functions">Module functions </a></li>
 </ul>
 
@@ -55,7 +57,7 @@
 <h1>Module <code>pigpiod</code></h1>
 <p>A Lua wrapper for the pigpiod C interface.</p>
 <p>
- luapigpiod allows control of Raspberry Pi GPIO pins from userspace.
+ Luapigpiod allows control of Raspberry Pi GPIO pins from userspace.
  All operation are handled in the context of sessions (aka connections) or
  in the context of subusidiary classes like waves, scripts, callbacks,
  eventCallback, I2C, Serial or SPI devices.
@@ -78,6 +80,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#_G._PIGPIOD_WAVEFORMS">_G._PIGPIOD_WAVEFORMS</a></td>
 	<td class="summary">Active waveforms are maintained in a global table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#baudrates">baudrates</a></td>
+	<td class="summary">Supported baudrates serial built-in serial interface.</td>
 	</tr>
 </table>
 <h2><a href="#Class_classWave">Class classWave </a></h2>
@@ -266,6 +272,25 @@
 	<td class="summary">Close I2C bit bang device.</td>
 	</tr>
 </table>
+<h2><a href="#Class_classSPI">Class classSPI </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#classSPI.close">classSPI.close (self)</a></td>
+	<td class="summary">Close SPI device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSPI.read">classSPI.read (self, nbytes)</a></td>
+	<td class="summary">Read given number of bytes from SPI interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSPI.write">classSPI.write (self, data)</a></td>
+	<td class="summary">Write given data to SPI interface.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSPI.transfer">classSPI.transfer (self, data)</a></td>
+	<td class="summary">Transfer (write and read) given data.</td>
+	</tr>
+</table>
 <h2><a href="#Class_classSession">Class classSession </a></h2>
 <table class="function_list">
 	<tr>
@@ -366,7 +391,7 @@
 	<td class="summary">Wait for an edge to occur.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openSerial">classSession.openSerial (self, baud, tty)</a></td>
+	<td class="name" nowrap><a href="#classSession.openSerial">classSession.openSerial (self, baud, tty, name)</a></td>
 	<td class="summary">Open serial device.</td>
 	</tr>
 	<tr>
@@ -388,6 +413,49 @@
 	<tr>
 	<td class="name" nowrap><a href="#classSession.scanI2C">classSession.scanI2C (self, bus)</a></td>
 	<td class="summary">Scan an I2C bus for present devices.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#classSession.openSPI">classSession.openSPI (self, spichannel, bitrate, flags, name)</a></td>
+	<td class="summary">Open SPI device.</td>
+	</tr>
+</table>
+<h2><a href="#Class_spiFlags">Class spiFlags </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:mode">spiFlags:mode (pol, pha)</a></td>
+	<td class="summary">SPI Mode: 0..3 => 00, 01, 10, 11 = (pol, pha)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:cslev">spiFlags:cslev (cs2, cs1, cs0)</a></td>
+	<td class="summary">SPI chip select level: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:csuse">spiFlags:csuse (cs2, cs1, cs0)</a></td>
+	<td class="summary">SPI chip select usage: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:interface">spiFlags:interface (val)</a></td>
+	<td class="summary">SPI interface: "aux" or "main"</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:wires">spiFlags:wires (val)</a></td>
+	<td class="summary">SPI 3 wire: 3 or 4</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:masterbytes">spiFlags:masterbytes (val)</a></td>
+	<td class="summary">SPI MOSI bytes to transmit before changing to MISO: 0..15</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:txendian">spiFlags:txendian (val)</a></td>
+	<td class="summary">SPI transmit endianess: "big" or "little"</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:rxendian">spiFlags:rxendian (val)</a></td>
+	<td class="summary">SPI receive endianess: "big" or "little"</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spiFlags:wordsize">spiFlags:wordsize (val)</a></td>
+	<td class="summary">SPI word size: 0 => 1 Byte, 1..8 => 8 bits per char, 9..16 => 16 bits per char, 32 bits per char</td>
 	</tr>
 </table>
 <h2><a href="#Module_functions">Module functions </a></h2>
@@ -415,6 +483,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#clearEventStats">clearEventStats ()</a></td>
 	<td class="summary">Clear event statistics.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#startThread">startThread (code, name, ...)</a></td>
+	<td class="summary">Start a new thrad.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stopThread">stopThread (pthread)</a></td>
+	<td class="summary">Stop given thread.</td>
 	</tr>
 </table>
 
@@ -451,6 +527,42 @@
  during object garbage collection.
 
 
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "baudrates"></a>
+    <strong>baudrates</strong>
+    </dt>
+    <dd>
+    Supported baudrates serial built-in serial interface.
+ 9600 (1), 19200 (2), 38400 (3), 57600 (4), 115200 (5), 230400 (6).
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">1</span>
+         9600 bps
+        </li>
+        <li><span class="parameter">2</span>
+         19200 bps
+        </li>
+        <li><span class="parameter">3</span>
+         38400 bps
+        </li>
+        <li><span class="parameter">4</span>
+         57600 bps
+        </li>
+        <li><span class="parameter">5</span>
+         115200 bps
+        </li>
+        <li><span class="parameter">6</span>
+         230400 bps
+        </li>
+    </ul>
 
 
 
@@ -1646,6 +1758,125 @@
 
 </dd>
 </dl>
+    <h2 class="section-header has-description"><a name="Class_classSPI"></a>Class classSPI </h2>
+
+          <div class="section-description">
+          <h3>SPI Device</h3>
+ This is a master SPI device.<br>
+ Constructor: <code>dev=session:openSPI(spichannel, bitraate, flags, name)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "classSPI.close"></a>
+    <strong>classSPI.close (self)</strong>
+    </dt>
+    <dd>
+    Close SPI device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Decvice.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSPI.read"></a>
+    <strong>classSPI.read (self, nbytes)</strong>
+    </dt>
+    <dd>
+    Read given number of bytes from SPI interface.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read in Lua string, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSPI.write"></a>
+    <strong>classSPI.write (self, data)</strong>
+    </dt>
+    <dd>
+    Write given data to SPI interface.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">data</span>
+         Data to write in a Lua string.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Number of byte written, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "classSPI.transfer"></a>
+    <strong>classSPI.transfer (self, data)</strong>
+    </dt>
+    <dd>
+    Transfer (write and read) given data.
+ As much bytes are read as being written.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">data</span>
+         Data to write in a Lua string.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read in a Lua string on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
     <h2 class="section-header has-description"><a name="Class_classSession"></a>Class classSession </h2>
 
           <div class="section-description">
@@ -2382,7 +2613,7 @@
 </dd>
     <dt>
     <a name = "classSession.openSerial"></a>
-    <strong>classSession.openSerial (self, baud, tty)</strong>
+    <strong>classSession.openSerial (self, baud, tty, name)</strong>
     </dt>
     <dd>
     Open serial device.
@@ -2400,8 +2631,16 @@
          Serial device file name starting with
             /dev/serial or /dev/tty
         </li>
+        <li><span class="parameter">name</span>
+         Name of the device.
+        </li>
     </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+        Device object on success, nil + errormsg on failure.
+    </ol>
 
 
 
@@ -2573,6 +2812,262 @@
 
 
 </dd>
+    <dt>
+    <a name = "classSession.openSPI"></a>
+    <strong>classSession.openSPI (self, spichannel, bitrate, flags, name)</strong>
+    </dt>
+    <dd>
+    Open SPI device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">spichannel</span>
+         Channel (chip select) to use: 0..2 - default: 0.
+        </li>
+        <li><span class="parameter">bitrate</span>
+         Bitrate 32 kbps to 30 Mbps - default: 32 kbps.
+        </li>
+        <li><span class="parameter">flags</span>
+         Flags to control basic parameters of the device.
+        </li>
+        <li><span class="parameter">name</span>
+         Name for device - default: spidev-<SPIHANDLE>.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Device object on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_spiFlags"></a>Class spiFlags </h2>
+
+          <div class="section-description">
+          <h3>SPI Flags</h3>
+ A set of "macros" that can be used to assemble the <code>flags</code> parameter
+ for the function <code>classSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
+ Here is how flags word is constructed:<br>
+ <code>21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0</code><br>
+ <code> b  b  b  b  b  b  R  T  n  n  n  n  W  A u2 u1 u0 p2 p1 p0  m1  m0</code><br>
+ <ul>
+ <li>mode: operation mode: pol * 2 + pha
+ <li>cslev: chip select level: p2..p0
+ <li>csuse: chip select usage: u2..u0
+ <li>interface: interface to use: "main" or "aux"
+ <li>wires: wires to use: 4 (bidir) or 3 (unidir)
+ <li>masterbytes: 0..15
+ <li>txendian: transmit endian: "big" or "little"
+ <li>rxendian: treceive endian: "big" or "little"
+ <li>wordsize: word size: 0..32
+</ul>
+ NOTE: wrong constructed flag values are not detected before using in call to classSession:openSPI(...).
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "spiFlags:mode"></a>
+    <strong>spiFlags:mode (pol, pha)</strong>
+    </dt>
+    <dd>
+    SPI Mode: 0..3 => 00, 01, 10, 11 = (pol, pha)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pol</span>
+
+        </li>
+        <li><span class="parameter">pha</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:cslev"></a>
+    <strong>spiFlags:cslev (cs2, cs1, cs0)</strong>
+    </dt>
+    <dd>
+    SPI chip select level: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">cs2</span>
+
+        </li>
+        <li><span class="parameter">cs1</span>
+
+        </li>
+        <li><span class="parameter">cs0</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:csuse"></a>
+    <strong>spiFlags:csuse (cs2, cs1, cs0)</strong>
+    </dt>
+    <dd>
+    SPI chip select usage: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">cs2</span>
+
+        </li>
+        <li><span class="parameter">cs1</span>
+
+        </li>
+        <li><span class="parameter">cs0</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:interface"></a>
+    <strong>spiFlags:interface (val)</strong>
+    </dt>
+    <dd>
+    SPI interface: "aux" or "main"
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:wires"></a>
+    <strong>spiFlags:wires (val)</strong>
+    </dt>
+    <dd>
+    SPI 3 wire: 3 or 4
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:masterbytes"></a>
+    <strong>spiFlags:masterbytes (val)</strong>
+    </dt>
+    <dd>
+    SPI MOSI bytes to transmit before changing to MISO: 0..15
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:txendian"></a>
+    <strong>spiFlags:txendian (val)</strong>
+    </dt>
+    <dd>
+    SPI transmit endianess: "big" or "little"
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:rxendian"></a>
+    <strong>spiFlags:rxendian (val)</strong>
+    </dt>
+    <dd>
+    SPI receive endianess: "big" or "little"
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spiFlags:wordsize"></a>
+    <strong>spiFlags:wordsize (val)</strong>
+    </dt>
+    <dd>
+    SPI word size: 0 => 1 Byte, 1..8 => 8 bits per char, 9..16 => 16 bits per char, 32 bits per char
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">val</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
 </dl>
     <h2 class="section-header has-description"><a name="Module_functions"></a>Module functions </h2>
 
@@ -2736,6 +3231,62 @@
 
 
 </dd>
+    <dt>
+    <a name = "startThread"></a>
+    <strong>startThread (code, name, ...)</strong>
+    </dt>
+    <dd>
+    Start a new thrad.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">code</span>
+         Lua code in a string.
+        </li>
+        <li><span class="parameter">name</span>
+         Name of the thread.
+        </li>
+        <li><span class="parameter">...</span>
+         Paramters passed to the given Lua code as arguments.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        pthread user data on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "stopThread"></a>
+    <strong>stopThread (pthread)</strong>
+    </dt>
+    <dd>
+    Stop given thread.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pthread</span>
+         Name or pthread userdata of thread.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
 </dl>
 
 
@@ -2743,7 +3294,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-12-09 23:00:33 </i>
+<i style="float:right;">Last updated 2018-12-18 20:14:19 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

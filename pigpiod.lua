@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- A Lua wrapper for the pigpiod C interface.
--- luapigpiod allows control of Raspberry Pi GPIO pins from userspace.
+-- Luapigpiod allows control of Raspberry Pi GPIO pins from userspace.
 -- All operation are handled in the context of sessions (aka connections) or
 -- in the context of subusidiary classes like waves, scripts, callbacks,
 -- eventCallback, I2C, Serial or SPI devices.
@@ -195,7 +195,22 @@ _G._PIGPIOD_WAVEFORMS = {}
 
 ---
 -- Supported baudrates serial built-in serial interface.
-baudrates = {9600, 19200, 38400, 57600, 115200, 230400}
+-- 9600 (1), 19200 (2), 38400 (3), 57600 (4), 115200 (5), 230400 (6).
+-- @table baudrates
+-- @field [1 9600 bps
+-- @field [2 19200 bps
+-- @field [3 38400 bps
+-- @field [4 57600 bps
+-- @field [5 115200 bps
+-- @field [6 230400 bps
+baudrates = {
+   [1] = 9600,
+   [2] = 19200,
+   [3] = 38400,
+   [4] = 57600,
+   [5] = 115200,
+   [6] = 230400
+}
 
 --------------------------------------------------------------------------------
 --- <h3>Waveforms</h3>
@@ -676,6 +691,65 @@ function classI2Cbb.close(self)
 end
 
 --------------------------------------------------------------------------------
+-- <h3>SPI Device</h3>
+-- This is a master SPI device.<br>
+-- Constructor: <code>dev=session:openSPI(spichannel, bitraate, flags, name)</code>
+-- @type classSPI
+--------------------------------------------------------------------------------
+local classSPI = {}
+
+---
+-- Close SPI device.
+-- @param self Decvice.
+-- @return true on success, nil + errormsg on failure
+function classSPI.close(self)
+   local res, err = tryB(spi_close(self.pihandle, self.handle))
+   if not res then return nil, err end
+   self.session.spidevs[self.handle] = nil
+   return true
+end
+
+---
+-- Read given number of bytes from SPI interface.
+-- @param self Device.
+-- @param nbytes Number of bytes to read.
+-- @return Data read in Lua string, nil + errormsg on failure.
+function classSPI.read(self, nbytes)
+   local res, errno = spi_read(self.pihandle, self.handle, nbytes)
+   if res == nil then
+      return nil, perror(errno)
+   end
+   return res
+end
+
+---
+-- Write given data to SPI interface.
+-- @param self Device.
+-- @param data Data to write in a Lua string.
+-- @return Number of byte written, nil + errormsg on failure
+function classSPI.write(self, data)
+   local res, errno = spi_write(self.pihandle, self.handle, data, #data)
+   if not res then
+      return nil, perror(errno)
+   end
+   return res
+end
+
+---
+-- Transfer (write and read) given data.
+-- As much bytes are read as being written.
+-- @param self Device.
+-- @param data Data to write in a Lua string.
+-- @return Data read in a Lua string on success, nil + errormsg on failure.
+function classSPI.transfer(self, data)
+   local s, err = spi_xfer(self.pihandle, self.handle, data, #data)
+   if not s then
+      return nil, err
+   end
+   return s
+end
+
+--------------------------------------------------------------------------------
 -- All GPIO control and status operations occurs in the context of a session.
 -- A session is create by connecting to a remote Raspberry Pi instance via
 -- network or locally.<br>
@@ -696,6 +770,7 @@ classSession.close = function(self)
    for _, item in pairs(self.callbacks) do item:cancel() end
    for _, item in pairs(self.eventcallbacks) do item:cancel() end
    for _, item in pairs(self.i2cdevs) do item:close() end
+   for _, item in pairs(self.spidevs) do item:close() end
    for _, item in pairs(self.serialdevs) do item:close() end
    for _, item in pairs(self.bbi2cdevs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
@@ -1233,6 +1308,8 @@ end
 -- @param baud Baudrate in bits per second.
 -- @param tty Serial device file name starting with
 --            /dev/serial or /dev/tty
+-- @param name Name of the device.
+-- @return Device object on success, nil + errormsg on failure.
 classSession.openSerial = function(self, baud, tty, name)
    local serial = {}
    local baud = baud or 9600
@@ -1371,6 +1448,94 @@ classSession.scanI2C = function(self, bus)
    return devlist
 end
 
+---
+-- Open SPI device.
+-- @param self Session.
+-- @param spichannel Channel (chip select) to use: 0..2 - default: 0.
+-- @param bitrate Bitrate 32 kbps to 30 Mbps - default: 32 kbps.
+-- @param flags Flags to control basic parameters of the device.
+-- @param name Name for device - default: spidev-<SPIHANDLE>.
+-- @return Device object on success, nil + errormsg on failure.
+classSession.openSPI = function(self, spichannel, bitrate, flags, name)
+   local spi = {}
+   local spichannel = spichannel or 0
+   local bitrate = bitrate or 32000
+   local flags = flags or 0
+   spi.handle = spi_open(self.handle, spichannel, bitrate, flags)
+   if spi.handle < 0 then
+      return nil, perror(spi.handle)
+   end
+   spi.pihandle = self.handle
+   setmetatable(spi, {
+                   __index = classSPI,
+                   __gc = function(self) self:close() end
+   })
+   spi.name = name or ("spidev-" .. spi.handle)
+   spi.session = self
+   self.spidevs[spi.handle] = spi
+   return spi
+end
+
+--------------------------------------------------------------------------------
+-- <h3>SPI Flags</h3>
+-- A set of "macros" (Lua functions) that can be used to assemble the <code>flags</code> parameter
+-- for the function <code>classSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
+-- Here is how flags word is constructed:<br>
+-- <code>21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0</code><br>
+-- <code> b  b  b  b  b  b  R  T  n  n  n  n  W  A u2 u1 u0 p2 p1 p0  m1  m0</code><br>
+-- <ul>
+-- <li>mode: operation mode: pol * 2 + pha
+-- <li>cslev: chip select level: p2..p0
+-- <li>csuse: chip select usage: u2..u0
+-- <li>interface: interface to use: "main" or "aux"
+-- <li>wires: wires to use: 4 (bidir) or 3 (unidir)
+-- <li>masterbytes: 0..15
+-- <li>txendian: transmit endian: "big" or "little"
+-- <li>rxendian: treceive endian: "big" or "little"
+-- <li>wordsize: word size: 0..32
+--</ul>
+-- NOTE: wrong constructed flag values are not detected before using in call to classSession:openSPI(...).
+-- @type spiFlags
+--------------------------------------------------------------------------------
+spiFlags = {
+   --- SPI Mode: 0..3 => 00, 01, 10, 11 = (pol, pha)
+   mode = function(pol, pha)
+      return bit32.lshift(pol*2 + pha, 0)
+   end,
+   --- SPI chip select level: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)
+   cslev = function(cs2, cs1, cs0)
+      return bit32.lshift(cs2*4 + cs1*2 + cs0, 2)
+   end,
+   --- SPI chip select usage: 0..7 => 000, 001, ..., 111 = (cs2, cs1, cs0)
+   csuse = function(cs2, cs1, cs0)
+      return bit32.lshift(cs2*4 + cs1*2 + cs0, 5)
+   end,
+   --- SPI interface: "aux" or "main"
+   interface = function(val)
+      if val == "aux" then return bit32.lshift(1, 8) else return 0x0000 end
+   end,
+   --- SPI 3 wire: 3 or 4
+   wires = function(val)
+      if val == 3 then return bit32.lshift(1, 9) else return 0x0000 end
+   end,
+   --- SPI MOSI bytes to transmit before changing to MISO: 0..15
+   masterbytes = function(val)
+      return bit32.lshift(val, 10)
+   end,
+   --- SPI transmit endianess: "big" or "little"
+   txendian = function(val)
+      if val == "little" then return bit32.lshift(1, 14) else return 0x0000 end
+   end,
+   --- SPI receive endianess: "big" or "little"
+   rxendian = function(val)
+      if val == "little" then return bit32.lshift(1, 15) else return 0x0000 end
+   end,
+   --- SPI word size: 0 => 1 Byte, 1..8 => 8 bits per char, 9..16 => 16 bits per char, 32 bits per char
+   wordsize = function(val)
+      if val <= 8 then return 0x0000 else return bit32.lshift(val, 16) end
+   end
+}
+
 --------------------------------------------------------------------------------
 -- Module functions.
 -- The pigpio module provides the following functions in the modules name space:
@@ -1407,6 +1572,7 @@ function open(host, port, name)
                    __gc = function(self) self:close() end
    })
    sess.i2cdevs={}
+   sess.spidevs={}
    sess.serialdevs={}
    sess.waveforms={}
    sess.scripts={}

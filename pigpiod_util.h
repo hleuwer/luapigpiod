@@ -104,4 +104,6 @@ int utlI2CBlockProcessCall(lua_State *L);
 int utlI2CReadI2CBlockData(lua_State *L);
 int utlI2CReadDevice(lua_State *L);
 int utlI2CZip(lua_State *L);
+int utlSPIRead(lua_State *L);
+int utlSPITransfer(lua_State *L);
 #endif

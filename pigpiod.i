@@ -32,6 +32,9 @@
 %native (i2c_read_i2c_block_data) int utlI2CReadI2CBlockData(lua_State *L);
 %native (i2c_read_device) int utlI2CReadDevice(lua_State *L);
 %native (i2c_zip) int utlI2CZip(lua_State *L);
+%native (spi_read) int utlSPIRead(lua_State *L);
+%native (spi_xfer) int utlSPITransfer(lua_State *L);
+
 // type mapping
 %typemap(in) uint_32_t {
 }
