@@ -218,16 +218,16 @@ baudrates = {
 -- GPIO pins in a programmable way. Once defined the waveform can be sent
 -- once or repeatedly.<br>
 -- Constructor: <code>session:openWave(waveform, name)</code>
--- @type classWave
+-- @type cWave
 --------------------------------------------------------------------------------
-local classWave = {}
+local cWave = {}
 
 ---
 -- Close given waveform.<br>
 -- This will delete all waveforms intermediately stored.
 -- @param self Waveform.
 -- @return true on success, nil + errormsg on failure.
-classWave.close = function(self)
+cWave.close = function(self)
    local ret, err = tryB(wave_delete(self.pihandle, self.handle))
    if not ret then
       return ret, err
@@ -236,13 +236,13 @@ classWave.close = function(self)
    self.session.waveforms[self.handle] = nil
    return true
 end
-classWave.delete = classWave.close
+cWave.delete = cWave.close
 
 ---
 -- Send waveform once.
 -- @param self Waveform.
 -- @return Number of DMA block in waveform.
-classWave.sendOnce = function(self)
+cWave.sendOnce = function(self)
    return tryV(wave_send_once(self.pihandle, self.handle))
 end
 
@@ -250,7 +250,7 @@ end
 -- Send waveform repeatedly until cancelled.
 -- @param self Waveform.
 -- @return Number of DMA blocks.
-classWave.sendRepeat = function(self)
+cWave.sendRepeat = function(self)
    return tryV(wave_send_repeat(self.pihandle, self.handle))
 end
 
@@ -261,7 +261,7 @@ end
 -- @param self Waveform.
 -- @param mode Mode to be used for sending.
 -- @return Number of DMA blocks.
-classWave.sendUsingMode = function(self, mode)
+cWave.sendUsingMode = function(self, mode)
    local wavemode = waveModes[mode]
    if not wavemode then
       return nil, "invalid wave mode"
@@ -276,16 +276,16 @@ end
 -- They allow very high pin toggling rates.
 -- See <a href=http://abyz.me.uk/rpi/pigpio/pigs.html#Scripts> Scripting </a><br>
 -- Constructor: <code>script=session:openScript(code, name)</code>
--- @type classScript
+-- @type cScript
 --------------------------------------------------------------------------------
-local classScript = {}
+local cScript = {}
 
 ---
 -- Run a script.<br>
 -- @param self Script.
 -- @param param List of up to 10 parameters for the script.
 -- @return true on success, nil + errormsg on failure.
-classScript.run = function(self, param)
+cScript.run = function(self, param)
    return tryB(run_script(self.pihandle, self.handle, param))
 end
 
@@ -295,7 +295,7 @@ end
 -- @param param List of up to 10 parameters replacing the corresponding
 --              subset of previous parameters.
 -- @return true on success, nil + errormsg on failure.
-classScript.update = function(self, param)
+cScript.update = function(self, param)
    return tryB(update_script(self.pihandle, self.handle, param))
 end
 
@@ -303,7 +303,7 @@ end
 -- Retrieve the run status and the parameters of given script.
 -- @param self Script.
 -- @return Run status and list of parameters on success; nil + errormsg on failure.
-classScript.status = function(self)
+cScript.status = function(self)
    local param, status = script_status(self.pihandle, self.handle)
    if status < 0 then
       return nil, perror(status)
@@ -315,7 +315,7 @@ end
 -- Stop the given  running script.
 -- @param self Script.
 -- @return true on success, nil + errormsg on failure.
-classScript.stop = function(self)
+cScript.stop = function(self)
    return tryB(stop_script(self.pihandle, self.handle))
 end
 
@@ -323,7 +323,7 @@ end
 -- Delete the given script.
 -- @param self Script.
 -- @return true on success, nil + errormsg on failure.
-classScript.delete = function(self)
+cScript.delete = function(self)
    local res, err = tryB(delete_script(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.scripts[self.handle] = nil
@@ -336,14 +336,14 @@ end
 -- watchdog is configured on the pin, the callback is also called with a pseudo
 -- level indication.<br>
 -- Constructor: <code>cb=session:callback(pin, edge, func, userdata)</code>
--- @type classCallback
+-- @type cCallback
 --------------------------------------------------------------------------------
-local classCallback = {}
+local cCallback = {}
 ---
 -- Cancel callback.
 -- @param self Callback.
 -- @return true on success, nil + errormsg on failure.
-function classCallback.cancel(self)
+function cCallback.cancel(self)
    local res, err = tryB(callback_cancel(self.id))
    if not res then return nil, err end
    self.session.callbacks[self.id] = nil
@@ -354,14 +354,14 @@ end
 --- <h3>User initiated event callback</h3>
 -- Up to 32 event (0 to 31) are supported.<br>
 -- Constructor: <code>cb=session:eventCallback(event, func, userdata)</code>
--- @type classEventCallback
+-- @type cEventCallback
 --------------------------------------------------------------------------------
-local classEventCallback = {}
+local cEventCallback = {}
 ---
 -- Cancel event callback.
 -- @param self Eventcallback
 -- @return true on success, nil + errormsg on failure.
-function classEventCallback.cancel(self)
+function cEventCallback.cancel(self)
    local res, err = tryB(event_callback_cancel(self.id))
    if not res then return nil, err end
    self.session.eventcallbacks[self.id] = nil
@@ -373,15 +373,15 @@ end
 -- Notification channels record pin changes in a FIFO which is readable by a
 -- file.<br>
 -- Constructor:<code>notify=session:openNotify()</code>
--- @type classNotify
+-- @type cNotify
 --------------------------------------------------------------------------------
-local classNotify = {}
+local cNotify = {}
 ---
 -- Start notification operation.
 -- @param self Notification channel.
 -- @param bits Bitmask defining the GPIOs to monitor.
 -- @return true on success, nil + errormsg on failure.
-classNotify.begin = function(self, bits)
+cNotify.begin = function(self, bits)
    return tryB(notify_begin(self.pihandle, self.handle, bits))
 end
 
@@ -389,7 +389,7 @@ end
 -- Pause notification monitoring.
 -- @param self Notification channel.
 -- @return true on success, nil + errormsg on failure.
-classNotify.pause = function(self)
+cNotify.pause = function(self)
    return tryB(notify_pause(self.pihandle, self.handle))
 end
 
@@ -400,7 +400,7 @@ end
 -- @param s Encoded notification sample.
 -- @return Decoded notification sample as Lua table of form
 -- <code>{seqno=SEGNO, flags=FLAGS, tick=TICK, level=LEVEL}</code>
-classNotify.decode = function(self, s)
+cNotify.decode = function(self, s)
    return decodeNotificationSample(s)
 end
 
@@ -408,7 +408,7 @@ end
 -- Close notification channel.
 -- @param self Notification channel.
 -- @return true on success, nil + errormsg on failure.
-classNotify.close = function(self)
+cNotify.close = function(self)
    local res, err = tryB(notify_close(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.notifychannels[self.handle] = nil
@@ -419,15 +419,15 @@ end
 -- <h3>Serial Device</h3>
 -- Serial (RS232) Devices.<br>
 -- Constructor:<code>device=session:openSerial(baud, tty)</code>
--- @type classSerial.
+-- @type cSerial.
 --------------------------------------------------------------------------------
-local classSerial = {}
+local cSerial = {}
 
 ---
 -- Close serial device.
 -- @param self Device.
 -- @return true on success, nil + errormsg on failure.
-function classSerial.close(self)
+function cSerial.close(self)
    local res, err = tryB(serial_close(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.serialdevs[self.handle] = nil
@@ -439,7 +439,7 @@ end
 -- @param self Device.
 -- @param val Value to write.
 -- @return true on success, nil + errormsg on failure.
-function classSerial.writeByte(self, val)
+function cSerial.writeByte(self, val)
    return tryB(serial_write_byte(self.pihandle, self.handle, val))
 end
 
@@ -447,7 +447,7 @@ end
 -- Read a single byte from serial interface.
 -- @param self Device.
 -- @return Byte read on success, nil + errormsg on failure.
-function classSerial.readByte(self)
+function cSerial.readByte(self)
    return tryV(serial_read_byte(self.pihandle, self.handle))
 end
 
@@ -456,7 +456,7 @@ end
 -- @param self Device.
 -- @param data Data to send as Lua string.
 -- @return true on success, nil + errormsg on failure.
-function classSerial.write(self, data)
+function cSerial.write(self, data)
    return tryB(serial_write(self.pihandle, self.handle, data, #data))
 end
 
@@ -465,7 +465,7 @@ end
 -- @param self Device.
 -- @param nbytes Number of bytes to read.
 -- @return Data read.
-function classSerial.read(self, nbytes)
+function cSerial.read(self, nbytes)
    local res, errno = serial_read(self.pihandle, self.handle, nbytes)
    if res == nil then
       return nil, perror(errno)
@@ -477,7 +477,7 @@ end
 -- Check whether data is available in the bufffer.
 -- @param self Device.
 -- @return Number of available data on success, nil + errormsg on failure.
-function classSerial.dataAvailable(self)
+function cSerial.dataAvailable(self)
    return tryV(serial_data_available(self.pihandle, self.handle))
 end
 
@@ -485,14 +485,14 @@ end
 -- <h3>I2C Device</h3>
 -- This is a master I2C device.<br>
 -- Constructor: <code>dev=session:openI2C(bus, address, name)</code>
--- @type classI2C
+-- @type cI2C
 --------------------------------------------------------------------------------
-local classI2C = {}
+local cI2C = {}
 ---
 -- Close the given I2C device.
 -- @param self Device.
 -- @return I2C interface instance as table.
-function classI2C.close(self)
+function cI2C.close(self)
    local ret, err = tryB(i2c_close(self.pihandle, self.handle))
    if not ret then return nil, err end
    self.session.i2cdevs[self.handle] = nil
@@ -504,7 +504,7 @@ end
 -- @param self Device.
 -- @param bit Bit to send.
 -- @return true on success, nil + errormsg on failure.
-function classI2C.writeQuick(self, bit)
+function cI2C.writeQuick(self, bit)
    return tryB(i2c_write_quick(self.pihandle, self.handle, bit))
 end
 
@@ -513,7 +513,7 @@ end
 -- @param self Device.
 -- @param byte Byte to send.
 -- @return true on success, nil + errormsg on failure
-function classI2C.sendByte(self, byte)
+function cI2C.sendByte(self, byte)
    return tryB(i2c_write_byte(self.pihandle, self.handle, byte))
 end
 
@@ -521,7 +521,7 @@ end
 -- Receive  a byte via given device.
 -- @param self Device.
 -- @return Byte received on success, nil + errormsg on failure
-function classI2C.receiveByte(self)
+function cI2C.receiveByte(self)
    return tryV(i2c_read_byte(self.pihandle, self.handle))
 end
 
@@ -531,7 +531,7 @@ end
 -- @param reg Register number.
 -- @param byte Byte to write.
 -- @return true on success, nil + errormsg on failure
-function classI2C.writeByte(self, reg, byte)
+function cI2C.writeByte(self, reg, byte)
    return tryB(i2c_write_byte_data(self.pihandle, self.handle, reg, byte))
 end
 
@@ -541,7 +541,7 @@ end
 -- @param reg Register number.
 -- @param word  Word to write.
 -- @return true on success, nil + errormsg on failure
-function classI2C.writeWord(self, reg, word)
+function cI2C.writeWord(self, reg, word)
    return tryB(i2c_write_word_data(self.pihandle, self.handle, reg, word))
 end
 
@@ -550,7 +550,7 @@ end
 -- @param self Device.
 -- @param reg Register number.
 -- @return Byte read on success, nil + errormsg on failure.
-function classI2C.readByte(self, reg)
+function cI2C.readByte(self, reg)
    return tryV(i2c_read_byte_data(self.pihandle, self.handle, reg))
 end
 
@@ -559,7 +559,7 @@ end
 -- @param self Device.
 -- @param reg Register number.
 -- @return Word read on success, nil + errormsg on failure.
-function classI2C.readWord(self, reg)
+function cI2C.readWord(self, reg)
    return tryV(i2c_read_word_data(self.pihandle, self.handle, reg))
 end
 
@@ -569,7 +569,7 @@ end
 -- @param reg Register number.
 -- @param val Word to write.
 -- @return Value read on success, nil + errormsg on failure.
-function classI2C.processCall(self, reg, val)
+function cI2C.processCall(self, reg, val)
    return tryV(i2c_process_call(self.pihandle, self.handle, reg, val))
 end
 
@@ -579,7 +579,7 @@ end
 -- @param reg Register number.
 -- @param data Binary data stored in Lua string allowing embedded zeros.
 -- @return Binary data from device on success, nil + errormsg on failure.
-function classI2C.writeBlockData(self, reg, data)
+function cI2C.writeBlockData(self, reg, data)
    return tryB(i2c_write_block_data(self.pihandle, self.handle, reg, data, #data))
 end
 
@@ -589,7 +589,7 @@ end
 -- @param reg Register number.
 -- @return Binary data stored in Lua string allowing embedded zeros on success
 --         nil + errormsg on failure.
-function classI2C.readBlockData(self, reg)
+function cI2C.readBlockData(self, reg)
    local res, errno = i2c_read_block_data(self.pihandle, self.handle, reg)
    if res == nil then
       return nil, perror(errno)
@@ -603,7 +603,7 @@ end
 -- @param reg Register number.
 -- @param data Lua string with data to be written.
 -- @return Data read in a Lua string allowing embedded zeros.
-function classI2C.blockProcessCall(self, reg, data)
+function cI2C.blockProcessCall(self, reg, data)
    return tryV(i2c_block_process_call(self.pihandle, self.handle, reg, data));
 end
 
@@ -613,7 +613,7 @@ end
 -- @param reg Register number.
 -- @param data Lua string with data to be written.
 -- @return true on success, nil + errormsg on failure.
-function classI2C.writeI2CBlockData(self, reg, data)
+function cI2C.writeI2CBlockData(self, reg, data)
    return tryB(i2c_write_i2c_block_data(self.pihandle, self.handle, reg, data, #data))
 end
 
@@ -623,7 +623,7 @@ end
 -- @param reg Register number.
 -- @param nbytes Number of bytes to be read.
 -- @return Number of byte read.
-function classI2C.readI2CBlockData(self, reg, nbytes)
+function cI2C.readI2CBlockData(self, reg, nbytes)
    local res, errno = i2c_read_i2c_block_data(self.pihandle, self.handle, reg, nbytes)
    if res == nil then
       return nil, perror(errno)
@@ -636,7 +636,7 @@ end
 -- @param self Device.
 -- @param nbytes Number of bytes to be read.
 -- @return Lua string with read data.
-function classI2C.readDevice(self, nbytes)
+function cI2C.readDevice(self, nbytes)
    return tryV(i2c_read_device(self.pihandle, self.handle))
 end
 
@@ -645,7 +645,7 @@ end
 -- @param self Device.
 -- @param data Lua string with data to write.
 -- @return true on success, nil + errormsg on failure.
-function classI2C.writeDevice(self, data)
+function cI2C.writeDevice(self, data)
    return tryB(i2c_write_device(self.pihandle, self.handle, data, #data))
 end
 
@@ -656,7 +656,7 @@ end
 -- @param inbuf Lua String with data to be sent.
 -- @param outlen Number of Byte to be returned.
 -- @return Bytes read in a Lua string on success, nil + errormsg on failure.
-function classI2C.zip(self, inbuf, outlen)
+function cI2C.zip(self, inbuf, outlen)
    return tryV(i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
 end
 
@@ -664,9 +664,9 @@ end
 -- <h3>I2C Bit Banging Device</h3>
 -- This device is a GPIO based I2C device allowing special service primitives.
 -- Constructor: <code>dev=session:openI2Cbb(sda, scl, baud)</code>
--- @type classI2Cbb
+-- @type cI2Cbb
 --------------------------------------------------------------------------------
-local classI2Cbb = {}
+local cI2Cbb = {}
 
 ---
 -- Execute a sequence of I2C commands.
@@ -675,7 +675,7 @@ local classI2Cbb = {}
 -- @param inbuf Lua String with data to be sent.
 -- @param outlen Number of Byte to be returned.
 -- @return Bytes read in a Lua string on success, nil + errormsg on failure.
-function classI2Cbb.zip(self, inbuf, outlen)
+function cI2Cbb.zip(self, inbuf, outlen)
    return tryV(bb_i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
 end
 
@@ -683,7 +683,7 @@ end
 -- Close I2C bit bang device.
 -- @param self Device.
 -- @return true on success, nil + errormsg on failure.
-function classI2Cbb.close(self)
+function cI2Cbb.close(self)
    local res, err = tryB(bb_i2c_close(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.bbi2cdevs[self.handle] = nil
@@ -694,15 +694,15 @@ end
 -- <h3>SPI Device</h3>
 -- This is a master SPI device.<br>
 -- Constructor: <code>dev=session:openSPI(spichannel, bitraate, flags, name)</code>
--- @type classSPI
+-- @type cSPI
 --------------------------------------------------------------------------------
-local classSPI = {}
+local cSPI = {}
 
 ---
 -- Close SPI device.
 -- @param self Decvice.
 -- @return true on success, nil + errormsg on failure
-function classSPI.close(self)
+function cSPI.close(self)
    local res, err = tryB(spi_close(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.spidevs[self.handle] = nil
@@ -714,7 +714,7 @@ end
 -- @param self Device.
 -- @param nbytes Number of bytes to read.
 -- @return Data read in Lua string, nil + errormsg on failure.
-function classSPI.read(self, nbytes)
+function cSPI.read(self, nbytes)
    local res, errno = spi_read(self.pihandle, self.handle, nbytes)
    if res == nil then
       return nil, perror(errno)
@@ -727,7 +727,7 @@ end
 -- @param self Device.
 -- @param data Data to write in a Lua string.
 -- @return Number of byte written, nil + errormsg on failure
-function classSPI.write(self, data)
+function cSPI.write(self, data)
    local res, errno = spi_write(self.pihandle, self.handle, data, #data)
    if not res then
       return nil, perror(errno)
@@ -741,7 +741,7 @@ end
 -- @param self Device.
 -- @param data Data to write in a Lua string.
 -- @return Data read in a Lua string on success, nil + errormsg on failure.
-function classSPI.transfer(self, data)
+function cSPI.transfer(self, data)
    local s, err = spi_xfer(self.pihandle, self.handle, data, #data)
    if not s then
       return nil, err
@@ -754,15 +754,15 @@ end
 -- A session is create by connecting to a remote Raspberry Pi instance via
 -- network or locally.<br>
 -- Constructor: <code>session=pigpiod.open(host, port, name)</code>
--- @type classSession
+-- @type cSession
 --------------------------------------------------------------------------------
-local classSession = {}
+local cSession = {}
 
 ---
 -- Close session.
 -- @param self Session.
 -- @return true on success, nil + errormsg on error.
-classSession.close = function(self)
+cSession.close = function(self)
 
    for _, item in pairs(self.waveforms) do item:close() end
    for _, item in pairs(self.scripts) do item:delete() end
@@ -785,7 +785,7 @@ end
 -- @param pin GPIO number.
 -- @param mode gpio.INPUT or gpio.OUTPUT.
 -- @return ture on success, nil + errormsg on error.
-classSession.setMode = function(self, pin, mode)
+cSession.setMode = function(self, pin, mode)
    return tryB(set_mode(self.handle, pin, mode))
 end
 
@@ -794,7 +794,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return true on success, nil + errormsg on error.
-classSession.getMode = function(self, pin)
+cSession.getMode = function(self, pin)
    return tryV(get_mode(self.handle, pin))
 end
 
@@ -804,7 +804,7 @@ end
 -- @param pin GPIO number.
 -- @param pud gpio.PUD_UP, gpio.PUD_DOWN or gpio.PUD_OFF
 -- @return true on success, nil + errormsg on error.
-classSession.setPullUpDown = function(self, pin, pud)
+cSession.setPullUpDown = function(self, pin, pud)
    return tryB(set_pull_up_down(self.handle, pin, pud)) 
 end
 
@@ -813,7 +813,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return Pin level.
-classSession.read = function(self, pin)
+cSession.read = function(self, pin)
    return tryV(gpioread(self.handle, pin))
 end
 
@@ -823,7 +823,7 @@ end
 -- @param pin GPIO number.
 -- @param val Level to set, 0 or 1.
 -- @return true on success, nil + errormsg on failure.
-classSession.write = function(self, pin, val)
+cSession.write = function(self, pin, val)
    return tryB(gpio_write(self.handle, pin, val))
 end
 
@@ -833,7 +833,7 @@ end
 -- @param pin GPIO number.
 -- @param dutycycle Dutycycle to use (0..range) default: 0..255.
 -- @return true on success, nil + errormsg on failure.
-classSession.setPwmDutycycle = function(self, pin, dutycycle)
+cSession.setPwmDutycycle = function(self, pin, dutycycle)
    return tryB(set_PWM_dutycycle(self.handle, pin, dutycycle))
 end
 
@@ -842,7 +842,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return Active dutycycle: 0..range 
-classSession.getPwmDutycycle = function(self, pin)
+cSession.getPwmDutycycle = function(self, pin)
    return tryV(get_PWM_dutycycle(self.handle, pin))
 end
 
@@ -852,7 +852,7 @@ end
 -- @param pin GPIO number.
 -- @param range Range between 25 and 40000.
 -- @return true on success; nil + errormsg on failure
-classSession.setPwmRange = function(self, pin, range)
+cSession.setPwmRange = function(self, pin, range)
    return tryB(set_PWM_range(self.handle, pin, range))
 end
 
@@ -861,7 +861,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return Dutycycle range for given pin.
-classSession.getPwmRange = function(self, pin)
+cSession.getPwmRange = function(self, pin)
    return tryV(get_PWM_range(self.handle, pin))
 end
 
@@ -870,7 +870,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return PWM real range.
-classSession.getPwmRealRange = function(self, pin)
+cSession.getPwmRealRange = function(self, pin)
    return tryV(get_PWM_real_range(self.handle, pin))
 end
 
@@ -879,7 +879,7 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @param frequency Frequency in Hz. 
-classSession.setPwmFrequency = function(self, pin, frequency)
+cSession.setPwmFrequency = function(self, pin, frequency)
    return tryV(set_PWM_frequency(self.handle, pin, frequency))
 end
 
@@ -888,26 +888,26 @@ end
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return Frequency in Hz.
-classSession.getPwmFrequency = function(self, pin)
+cSession.getPwmFrequency = function(self, pin)
    return tryV(get_PWM_frequency(self.handle, pin))
 end
 
 ---
--- Start servo pulses. Can be alternatively called via classSession.servo(...).
+-- Start servo pulses. Can be alternatively called via cSession.servo(...).
 -- @param self Session.
 -- @param pin GPIO number.
 -- @param pulsewidth Pulsewidth between 500 and 2500, default: 1500.
-classSession.setServoPulsewidth = function(self, pin, pulsewidth)
+cSession.setServoPulsewidth = function(self, pin, pulsewidth)
    return tryB(set_servo_pulsewidth(self.handle, pin, pulsewidth))
 end
-classSession.servo = classSession.setServoPulsewidth
+cSession.servo = cSession.setServoPulsewidth
 
 ---
 -- Get servo pulsewidth.
 -- @param self Session.
 -- @param pin GPIO number.
 -- @return Servo pulsewidth.
-classSession.getServoPulsewidth = function(self, pin)
+cSession.getServoPulsewidth = function(self, pin)
    return tryV(get_servo_pulsewidth(self.handle, pin))
 end
 
@@ -917,7 +917,7 @@ end
 -- as returned by this function.
 -- @param self Session.
 -- @return Notifcation channel handle.
-classSession.openNotify = function(self)
+cSession.openNotify = function(self)
    local notify = {}
    notify.handle = notify_open(self.handle)
    notify.pihandle = self.handle
@@ -925,7 +925,7 @@ classSession.openNotify = function(self)
       return nil, perror(notify.handle), notify.handle
    end
    setmetatable(notify, {
-                   __index = classNotify,
+                   __index = cNotify,
                    __gc = function(self) self:close() end
    })
    notify.filename = "/dev/pigpio"..notify.handle
@@ -933,7 +933,7 @@ classSession.openNotify = function(self)
    self.notifychannels[notify.handle] = notify
    return notify
 end
-classSession.notifyOpen = classSession.openNotify
+cSession.notifyOpen = cSession.openNotify
 
 ---
 -- Set watchdog for the specified pin.
@@ -942,7 +942,7 @@ classSession.notifyOpen = classSession.openNotify
 -- @param pin GPIO number.
 -- @param timeout Timeout in milliseconds.
 -- @return true on success, nil + errormsg on failure.
-classSession.setWatchdog = function(self, pin, timeout)
+cSession.setWatchdog = function(self, pin, timeout)
    return tryB(set_watchdog(self.handle, pin, timeout))
 end
 
@@ -952,52 +952,52 @@ end
 -- @param pin GPIO number.
 -- @param steady Minimum time of stable level in order to report state change.
 -- @return true on success, nil + errormsg on failure.
-classSession.setGlitchFilter = function(self, pin, steady)
+cSession.setGlitchFilter = function(self, pin, steady)
    return tryB(set_glitch_filter(self.handle, pin, steady))
 end
 
-classSession.setNoiseFilter = function(self, pin, steady, active)
+cSession.setNoiseFilter = function(self, pin, steady, active)
    return tryB(set_noise_filter(self.handle, pin, steady, active))
 end
 
-classSession.readBank1 = function(self)
+cSession.readBank1 = function(self)
    return tryV(read_bank_1(self.handle))
 end
 
-classSession.readBank2 = function(self)
+cSession.readBank2 = function(self)
    return tryV(read_bank_2(self.handle))
 end
 
-classSession.clearBank1 = function(self, bits)
+cSession.clearBank1 = function(self, bits)
    return tryB(clear_bank_1(self.handle, bits))
 end
 
-classSession.clearBank2 = function(self, bits)
+cSession.clearBank2 = function(self, bits)
    return tryB(clear_bank_2(self.handle, bits))
 end
 
-classSession.setBank1 = function(self, bits)
+cSession.setBank1 = function(self, bits)
    return tryB(clear_bank_1(self.handle, bits))
 end
 
-classSession.setBank2 = function(self, bits)
+cSession.setBank2 = function(self, bits)
    return tryB(clear_bank_2(self.handle, bits))
 end
 
-classSession.hardwareClock = function(self, pin, clkfreq)
+cSession.hardwareClock = function(self, pin, clkfreq)
    return tryB(hardware_clock(self.handle, pin, clkfreq))
 end
 
-classSession.hardwarePwm = function(self, pin, pwmfreq, pwmduty)
+cSession.hardwarePwm = function(self, pin, pwmfreq, pwmduty)
    return tryB(hardware_PWM(self.handle, pin, pwmfreq, pwmduty))
 end
 
-classSession.getCurrentTick = function(self)
+cSession.getCurrentTick = function(self)
    return tryV(get_current_tick(self.handle))
 end
-classSession.tick = classSession.getCurrentTick
+cSession.tick = cSession.getCurrentTick
 
-classSession.getHardwareRevision = function(self)
+cSession.getHardwareRevision = function(self)
    local hwrev = get_hardware_revision(self.handle)
    local typ, model, comment
    if hwrev == 2 or hwrev == 3 then
@@ -1016,26 +1016,26 @@ classSession.getHardwareRevision = function(self)
    return typ, model, comment
 end
 
-classSession.getPinning = function(self, typ)
+cSession.getPinning = function(self, typ)
    if typ < 1 or typ > 3 then
       return nil, "invalid type."
    end
    return pinnings[typ]
 end
 
-classSession.getPigpioVersion = function(self)
+cSession.getPigpioVersion = function(self)
    return tryV(get_pigpio_version(self.handle))
 end
 
---classSession.waveAddNew = function(self) return
+--cSession.waveAddNew = function(self) return
 --   tryB(wave_add_new(self.handle))
 --end
 
---classSession.waveAddGeneric = function(self, pulses)
+--cSession.waveAddGeneric = function(self, pulses)
 --   return tryV(wave_add_generic(self.handle, pulses))
 --end
 
---classSession.waveAddSerial = function(self, pin, baud, nbits, stopbits, timeoffs, str)
+--cSession.waveAddSerial = function(self, pin, baud, nbits, stopbits, timeoffs, str)
 --   return tryV(wave_add_serial(self.handle, pin, baud, nbits, stopbits, timeoffs, #str, str))
 --end
 
@@ -1055,7 +1055,7 @@ end
 -- </ul></ul>
 -- @param name Name of the waveform (optional).
 -- @return Wave objec on success; nil + errormsg on failure.
-classSession.openWave = function(self, waveform, name)
+cSession.openWave = function(self, waveform, name)
    local wave = {}
    local npulses = 0
    -- 1. add waveforms
@@ -1079,7 +1079,7 @@ classSession.openWave = function(self, waveform, name)
    wave.pihandle = self.handle
    wave.name = name or ("wave-"..wave.handle)
    setmetatable(wave, {
-                 __index = classWave,
+                 __index = cWave,
                  __gc = function(self) self:delete() end
    })
    _G._PIGPIOD_WAVEFORMS[wave.handle] = wave
@@ -1087,12 +1087,12 @@ classSession.openWave = function(self, waveform, name)
    wave.session = self
    return wave
 end
-classSession.waveOpen = classSession.openWave
+cSession.waveOpen = cSession.openWave
 ---
 -- Clear all waveforms.
 -- @param self Session.
 -- @return true on success, nil + errormsg on failure.
-classSession.waveClear = function(self)
+cSession.waveClear = function(self)
    local ret, err = tryB(wave_clear(self.handle))
    if not ret then
       return nil, err
@@ -1115,7 +1115,7 @@ end
 --     <li>'start' ... 'repeat forever':  repeat forever.
 -- </ul></ul>
 -- @return true on success, nil + errormsg on failure.
-classSession.waveChain = function(self, list)
+cSession.waveChain = function(self, list)
    local s = ""
    if type(list) ~= "table" then
       error(strinf.format("Table expected as arg %d, received %s.", type(list)))
@@ -1154,7 +1154,7 @@ classSession.waveChain = function(self, list)
    return tryB(wave_chain(self.handle, s, #s))
 end
 
-classSession.waveTxAt = function(self)
+cSession.waveTxAt = function(self)
    local ret, err = tryV(wave_tx_at(self.handle))
    if not ret then
       return nil, err
@@ -1162,51 +1162,51 @@ classSession.waveTxAt = function(self)
    return _G._PIGPIOD_WAVEFORMS[ret].name, ret
 end
 
-classSession.waveTxBusy = function(self)
+cSession.waveTxBusy = function(self)
    return tryV(wave_tx_busy(self.handle))
 end
 
-classSession.waveTxStop = function(self)
+cSession.waveTxStop = function(self)
    return tryB(wave_tx_stop(self.handle))
 end
 
-classSession.waveGetMicros = function(self)
+cSession.waveGetMicros = function(self)
    return tryV(wave_get_micros(self.handle))
 end
 
-classSession.waveGetHighMicros = function(self)
+cSession.waveGetHighMicros = function(self)
    return tryV(wave_get_high_micros(self.handle))
 end
 
-classSession.waveGetMaxMicros = function(self)
+cSession.waveGetMaxMicros = function(self)
    return tryV(wave_get_max_micros(self.handle))
 end
 
-classSession.waveGetPulses = function(self)
+cSession.waveGetPulses = function(self)
    return tryV(wave_get_pulses(self.handle))
 end
 
-classSession.waveGetHighPulses = function(self)
+cSession.waveGetHighPulses = function(self)
    return tryV(wave_get_high_pulses(self.handle))
 end
 
-classSession.waveGetMaxPulses = function(self)
+cSession.waveGetMaxPulses = function(self)
    return tryV(wave_get_max_pulses(self.handle))
 end
 
-classSession.waveGetCbs = function(self)
+cSession.waveGetCbs = function(self)
    return tryV(wave_get_cbs(self.handle))
 end
 
-classSession.waveGetHighCbs = function(self)
+cSession.waveGetHighCbs = function(self)
    return tryV(wave_get_high_cbs(self.handle))
 end
 
-classSession.waveGetMaxCbs = function(self)
+cSession.waveGetMaxCbs = function(self)
    return tryV(wave_get_max_cbs(self.handle))
 end   
 
-classSession.trigger = function(self, pin, pulselen, level)
+cSession.trigger = function(self, pin, pulselen, level)
    return tryB(gpio_trigger(self.handle, pin, pulselen, level)) 
 end
 
@@ -1216,7 +1216,7 @@ end
 -- @param self Session.
 -- @param code Scipt code.
 -- @return Script object on success; nil + errormsg on failure.
-classSession.openScript = function(self, code)
+cSession.openScript = function(self, code)
    local script = {}
    script.handle = store_script(self.handle, code)
    script.pihandle = self.handle
@@ -1224,15 +1224,15 @@ classSession.openScript = function(self, code)
       return nil, perror(script.handle), script.handle
    end
    setmetatable(script, {
-                   __index = classScript,
+                   __index = cScript,
                    __gc = function(self) self:delete() end
    })
    self.scripts[script.handle] = script
    script.session = self
    return script
 end
-classSession.storeScript = classSession.openScript
-classSession.scriptOpen = classSession.openScript
+cSession.storeScript = cSession.openScript
+cSession.scriptOpen = cSession.openScript
 
 ---
 -- Define a pin event callback function.
@@ -1245,14 +1245,14 @@ classSession.scriptOpen = classSession.openScript
 -- @param func Lua callback function.
 -- @param userdata Any Lua value as user parameter.
 -- @return Callback object.
-classSession.callback = function(self, pin, edge, func, userdata)
+cSession.callback = function(self, pin, edge, func, userdata)
    local callback = {}
    callback.id = gpio.callback(self.handle, pin, edge, func, userdata)
    if callback.id < 0 then
       return nil, perror(callback.id), callback.id
    end
    setmetatable(callback, {
-                   __index = classCallback,
+                   __index = cCallback,
                    __gc = function(self) self:cancel() end
    })
    self.callbacks[callback.id] = callback
@@ -1260,14 +1260,14 @@ classSession.callback = function(self, pin, edge, func, userdata)
    return callback
 end
 
-classSession.eventCallback = function(self, event, func, userdata)
+cSession.eventCallback = function(self, event, func, userdata)
    local callback = {}
    callback.id = event_callback(self.handle, event, func, userdata)
    if callback.id < 0 then
       return nil, perror(callback.id), callback.id
    end
    setmetatable(callback, {
-                   __index = classEventCallback,
+                   __index = cEventCallback,
                    __gc = function(self) self:cancel() end
    })
    self.eventcallbacks[callback.id] = callback
@@ -1283,7 +1283,7 @@ end
 --        <code>gpio.RISING_EDGE, gpio.FALLING_EDGE, gpio.EITHER_EDGE</code>
 -- @param timeout Timeout in seconds.
 -- @return true if edge occured, nil + "timeout" if edge is not detected.
-classSession.waitEdge = function(self, pin, edge, timeout)
+cSession.waitEdge = function(self, pin, edge, timeout)
    local ret = wait_for_edge(self.handle, pin, edge, timeout)
    if ret == 1 then
       return true
@@ -1292,13 +1292,13 @@ classSession.waitEdge = function(self, pin, edge, timeout)
    end
 end
 
-classSession.waitEvent = function(self, event, timeout)
+cSession.waitEvent = function(self, event, timeout)
    local res, err = tryV(wait_for_event(self.handle, event, timeout))
    if not res then return nil, err end
    return true
 end
 
-classSession.triggerEvent = function(self, event)
+cSession.triggerEvent = function(self, event)
    return tryB(event_trigger(self.handle, event))
 end
 
@@ -1310,7 +1310,7 @@ end
 --            /dev/serial or /dev/tty
 -- @param name Name of the device.
 -- @return Device object on success, nil + errormsg on failure.
-classSession.openSerial = function(self, baud, tty, name)
+cSession.openSerial = function(self, baud, tty, name)
    local serial = {}
    local baud = baud or 9600
    local tty = tty or "/dev/serial0"
@@ -1318,7 +1318,7 @@ classSession.openSerial = function(self, baud, tty, name)
    serial.handle = serial_open(self.handle, tty, baud, flags)
    serial.pihandle = self.handle
    setmetatable(serial, {
-                   __index = classSerial,
+                   __index = cSerial,
                    __gc = function(self) self:close() end
    })
    self.serialdevs[serial.handle] = serial
@@ -1337,7 +1337,7 @@ end
 -- <li>pad = 2: GPIO[46 .. 53]
 -- </ul>
 -- @return Signal strength in mA.
-classSession.getPadStrength = function(self, pad)
+cSession.getPadStrength = function(self, pad)
    if pad < 0 or pad > 3 then
       return nil, "invalid pad index."
    end
@@ -1355,7 +1355,7 @@ end
 -- </ul>
 -- @param mamps Strength in mA
 -- @return true on success, nil + errormsg on failure.
-classSession.setPadStrength = function(self, pad, mamps)
+cSession.setPadStrength = function(self, pad, mamps)
    if pad < 0 or pad > 3 then
       return nil, "invalid pad index."
    end
@@ -1372,7 +1372,7 @@ end
 -- @param name Name of the script.
 -- @param scriptparam Parameters for the script.
 -- @return 0 on success, nil + error message on failure.
-classSession.shell = function(self, name, scriptparam)
+cSession.shell = function(self, name, scriptparam)
    local status = shell_(self.handle, name, scriptparam)
    if status == 32512 then
       return nil, "script not found."
@@ -1387,7 +1387,7 @@ end
 -- @param address Address of the device.
 -- @param name Optional name.
 -- @return I2C device object; nil + errormsg on failure.
-classSession.openI2C = function(self, bus, address, name)
+cSession.openI2C = function(self, bus, address, name)
    local i2c = {}
    local flags = 0
    if bus < 0 then return nil, "invalid bus index." end
@@ -1398,7 +1398,7 @@ classSession.openI2C = function(self, bus, address, name)
    end
    i2c.pihandle = self.handle
    setmetatable(i2c, {
-                   __index = classI2C,
+                   __index = cI2C,
                    __gc = function(self) self:close() end
    })
    i2c.name = name or ("i2cdev-"..i2c.handle)
@@ -1407,14 +1407,14 @@ classSession.openI2C = function(self, bus, address, name)
    return i2c
 end
 
-classSession.openI2Cbb = function(self, sda, scl, baud)
+cSession.openI2Cbb = function(self, sda, scl, baud)
    local i2c = {}
    local res, err = tryB(bb_i2c_open(self.handle, sda, scl, baud))
    if not res then return nil, err end
    i2c.handle = sda
    i2c.pihandle = i2c.handle
    setmetatable(i2c, {
-                   __index = classI2Cbb,
+                   __index = cI2Cbb,
                    __gc = function(self) self:close() end
    })
    i2c.session = self
@@ -1430,7 +1430,7 @@ end
 -- @param bus Bus index 0 or 1.
 -- @return List of connect and usable or not usable devices on success,
 --         nil + errormsg on failure.
-classSession.scanI2C = function(self, bus)
+cSession.scanI2C = function(self, bus)
    local devlist = {}
    for addr = 0x00, 0x7f do
       local dev, err = self:openI2C(bus, addr, "none")
@@ -1456,7 +1456,7 @@ end
 -- @param flags Flags to control basic parameters of the device.
 -- @param name Name for device - default: spidev-<SPIHANDLE>.
 -- @return Device object on success, nil + errormsg on failure.
-classSession.openSPI = function(self, spichannel, bitrate, flags, name)
+cSession.openSPI = function(self, spichannel, bitrate, flags, name)
    local spi = {}
    local spichannel = spichannel or 0
    local bitrate = bitrate or 32000
@@ -1467,7 +1467,7 @@ classSession.openSPI = function(self, spichannel, bitrate, flags, name)
    end
    spi.pihandle = self.handle
    setmetatable(spi, {
-                   __index = classSPI,
+                   __index = cSPI,
                    __gc = function(self) self:close() end
    })
    spi.name = name or ("spidev-" .. spi.handle)
@@ -1479,7 +1479,7 @@ end
 --------------------------------------------------------------------------------
 -- <h3>SPI Flags</h3>
 -- A set of "macros" (Lua functions) that can be used to assemble the <code>flags</code> parameter
--- for the function <code>classSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
+-- for the function <code>cSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
 -- Here is how flags word is constructed:<br>
 -- <code>21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0</code><br>
 -- <code> b  b  b  b  b  b  R  T  n  n  n  n  W  A u2 u1 u0 p2 p1 p0  m1  m0</code><br>
@@ -1494,7 +1494,7 @@ end
 -- <li>rxendian: treceive endian: "big" or "little"
 -- <li>wordsize: word size: 0..32
 --</ul>
--- NOTE: wrong constructed flag values are not detected before using in call to classSession:openSPI(...).
+-- NOTE: wrong constructed flag values are not detected before using in call to cSession:openSPI(...).
 -- @type spiFlags
 --------------------------------------------------------------------------------
 spiFlags = {
@@ -1556,19 +1556,20 @@ spiFlags = {
 -- @param host Hostname of target system. Default: localhost.
 -- @param port Port to be used. Default: 8888.
 -- @param name Name of this session (optional).
--- @return Session object of class classSession.
+-- @return Session object of class cSession.
 function open(host, port, name)
    local sess = {}
    sess.host = tostring(host or "localhost")
    sess.port = tostring(port or 8888)
    sess.handle = pigpio_start(sess.host, sess.port)
+   print("#1#", sess.host, sess.port, sess.handle)
    if sess.handle < 0 then
       return nil, perror(sess.handle), sess.handle
    end
    sess.name = name or ("sess-"..sess.handle)
    _G._PIGPIOD_SESSIONS[sess.handle] = sess
    setmetatable(sess, {
-                   __index = classSession,
+                   __index = cSession,
                    __gc = function(self) self:close() end
    })
    sess.i2cdevs={}

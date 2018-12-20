@@ -30,16 +30,16 @@
 <h2>Contents</h2>
 <ul>
 <li><a href="#Tables">Tables</a></li>
-<li><a href="#Class_classWave">Class classWave </a></li>
-<li><a href="#Class_classScript">Class classScript </a></li>
-<li><a href="#Class_classCallback">Class classCallback </a></li>
-<li><a href="#Class_classEventCallback">Class classEventCallback </a></li>
-<li><a href="#Class_classNotify">Class classNotify </a></li>
-<li><a href="#Class_classSerial_">Class classSerial. </a></li>
-<li><a href="#Class_classI2C">Class classI2C </a></li>
-<li><a href="#Class_classI2Cbb">Class classI2Cbb </a></li>
-<li><a href="#Class_classSPI">Class classSPI </a></li>
-<li><a href="#Class_classSession">Class classSession </a></li>
+<li><a href="#Class_cWave">Class cWave </a></li>
+<li><a href="#Class_cScript">Class cScript </a></li>
+<li><a href="#Class_cCallback">Class cCallback </a></li>
+<li><a href="#Class_cEventCallback">Class cEventCallback </a></li>
+<li><a href="#Class_cNotify">Class cNotify </a></li>
+<li><a href="#Class_cSerial_">Class cSerial. </a></li>
+<li><a href="#Class_cI2C">Class cI2C </a></li>
+<li><a href="#Class_cI2Cbb">Class cI2Cbb </a></li>
+<li><a href="#Class_cSPI">Class cSPI </a></li>
+<li><a href="#Class_cSession">Class cSession </a></li>
 <li><a href="#Class_spiFlags">Class spiFlags </a></li>
 <li><a href="#Module_functions">Module functions </a></li>
 </ul>
@@ -86,336 +86,336 @@
 	<td class="summary">Supported baudrates serial built-in serial interface.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classWave">Class classWave </a></h2>
+<h2><a href="#Class_cWave">Class cWave </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classWave.close">classWave.close (self)</a></td>
+	<td class="name" nowrap><a href="#cWave.close">cWave.close (self)</a></td>
 	<td class="summary">Close given waveform.<br>
  This will delete all waveforms intermediately stored.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classWave.sendOnce">classWave.sendOnce (self)</a></td>
+	<td class="name" nowrap><a href="#cWave.sendOnce">cWave.sendOnce (self)</a></td>
 	<td class="summary">Send waveform once.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classWave.sendRepeat">classWave.sendRepeat (self)</a></td>
+	<td class="name" nowrap><a href="#cWave.sendRepeat">cWave.sendRepeat (self)</a></td>
 	<td class="summary">Send waveform repeatedly until cancelled.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classWave.sendUsingMode">classWave.sendUsingMode (self, mode)</a></td>
+	<td class="name" nowrap><a href="#cWave.sendUsingMode">cWave.sendUsingMode (self, mode)</a></td>
 	<td class="summary">Send the given waveform with given mode.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classScript">Class classScript </a></h2>
+<h2><a href="#Class_cScript">Class cScript </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classScript.run">classScript.run (self, param)</a></td>
+	<td class="name" nowrap><a href="#cScript.run">cScript.run (self, param)</a></td>
 	<td class="summary">Run a script.<br></td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classScript.update">classScript.update (self, param)</a></td>
+	<td class="name" nowrap><a href="#cScript.update">cScript.update (self, param)</a></td>
 	<td class="summary">Update parameters of a script, which may already run.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classScript.status">classScript.status (self)</a></td>
+	<td class="name" nowrap><a href="#cScript.status">cScript.status (self)</a></td>
 	<td class="summary">Retrieve the run status and the parameters of given script.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classScript.stop">classScript.stop (self)</a></td>
+	<td class="name" nowrap><a href="#cScript.stop">cScript.stop (self)</a></td>
 	<td class="summary">Stop the given  running script.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classScript.delete">classScript.delete (self)</a></td>
+	<td class="name" nowrap><a href="#cScript.delete">cScript.delete (self)</a></td>
 	<td class="summary">Delete the given script.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classCallback">Class classCallback </a></h2>
+<h2><a href="#Class_cCallback">Class cCallback </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classCallback.cancel">classCallback.cancel (self)</a></td>
+	<td class="name" nowrap><a href="#cCallback.cancel">cCallback.cancel (self)</a></td>
 	<td class="summary">Cancel callback.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classEventCallback">Class classEventCallback </a></h2>
+<h2><a href="#Class_cEventCallback">Class cEventCallback </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classEventCallback.cancel">classEventCallback.cancel (self)</a></td>
+	<td class="name" nowrap><a href="#cEventCallback.cancel">cEventCallback.cancel (self)</a></td>
 	<td class="summary">Cancel event callback.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classNotify">Class classNotify </a></h2>
+<h2><a href="#Class_cNotify">Class cNotify </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classNotify.begin">classNotify.begin (self, bits)</a></td>
+	<td class="name" nowrap><a href="#cNotify.begin">cNotify.begin (self, bits)</a></td>
 	<td class="summary">Start notification operation.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classNotify.pause">classNotify.pause (self)</a></td>
+	<td class="name" nowrap><a href="#cNotify.pause">cNotify.pause (self)</a></td>
 	<td class="summary">Pause notification monitoring.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classNotify.decode">classNotify.decode (self, s)</a></td>
+	<td class="name" nowrap><a href="#cNotify.decode">cNotify.decode (self, s)</a></td>
 	<td class="summary">Convert a notification sample given in binary coded form in a Lua string
  into a table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classNotify.close">classNotify.close (self)</a></td>
+	<td class="name" nowrap><a href="#cNotify.close">cNotify.close (self)</a></td>
 	<td class="summary">Close notification channel.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classSerial_">Class classSerial. </a></h2>
+<h2><a href="#Class_cSerial_">Class cSerial. </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.close">classSerial.close (self)</a></td>
+	<td class="name" nowrap><a href="#cSerial.close">cSerial.close (self)</a></td>
 	<td class="summary">Close serial device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.writeByte">classSerial.writeByte (self, val)</a></td>
+	<td class="name" nowrap><a href="#cSerial.writeByte">cSerial.writeByte (self, val)</a></td>
 	<td class="summary">Write a single byte to serial interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.readByte">classSerial.readByte (self)</a></td>
+	<td class="name" nowrap><a href="#cSerial.readByte">cSerial.readByte (self)</a></td>
 	<td class="summary">Read a single byte from serial interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.write">classSerial.write (self, data)</a></td>
+	<td class="name" nowrap><a href="#cSerial.write">cSerial.write (self, data)</a></td>
 	<td class="summary">Write data to serial interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.read">classSerial.read (self, nbytes)</a></td>
+	<td class="name" nowrap><a href="#cSerial.read">cSerial.read (self, nbytes)</a></td>
 	<td class="summary">Read data from serial interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSerial.dataAvailable">classSerial.dataAvailable (self)</a></td>
+	<td class="name" nowrap><a href="#cSerial.dataAvailable">cSerial.dataAvailable (self)</a></td>
 	<td class="summary">Check whether data is available in the bufffer.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classI2C">Class classI2C </a></h2>
+<h2><a href="#Class_cI2C">Class cI2C </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.close">classI2C.close (self)</a></td>
+	<td class="name" nowrap><a href="#cI2C.close">cI2C.close (self)</a></td>
 	<td class="summary">Close the given I2C device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeQuick">classI2C.writeQuick (self, bit)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeQuick">cI2C.writeQuick (self, bit)</a></td>
 	<td class="summary">Send a single bit (0 or 1) via the given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.sendByte">classI2C.sendByte (self, byte)</a></td>
+	<td class="name" nowrap><a href="#cI2C.sendByte">cI2C.sendByte (self, byte)</a></td>
 	<td class="summary">Send a byte via the given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.receiveByte">classI2C.receiveByte (self)</a></td>
+	<td class="name" nowrap><a href="#cI2C.receiveByte">cI2C.receiveByte (self)</a></td>
 	<td class="summary">Receive  a byte via given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeByte">classI2C.writeByte (self, reg, byte)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeByte">cI2C.writeByte (self, reg, byte)</a></td>
 	<td class="summary">Write the given byte to the given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeWord">classI2C.writeWord (self, reg, word)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeWord">cI2C.writeWord (self, reg, word)</a></td>
 	<td class="summary">Write the given 16 bit word to the given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.readByte">classI2C.readByte (self, reg)</a></td>
+	<td class="name" nowrap><a href="#cI2C.readByte">cI2C.readByte (self, reg)</a></td>
 	<td class="summary">Read a byte from the given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.readWord">classI2C.readWord (self, reg)</a></td>
+	<td class="name" nowrap><a href="#cI2C.readWord">cI2C.readWord (self, reg)</a></td>
 	<td class="summary">Read a 16 bit word from the given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.processCall">classI2C.processCall (self, reg, val)</a></td>
+	<td class="name" nowrap><a href="#cI2C.processCall">cI2C.processCall (self, reg, val)</a></td>
 	<td class="summary">Write + read (process) given 16 bit value to/freom given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeBlockData">classI2C.writeBlockData (self, reg, data)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeBlockData">cI2C.writeBlockData (self, reg, data)</a></td>
 	<td class="summary">Write a block of bytes into given register of given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.readBlockData">classI2C.readBlockData (self, reg)</a></td>
+	<td class="name" nowrap><a href="#cI2C.readBlockData">cI2C.readBlockData (self, reg)</a></td>
 	<td class="summary">Read a block of bytes from given register of given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.blockProcessCall">classI2C.blockProcessCall (self, reg, data)</a></td>
+	<td class="name" nowrap><a href="#cI2C.blockProcessCall">cI2C.blockProcessCall (self, reg, data)</a></td>
 	<td class="summary">Send + receive a block of data to/from given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeI2CBlockData">classI2C.writeI2CBlockData (self, reg, data)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeI2CBlockData">cI2C.writeI2CBlockData (self, reg, data)</a></td>
 	<td class="summary">Write 1 to 32 bytes to given register on given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.readI2CBlockData">classI2C.readI2CBlockData (self, reg, nbytes)</a></td>
+	<td class="name" nowrap><a href="#cI2C.readI2CBlockData">cI2C.readI2CBlockData (self, reg, nbytes)</a></td>
 	<td class="summary">Read given number of bytes from given register in given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.readDevice">classI2C.readDevice (self, nbytes)</a></td>
+	<td class="name" nowrap><a href="#cI2C.readDevice">cI2C.readDevice (self, nbytes)</a></td>
 	<td class="summary">Read given number bytes from given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.writeDevice">classI2C.writeDevice (self, data)</a></td>
+	<td class="name" nowrap><a href="#cI2C.writeDevice">cI2C.writeDevice (self, data)</a></td>
 	<td class="summary">Write given data to given device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2C.zip">classI2C.zip (self, inbuf, outlen)</a></td>
+	<td class="name" nowrap><a href="#cI2C.zip">cI2C.zip (self, inbuf, outlen)</a></td>
 	<td class="summary">Execute a sequence of I2C commands.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classI2Cbb">Class classI2Cbb </a></h2>
+<h2><a href="#Class_cI2Cbb">Class cI2Cbb </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classI2Cbb.zip">classI2Cbb.zip (self, inbuf, outlen)</a></td>
+	<td class="name" nowrap><a href="#cI2Cbb.zip">cI2Cbb.zip (self, inbuf, outlen)</a></td>
 	<td class="summary">Execute a sequence of I2C commands.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classI2Cbb.close">classI2Cbb.close (self)</a></td>
+	<td class="name" nowrap><a href="#cI2Cbb.close">cI2Cbb.close (self)</a></td>
 	<td class="summary">Close I2C bit bang device.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classSPI">Class classSPI </a></h2>
+<h2><a href="#Class_cSPI">Class cSPI </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classSPI.close">classSPI.close (self)</a></td>
+	<td class="name" nowrap><a href="#cSPI.close">cSPI.close (self)</a></td>
 	<td class="summary">Close SPI device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSPI.read">classSPI.read (self, nbytes)</a></td>
+	<td class="name" nowrap><a href="#cSPI.read">cSPI.read (self, nbytes)</a></td>
 	<td class="summary">Read given number of bytes from SPI interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSPI.write">classSPI.write (self, data)</a></td>
+	<td class="name" nowrap><a href="#cSPI.write">cSPI.write (self, data)</a></td>
 	<td class="summary">Write given data to SPI interface.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSPI.transfer">classSPI.transfer (self, data)</a></td>
+	<td class="name" nowrap><a href="#cSPI.transfer">cSPI.transfer (self, data)</a></td>
 	<td class="summary">Transfer (write and read) given data.</td>
 	</tr>
 </table>
-<h2><a href="#Class_classSession">Class classSession </a></h2>
+<h2><a href="#Class_cSession">Class cSession </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#classSession.close">classSession.close (self)</a></td>
+	<td class="name" nowrap><a href="#cSession.close">cSession.close (self)</a></td>
 	<td class="summary">Close session.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setMode">classSession.setMode (self, pin, mode)</a></td>
+	<td class="name" nowrap><a href="#cSession.setMode">cSession.setMode (self, pin, mode)</a></td>
 	<td class="summary">Set pin mode.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getMode">classSession.getMode (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getMode">cSession.getMode (self, pin)</a></td>
 	<td class="summary">Get pin mode.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setPullUpDown">classSession.setPullUpDown (self, pin, pud)</a></td>
+	<td class="name" nowrap><a href="#cSession.setPullUpDown">cSession.setPullUpDown (self, pin, pud)</a></td>
 	<td class="summary">Set pull-up/down configuration of pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.read">classSession.read (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.read">cSession.read (self, pin)</a></td>
 	<td class="summary">Read pin level.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.write">classSession.write (self, pin, val)</a></td>
+	<td class="name" nowrap><a href="#cSession.write">cSession.write (self, pin, val)</a></td>
 	<td class="summary">Write pin level.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setPwmDutycycle">classSession.setPwmDutycycle (self, pin, dutycycle)</a></td>
+	<td class="name" nowrap><a href="#cSession.setPwmDutycycle">cSession.setPwmDutycycle (self, pin, dutycycle)</a></td>
 	<td class="summary">Start Software controlled PWM on given pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getPwmDutycycle">classSession.getPwmDutycycle (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getPwmDutycycle">cSession.getPwmDutycycle (self, pin)</a></td>
 	<td class="summary">Get the PWM duty cycle.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setPwmRange">classSession.setPwmRange (self, pin, range)</a></td>
+	<td class="name" nowrap><a href="#cSession.setPwmRange">cSession.setPwmRange (self, pin, range)</a></td>
 	<td class="summary">Set the dutycycle range for PWM on given pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getPwmRange">classSession.getPwmRange (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getPwmRange">cSession.getPwmRange (self, pin)</a></td>
 	<td class="summary">Get current PWM range for given pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getPwmRealRange">classSession.getPwmRealRange (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getPwmRealRange">cSession.getPwmRealRange (self, pin)</a></td>
 	<td class="summary">Get current PWM real range for given pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setPwmFrequency">classSession.setPwmFrequency (self, pin, frequency)</a></td>
+	<td class="name" nowrap><a href="#cSession.setPwmFrequency">cSession.setPwmFrequency (self, pin, frequency)</a></td>
 	<td class="summary">Set PWM frequency.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getPwmFrequency">classSession.getPwmFrequency (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getPwmFrequency">cSession.getPwmFrequency (self, pin)</a></td>
 	<td class="summary">Get PWM frequency.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setServoPulsewidth">classSession.setServoPulsewidth (self, pin, pulsewidth)</a></td>
+	<td class="name" nowrap><a href="#cSession.setServoPulsewidth">cSession.setServoPulsewidth (self, pin, pulsewidth)</a></td>
 	<td class="summary">Start servo pulses.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getServoPulsewidth">classSession.getServoPulsewidth (self, pin)</a></td>
+	<td class="name" nowrap><a href="#cSession.getServoPulsewidth">cSession.getServoPulsewidth (self, pin)</a></td>
 	<td class="summary">Get servo pulsewidth.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openNotify">classSession.openNotify (self)</a></td>
+	<td class="name" nowrap><a href="#cSession.openNotify">cSession.openNotify (self)</a></td>
 	<td class="summary">Open a notification channel.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setWatchdog">classSession.setWatchdog (self, pin, timeout)</a></td>
+	<td class="name" nowrap><a href="#cSession.setWatchdog">cSession.setWatchdog (self, pin, timeout)</a></td>
 	<td class="summary">Set watchdog for the specified pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setGlitchFilter">classSession.setGlitchFilter (self, pin, steady)</a></td>
+	<td class="name" nowrap><a href="#cSession.setGlitchFilter">cSession.setGlitchFilter (self, pin, steady)</a></td>
 	<td class="summary">Set glitch filter for given pin.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openWave">classSession.openWave (self, waveform, name)</a></td>
+	<td class="name" nowrap><a href="#cSession.openWave">cSession.openWave (self, waveform, name)</a></td>
 	<td class="summary">Open a waveform as defined by parameter 'waveform'.<br>
  An optional user defined name can be provided.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.waveClear">classSession.waveClear (self)</a></td>
+	<td class="name" nowrap><a href="#cSession.waveClear">cSession.waveClear (self)</a></td>
 	<td class="summary">Clear all waveforms.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.waveChain">classSession.waveChain (self, list)</a></td>
+	<td class="name" nowrap><a href="#cSession.waveChain">cSession.waveChain (self, list)</a></td>
 	<td class="summary">Define and start a chain of waveforms.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openScript">classSession.openScript (self, code)</a></td>
+	<td class="name" nowrap><a href="#cSession.openScript">cSession.openScript (self, code)</a></td>
 	<td class="summary">Open a gpiod script.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.callback">classSession.callback (self, pin, edge, func, userdata)</a></td>
+	<td class="name" nowrap><a href="#cSession.callback">cSession.callback (self, pin, edge, func, userdata)</a></td>
 	<td class="summary">Define a pin event callback function.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.waitEdge">classSession.waitEdge (self, pin, edge, timeout)</a></td>
+	<td class="name" nowrap><a href="#cSession.waitEdge">cSession.waitEdge (self, pin, edge, timeout)</a></td>
 	<td class="summary">Wait for an edge to occur.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openSerial">classSession.openSerial (self, baud, tty, name)</a></td>
+	<td class="name" nowrap><a href="#cSession.openSerial">cSession.openSerial (self, baud, tty, name)</a></td>
 	<td class="summary">Open serial device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.getPadStrength">classSession.getPadStrength (self, pad)</a></td>
+	<td class="name" nowrap><a href="#cSession.getPadStrength">cSession.getPadStrength (self, pad)</a></td>
 	<td class="summary">Get a pads signal strength in mA.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.setPadStrength">classSession.setPadStrength (self, pad, mamps)</a></td>
+	<td class="name" nowrap><a href="#cSession.setPadStrength">cSession.setPadStrength (self, pad, mamps)</a></td>
 	<td class="summary">Set strength of a pad.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.shell">classSession.shell (self, name, scriptparam)</a></td>
+	<td class="name" nowrap><a href="#cSession.shell">cSession.shell (self, name, scriptparam)</a></td>
 	<td class="summary">Execute a shell script  on connected host.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openI2C">classSession.openI2C (self, bus, address, name)</a></td>
+	<td class="name" nowrap><a href="#cSession.openI2C">cSession.openI2C (self, bus, address, name)</a></td>
 	<td class="summary">Open I2C device.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.scanI2C">classSession.scanI2C (self, bus)</a></td>
+	<td class="name" nowrap><a href="#cSession.scanI2C">cSession.scanI2C (self, bus)</a></td>
 	<td class="summary">Scan an I2C bus for present devices.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#classSession.openSPI">classSession.openSPI (self, spichannel, bitrate, flags, name)</a></td>
+	<td class="name" nowrap><a href="#cSession.openSPI">cSession.openSPI (self, spichannel, bitrate, flags, name)</a></td>
 	<td class="summary">Open SPI device.</td>
 	</tr>
 </table>
@@ -570,7 +570,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classWave"></a>Class classWave </h2>
+    <h2 class="section-header has-description"><a name="Class_cWave"></a>Class cWave </h2>
 
           <div class="section-description">
           <h3>Waveforms</h3>
@@ -581,8 +581,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classWave.close"></a>
-    <strong>classWave.close (self)</strong>
+    <a name = "cWave.close"></a>
+    <strong>cWave.close (self)</strong>
     </dt>
     <dd>
     Close given waveform.<br>
@@ -607,8 +607,8 @@
 
 </dd>
     <dt>
-    <a name = "classWave.sendOnce"></a>
-    <strong>classWave.sendOnce (self)</strong>
+    <a name = "cWave.sendOnce"></a>
+    <strong>cWave.sendOnce (self)</strong>
     </dt>
     <dd>
     Send waveform once.
@@ -632,8 +632,8 @@
 
 </dd>
     <dt>
-    <a name = "classWave.sendRepeat"></a>
-    <strong>classWave.sendRepeat (self)</strong>
+    <a name = "cWave.sendRepeat"></a>
+    <strong>cWave.sendRepeat (self)</strong>
     </dt>
     <dd>
     Send waveform repeatedly until cancelled.
@@ -657,8 +657,8 @@
 
 </dd>
     <dt>
-    <a name = "classWave.sendUsingMode"></a>
-    <strong>classWave.sendUsingMode (self, mode)</strong>
+    <a name = "cWave.sendUsingMode"></a>
+    <strong>cWave.sendUsingMode (self, mode)</strong>
     </dt>
     <dd>
     Send the given waveform with given mode.
@@ -687,7 +687,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classScript"></a>Class classScript </h2>
+    <h2 class="section-header has-description"><a name="Class_cScript"></a>Class cScript </h2>
 
           <div class="section-description">
           <h3>Scripting</h3>
@@ -699,8 +699,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classScript.run"></a>
-    <strong>classScript.run (self, param)</strong>
+    <a name = "cScript.run"></a>
+    <strong>cScript.run (self, param)</strong>
     </dt>
     <dd>
     Run a script.<br>
@@ -727,8 +727,8 @@
 
 </dd>
     <dt>
-    <a name = "classScript.update"></a>
-    <strong>classScript.update (self, param)</strong>
+    <a name = "cScript.update"></a>
+    <strong>cScript.update (self, param)</strong>
     </dt>
     <dd>
     Update parameters of a script, which may already run.
@@ -756,8 +756,8 @@
 
 </dd>
     <dt>
-    <a name = "classScript.status"></a>
-    <strong>classScript.status (self)</strong>
+    <a name = "cScript.status"></a>
+    <strong>cScript.status (self)</strong>
     </dt>
     <dd>
     Retrieve the run status and the parameters of given script.
@@ -781,8 +781,8 @@
 
 </dd>
     <dt>
-    <a name = "classScript.stop"></a>
-    <strong>classScript.stop (self)</strong>
+    <a name = "cScript.stop"></a>
+    <strong>cScript.stop (self)</strong>
     </dt>
     <dd>
     Stop the given  running script.
@@ -806,8 +806,8 @@
 
 </dd>
     <dt>
-    <a name = "classScript.delete"></a>
-    <strong>classScript.delete (self)</strong>
+    <a name = "cScript.delete"></a>
+    <strong>cScript.delete (self)</strong>
     </dt>
     <dd>
     Delete the given script.
@@ -831,7 +831,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classCallback"></a>Class classCallback </h2>
+    <h2 class="section-header has-description"><a name="Class_cCallback"></a>Class cCallback </h2>
 
           <div class="section-description">
           <h3>Pin event callback</h3>
@@ -842,8 +842,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classCallback.cancel"></a>
-    <strong>classCallback.cancel (self)</strong>
+    <a name = "cCallback.cancel"></a>
+    <strong>cCallback.cancel (self)</strong>
     </dt>
     <dd>
     Cancel callback.
@@ -867,7 +867,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classEventCallback"></a>Class classEventCallback </h2>
+    <h2 class="section-header has-description"><a name="Class_cEventCallback"></a>Class cEventCallback </h2>
 
           <div class="section-description">
           <h3>User initiated event callback</h3>
@@ -876,8 +876,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classEventCallback.cancel"></a>
-    <strong>classEventCallback.cancel (self)</strong>
+    <a name = "cEventCallback.cancel"></a>
+    <strong>cEventCallback.cancel (self)</strong>
     </dt>
     <dd>
     Cancel event callback.
@@ -901,7 +901,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classNotify"></a>Class classNotify </h2>
+    <h2 class="section-header has-description"><a name="Class_cNotify"></a>Class cNotify </h2>
 
           <div class="section-description">
           <h3>Notification channels</h3>
@@ -911,8 +911,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classNotify.begin"></a>
-    <strong>classNotify.begin (self, bits)</strong>
+    <a name = "cNotify.begin"></a>
+    <strong>cNotify.begin (self, bits)</strong>
     </dt>
     <dd>
     Start notification operation.
@@ -939,8 +939,8 @@
 
 </dd>
     <dt>
-    <a name = "classNotify.pause"></a>
-    <strong>classNotify.pause (self)</strong>
+    <a name = "cNotify.pause"></a>
+    <strong>cNotify.pause (self)</strong>
     </dt>
     <dd>
     Pause notification monitoring.
@@ -964,8 +964,8 @@
 
 </dd>
     <dt>
-    <a name = "classNotify.decode"></a>
-    <strong>classNotify.decode (self, s)</strong>
+    <a name = "cNotify.decode"></a>
+    <strong>cNotify.decode (self, s)</strong>
     </dt>
     <dd>
     Convert a notification sample given in binary coded form in a Lua string
@@ -994,8 +994,8 @@
 
 </dd>
     <dt>
-    <a name = "classNotify.close"></a>
-    <strong>classNotify.close (self)</strong>
+    <a name = "cNotify.close"></a>
+    <strong>cNotify.close (self)</strong>
     </dt>
     <dd>
     Close notification channel.
@@ -1019,7 +1019,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classSerial_"></a>Class classSerial. </h2>
+    <h2 class="section-header has-description"><a name="Class_cSerial_"></a>Class cSerial. </h2>
 
           <div class="section-description">
           <h3>Serial Device</h3>
@@ -1028,8 +1028,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classSerial.close"></a>
-    <strong>classSerial.close (self)</strong>
+    <a name = "cSerial.close"></a>
+    <strong>cSerial.close (self)</strong>
     </dt>
     <dd>
     Close serial device.
@@ -1053,8 +1053,8 @@
 
 </dd>
     <dt>
-    <a name = "classSerial.writeByte"></a>
-    <strong>classSerial.writeByte (self, val)</strong>
+    <a name = "cSerial.writeByte"></a>
+    <strong>cSerial.writeByte (self, val)</strong>
     </dt>
     <dd>
     Write a single byte to serial interface.
@@ -1081,8 +1081,8 @@
 
 </dd>
     <dt>
-    <a name = "classSerial.readByte"></a>
-    <strong>classSerial.readByte (self)</strong>
+    <a name = "cSerial.readByte"></a>
+    <strong>cSerial.readByte (self)</strong>
     </dt>
     <dd>
     Read a single byte from serial interface.
@@ -1106,8 +1106,8 @@
 
 </dd>
     <dt>
-    <a name = "classSerial.write"></a>
-    <strong>classSerial.write (self, data)</strong>
+    <a name = "cSerial.write"></a>
+    <strong>cSerial.write (self, data)</strong>
     </dt>
     <dd>
     Write data to serial interface.
@@ -1134,8 +1134,8 @@
 
 </dd>
     <dt>
-    <a name = "classSerial.read"></a>
-    <strong>classSerial.read (self, nbytes)</strong>
+    <a name = "cSerial.read"></a>
+    <strong>cSerial.read (self, nbytes)</strong>
     </dt>
     <dd>
     Read data from serial interface.  Up to nbytes are read.
@@ -1162,8 +1162,8 @@
 
 </dd>
     <dt>
-    <a name = "classSerial.dataAvailable"></a>
-    <strong>classSerial.dataAvailable (self)</strong>
+    <a name = "cSerial.dataAvailable"></a>
+    <strong>cSerial.dataAvailable (self)</strong>
     </dt>
     <dd>
     Check whether data is available in the bufffer.
@@ -1187,7 +1187,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classI2C"></a>Class classI2C </h2>
+    <h2 class="section-header has-description"><a name="Class_cI2C"></a>Class cI2C </h2>
 
           <div class="section-description">
           <h3>I2C Device</h3>
@@ -1196,8 +1196,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classI2C.close"></a>
-    <strong>classI2C.close (self)</strong>
+    <a name = "cI2C.close"></a>
+    <strong>cI2C.close (self)</strong>
     </dt>
     <dd>
     Close the given I2C device.
@@ -1221,8 +1221,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeQuick"></a>
-    <strong>classI2C.writeQuick (self, bit)</strong>
+    <a name = "cI2C.writeQuick"></a>
+    <strong>cI2C.writeQuick (self, bit)</strong>
     </dt>
     <dd>
     Send a single bit (0 or 1) via the given device.
@@ -1249,8 +1249,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.sendByte"></a>
-    <strong>classI2C.sendByte (self, byte)</strong>
+    <a name = "cI2C.sendByte"></a>
+    <strong>cI2C.sendByte (self, byte)</strong>
     </dt>
     <dd>
     Send a byte via the given device.
@@ -1277,8 +1277,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.receiveByte"></a>
-    <strong>classI2C.receiveByte (self)</strong>
+    <a name = "cI2C.receiveByte"></a>
+    <strong>cI2C.receiveByte (self)</strong>
     </dt>
     <dd>
     Receive  a byte via given device.
@@ -1302,8 +1302,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeByte"></a>
-    <strong>classI2C.writeByte (self, reg, byte)</strong>
+    <a name = "cI2C.writeByte"></a>
+    <strong>cI2C.writeByte (self, reg, byte)</strong>
     </dt>
     <dd>
     Write the given byte to the given register in given device.
@@ -1333,8 +1333,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeWord"></a>
-    <strong>classI2C.writeWord (self, reg, word)</strong>
+    <a name = "cI2C.writeWord"></a>
+    <strong>cI2C.writeWord (self, reg, word)</strong>
     </dt>
     <dd>
     Write the given 16 bit word to the given register in given device.
@@ -1364,8 +1364,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.readByte"></a>
-    <strong>classI2C.readByte (self, reg)</strong>
+    <a name = "cI2C.readByte"></a>
+    <strong>cI2C.readByte (self, reg)</strong>
     </dt>
     <dd>
     Read a byte from the given register in given device.
@@ -1392,8 +1392,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.readWord"></a>
-    <strong>classI2C.readWord (self, reg)</strong>
+    <a name = "cI2C.readWord"></a>
+    <strong>cI2C.readWord (self, reg)</strong>
     </dt>
     <dd>
     Read a 16 bit word from the given register in given device.
@@ -1420,8 +1420,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.processCall"></a>
-    <strong>classI2C.processCall (self, reg, val)</strong>
+    <a name = "cI2C.processCall"></a>
+    <strong>cI2C.processCall (self, reg, val)</strong>
     </dt>
     <dd>
     Write + read (process) given 16 bit value to/freom given device.
@@ -1451,8 +1451,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeBlockData"></a>
-    <strong>classI2C.writeBlockData (self, reg, data)</strong>
+    <a name = "cI2C.writeBlockData"></a>
+    <strong>cI2C.writeBlockData (self, reg, data)</strong>
     </dt>
     <dd>
     Write a block of bytes into given register of given device.
@@ -1482,8 +1482,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.readBlockData"></a>
-    <strong>classI2C.readBlockData (self, reg)</strong>
+    <a name = "cI2C.readBlockData"></a>
+    <strong>cI2C.readBlockData (self, reg)</strong>
     </dt>
     <dd>
     Read a block of bytes from given register of given device.
@@ -1511,8 +1511,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.blockProcessCall"></a>
-    <strong>classI2C.blockProcessCall (self, reg, data)</strong>
+    <a name = "cI2C.blockProcessCall"></a>
+    <strong>cI2C.blockProcessCall (self, reg, data)</strong>
     </dt>
     <dd>
     Send + receive a block of data to/from given register in given device.
@@ -1542,8 +1542,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeI2CBlockData"></a>
-    <strong>classI2C.writeI2CBlockData (self, reg, data)</strong>
+    <a name = "cI2C.writeI2CBlockData"></a>
+    <strong>cI2C.writeI2CBlockData (self, reg, data)</strong>
     </dt>
     <dd>
     Write 1 to 32 bytes to given register on given device.
@@ -1573,8 +1573,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.readI2CBlockData"></a>
-    <strong>classI2C.readI2CBlockData (self, reg, nbytes)</strong>
+    <a name = "cI2C.readI2CBlockData"></a>
+    <strong>cI2C.readI2CBlockData (self, reg, nbytes)</strong>
     </dt>
     <dd>
     Read given number of bytes from given register in given device.
@@ -1604,8 +1604,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.readDevice"></a>
-    <strong>classI2C.readDevice (self, nbytes)</strong>
+    <a name = "cI2C.readDevice"></a>
+    <strong>cI2C.readDevice (self, nbytes)</strong>
     </dt>
     <dd>
     Read given number bytes from given device.
@@ -1632,8 +1632,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.writeDevice"></a>
-    <strong>classI2C.writeDevice (self, data)</strong>
+    <a name = "cI2C.writeDevice"></a>
+    <strong>cI2C.writeDevice (self, data)</strong>
     </dt>
     <dd>
     Write given data to given device.
@@ -1660,8 +1660,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2C.zip"></a>
-    <strong>classI2C.zip (self, inbuf, outlen)</strong>
+    <a name = "cI2C.zip"></a>
+    <strong>cI2C.zip (self, inbuf, outlen)</strong>
     </dt>
     <dd>
     Execute a sequence of I2C commands.
@@ -1692,7 +1692,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classI2Cbb"></a>Class classI2Cbb </h2>
+    <h2 class="section-header has-description"><a name="Class_cI2Cbb"></a>Class cI2Cbb </h2>
 
           <div class="section-description">
           <h3>I2C Bit Banging Device</h3>
@@ -1701,8 +1701,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classI2Cbb.zip"></a>
-    <strong>classI2Cbb.zip (self, inbuf, outlen)</strong>
+    <a name = "cI2Cbb.zip"></a>
+    <strong>cI2Cbb.zip (self, inbuf, outlen)</strong>
     </dt>
     <dd>
     Execute a sequence of I2C commands.
@@ -1733,8 +1733,8 @@
 
 </dd>
     <dt>
-    <a name = "classI2Cbb.close"></a>
-    <strong>classI2Cbb.close (self)</strong>
+    <a name = "cI2Cbb.close"></a>
+    <strong>cI2Cbb.close (self)</strong>
     </dt>
     <dd>
     Close I2C bit bang device.
@@ -1758,7 +1758,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classSPI"></a>Class classSPI </h2>
+    <h2 class="section-header has-description"><a name="Class_cSPI"></a>Class cSPI </h2>
 
           <div class="section-description">
           <h3>SPI Device</h3>
@@ -1767,8 +1767,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classSPI.close"></a>
-    <strong>classSPI.close (self)</strong>
+    <a name = "cSPI.close"></a>
+    <strong>cSPI.close (self)</strong>
     </dt>
     <dd>
     Close SPI device.
@@ -1792,8 +1792,8 @@
 
 </dd>
     <dt>
-    <a name = "classSPI.read"></a>
-    <strong>classSPI.read (self, nbytes)</strong>
+    <a name = "cSPI.read"></a>
+    <strong>cSPI.read (self, nbytes)</strong>
     </dt>
     <dd>
     Read given number of bytes from SPI interface.
@@ -1820,8 +1820,8 @@
 
 </dd>
     <dt>
-    <a name = "classSPI.write"></a>
-    <strong>classSPI.write (self, data)</strong>
+    <a name = "cSPI.write"></a>
+    <strong>cSPI.write (self, data)</strong>
     </dt>
     <dd>
     Write given data to SPI interface.
@@ -1848,8 +1848,8 @@
 
 </dd>
     <dt>
-    <a name = "classSPI.transfer"></a>
-    <strong>classSPI.transfer (self, data)</strong>
+    <a name = "cSPI.transfer"></a>
+    <strong>cSPI.transfer (self, data)</strong>
     </dt>
     <dd>
     Transfer (write and read) given data.
@@ -1877,7 +1877,7 @@
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="Class_classSession"></a>Class classSession </h2>
+    <h2 class="section-header has-description"><a name="Class_cSession"></a>Class cSession </h2>
 
           <div class="section-description">
           All GPIO control and status operations occurs in the context of a session.
@@ -1887,8 +1887,8 @@
           </div>
     <dl class="function">
     <dt>
-    <a name = "classSession.close"></a>
-    <strong>classSession.close (self)</strong>
+    <a name = "cSession.close"></a>
+    <strong>cSession.close (self)</strong>
     </dt>
     <dd>
     Close session.
@@ -1912,8 +1912,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setMode"></a>
-    <strong>classSession.setMode (self, pin, mode)</strong>
+    <a name = "cSession.setMode"></a>
+    <strong>cSession.setMode (self, pin, mode)</strong>
     </dt>
     <dd>
     Set pin mode.
@@ -1943,8 +1943,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getMode"></a>
-    <strong>classSession.getMode (self, pin)</strong>
+    <a name = "cSession.getMode"></a>
+    <strong>cSession.getMode (self, pin)</strong>
     </dt>
     <dd>
     Get pin mode.
@@ -1971,8 +1971,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setPullUpDown"></a>
-    <strong>classSession.setPullUpDown (self, pin, pud)</strong>
+    <a name = "cSession.setPullUpDown"></a>
+    <strong>cSession.setPullUpDown (self, pin, pud)</strong>
     </dt>
     <dd>
     Set pull-up/down configuration of pin.
@@ -2002,8 +2002,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.read"></a>
-    <strong>classSession.read (self, pin)</strong>
+    <a name = "cSession.read"></a>
+    <strong>cSession.read (self, pin)</strong>
     </dt>
     <dd>
     Read pin level.
@@ -2030,8 +2030,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.write"></a>
-    <strong>classSession.write (self, pin, val)</strong>
+    <a name = "cSession.write"></a>
+    <strong>cSession.write (self, pin, val)</strong>
     </dt>
     <dd>
     Write pin level.
@@ -2061,8 +2061,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setPwmDutycycle"></a>
-    <strong>classSession.setPwmDutycycle (self, pin, dutycycle)</strong>
+    <a name = "cSession.setPwmDutycycle"></a>
+    <strong>cSession.setPwmDutycycle (self, pin, dutycycle)</strong>
     </dt>
     <dd>
     Start Software controlled PWM on given pin.
@@ -2092,8 +2092,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getPwmDutycycle"></a>
-    <strong>classSession.getPwmDutycycle (self, pin)</strong>
+    <a name = "cSession.getPwmDutycycle"></a>
+    <strong>cSession.getPwmDutycycle (self, pin)</strong>
     </dt>
     <dd>
     Get the PWM duty cycle.
@@ -2120,8 +2120,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setPwmRange"></a>
-    <strong>classSession.setPwmRange (self, pin, range)</strong>
+    <a name = "cSession.setPwmRange"></a>
+    <strong>cSession.setPwmRange (self, pin, range)</strong>
     </dt>
     <dd>
     Set the dutycycle range for PWM on given pin.
@@ -2151,8 +2151,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getPwmRange"></a>
-    <strong>classSession.getPwmRange (self, pin)</strong>
+    <a name = "cSession.getPwmRange"></a>
+    <strong>cSession.getPwmRange (self, pin)</strong>
     </dt>
     <dd>
     Get current PWM range for given pin.
@@ -2179,8 +2179,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getPwmRealRange"></a>
-    <strong>classSession.getPwmRealRange (self, pin)</strong>
+    <a name = "cSession.getPwmRealRange"></a>
+    <strong>cSession.getPwmRealRange (self, pin)</strong>
     </dt>
     <dd>
     Get current PWM real range for given pin.
@@ -2207,8 +2207,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setPwmFrequency"></a>
-    <strong>classSession.setPwmFrequency (self, pin, frequency)</strong>
+    <a name = "cSession.setPwmFrequency"></a>
+    <strong>cSession.setPwmFrequency (self, pin, frequency)</strong>
     </dt>
     <dd>
     Set PWM frequency.
@@ -2233,8 +2233,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getPwmFrequency"></a>
-    <strong>classSession.getPwmFrequency (self, pin)</strong>
+    <a name = "cSession.getPwmFrequency"></a>
+    <strong>cSession.getPwmFrequency (self, pin)</strong>
     </dt>
     <dd>
     Get PWM frequency.
@@ -2261,11 +2261,11 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setServoPulsewidth"></a>
-    <strong>classSession.setServoPulsewidth (self, pin, pulsewidth)</strong>
+    <a name = "cSession.setServoPulsewidth"></a>
+    <strong>cSession.setServoPulsewidth (self, pin, pulsewidth)</strong>
     </dt>
     <dd>
-    Start servo pulses.  Can be alternatively called via classSession.servo(...).
+    Start servo pulses.  Can be alternatively called via cSession.servo(...).
 
 
     <h3>Parameters:</h3>
@@ -2287,8 +2287,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getServoPulsewidth"></a>
-    <strong>classSession.getServoPulsewidth (self, pin)</strong>
+    <a name = "cSession.getServoPulsewidth"></a>
+    <strong>cSession.getServoPulsewidth (self, pin)</strong>
     </dt>
     <dd>
     Get servo pulsewidth.
@@ -2315,8 +2315,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openNotify"></a>
-    <strong>classSession.openNotify (self)</strong>
+    <a name = "cSession.openNotify"></a>
+    <strong>cSession.openNotify (self)</strong>
     </dt>
     <dd>
     Open a notification channel.
@@ -2342,8 +2342,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setWatchdog"></a>
-    <strong>classSession.setWatchdog (self, pin, timeout)</strong>
+    <a name = "cSession.setWatchdog"></a>
+    <strong>cSession.setWatchdog (self, pin, timeout)</strong>
     </dt>
     <dd>
     Set watchdog for the specified pin.
@@ -2374,8 +2374,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setGlitchFilter"></a>
-    <strong>classSession.setGlitchFilter (self, pin, steady)</strong>
+    <a name = "cSession.setGlitchFilter"></a>
+    <strong>cSession.setGlitchFilter (self, pin, steady)</strong>
     </dt>
     <dd>
     Set glitch filter for given pin.
@@ -2405,8 +2405,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openWave"></a>
-    <strong>classSession.openWave (self, waveform, name)</strong>
+    <a name = "cSession.openWave"></a>
+    <strong>cSession.openWave (self, waveform, name)</strong>
     </dt>
     <dd>
     Open a waveform as defined by parameter 'waveform'.<br>
@@ -2446,8 +2446,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.waveClear"></a>
-    <strong>classSession.waveClear (self)</strong>
+    <a name = "cSession.waveClear"></a>
+    <strong>cSession.waveClear (self)</strong>
     </dt>
     <dd>
     Clear all waveforms.
@@ -2471,8 +2471,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.waveChain"></a>
-    <strong>classSession.waveChain (self, list)</strong>
+    <a name = "cSession.waveChain"></a>
+    <strong>cSession.waveChain (self, list)</strong>
     </dt>
     <dd>
     Define and start a chain of waveforms.
@@ -2508,8 +2508,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openScript"></a>
-    <strong>classSession.openScript (self, code)</strong>
+    <a name = "cSession.openScript"></a>
+    <strong>cSession.openScript (self, code)</strong>
     </dt>
     <dd>
     Open a gpiod script.
@@ -2537,8 +2537,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.callback"></a>
-    <strong>classSession.callback (self, pin, edge, func, userdata)</strong>
+    <a name = "cSession.callback"></a>
+    <strong>cSession.callback (self, pin, edge, func, userdata)</strong>
     </dt>
     <dd>
     Define a pin event callback function.
@@ -2577,8 +2577,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.waitEdge"></a>
-    <strong>classSession.waitEdge (self, pin, edge, timeout)</strong>
+    <a name = "cSession.waitEdge"></a>
+    <strong>cSession.waitEdge (self, pin, edge, timeout)</strong>
     </dt>
     <dd>
     Wait for an edge to occur.
@@ -2612,8 +2612,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openSerial"></a>
-    <strong>classSession.openSerial (self, baud, tty, name)</strong>
+    <a name = "cSession.openSerial"></a>
+    <strong>cSession.openSerial (self, baud, tty, name)</strong>
     </dt>
     <dd>
     Open serial device.
@@ -2647,8 +2647,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.getPadStrength"></a>
-    <strong>classSession.getPadStrength (self, pad)</strong>
+    <a name = "cSession.getPadStrength"></a>
+    <strong>cSession.getPadStrength (self, pad)</strong>
     </dt>
     <dd>
     Get a pads signal strength in mA.
@@ -2680,8 +2680,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.setPadStrength"></a>
-    <strong>classSession.setPadStrength (self, pad, mamps)</strong>
+    <a name = "cSession.setPadStrength"></a>
+    <strong>cSession.setPadStrength (self, pad, mamps)</strong>
     </dt>
     <dd>
     Set strength of a pad.
@@ -2716,8 +2716,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.shell"></a>
-    <strong>classSession.shell (self, name, scriptparam)</strong>
+    <a name = "cSession.shell"></a>
+    <strong>cSession.shell (self, name, scriptparam)</strong>
     </dt>
     <dd>
     Execute a shell script  on connected host.
@@ -2748,8 +2748,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openI2C"></a>
-    <strong>classSession.openI2C (self, bus, address, name)</strong>
+    <a name = "cSession.openI2C"></a>
+    <strong>cSession.openI2C (self, bus, address, name)</strong>
     </dt>
     <dd>
     Open I2C device.
@@ -2782,8 +2782,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.scanI2C"></a>
-    <strong>classSession.scanI2C (self, bus)</strong>
+    <a name = "cSession.scanI2C"></a>
+    <strong>cSession.scanI2C (self, bus)</strong>
     </dt>
     <dd>
     Scan an I2C bus for present devices.
@@ -2813,8 +2813,8 @@
 
 </dd>
     <dt>
-    <a name = "classSession.openSPI"></a>
-    <strong>classSession.openSPI (self, spichannel, bitrate, flags, name)</strong>
+    <a name = "cSession.openSPI"></a>
+    <strong>cSession.openSPI (self, spichannel, bitrate, flags, name)</strong>
     </dt>
     <dd>
     Open SPI device.
@@ -2854,8 +2854,8 @@
 
           <div class="section-description">
           <h3>SPI Flags</h3>
- A set of "macros" that can be used to assemble the <code>flags</code> parameter
- for the function <code>classSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
+ A set of "macros" (Lua functions) that can be used to assemble the <code>flags</code> parameter
+ for the function <code>cSession:openSPI(spichannel, bitrate, flags, name)</code>.<br>
  Here is how flags word is constructed:<br>
  <code>21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0</code><br>
  <code> b  b  b  b  b  b  R  T  n  n  n  n  W  A u2 u1 u0 p2 p1 p0  m1  m0</code><br>
@@ -2870,7 +2870,7 @@
  <li>rxendian: treceive endian: "big" or "little"
  <li>wordsize: word size: 0..32
 </ul>
- NOTE: wrong constructed flag values are not detected before using in call to classSession:openSPI(...).
+ NOTE: wrong constructed flag values are not detected before using in call to cSession:openSPI(...).
           </div>
     <dl class="function">
     <dt>
@@ -3109,7 +3109,7 @@
     <h3>Returns:</h3>
     <ol>
 
-        Session object of class classSession.
+        Session object of class cSession.
     </ol>
 
 
@@ -3294,7 +3294,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-12-18 20:14:19 </i>
+<i style="float:right;">Last updated 2018-12-20 17:37:42 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
