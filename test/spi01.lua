@@ -37,20 +37,20 @@ assert(dev:write(sendbuf))
 
 printf("Receive message (check all 0) of len=%d bytes ...", #nullbuf)
 local rxb = dev:read(#nullbuf)
-print("nullbuf:", string.byte(nullbuf, 1, #nullbuf))
-print("rxb    :", string.byte(rxb, 1, #rxb))
+--print("nullbuf:", string.byte(nullbuf, 1, #nullbuf))
+--print("rxb    :", string.byte(rxb, 1, #rxb))
 assert(rxb == nullbuf)
 
 printf("Transfer message (receive = transmit = random) of len=%d bytes ...", #randombuf)
 rxb = dev:transfer(randombuf)
-print("randbuf:", string.byte(randombuf, 1, #randombuf))
-print("rxb    :", string.byte(rxb, 1, #rxb))
+--print("randbuf:", string.byte(randombuf, 1, #randombuf))
+--print("rxb    :", string.byte(rxb, 1, #rxb))
 assert(rxb == randombuf)
 
 printf("Transfer message (receive = transmit = const) ...")
 rxb = dev:transfer(sendbuf)
-print("sendbuf:", string.byte(sendbuf, 1, #sendbuf))
-print("rxb    :", string.byte(rxb, 1, #rxb))
+--print("sendbuf:", string.byte(sendbuf, 1, #sendbuf))
+--print("rxb    :", string.byte(rxb, 1, #rxb))
 assert(rxb == sendbuf)
 
 
