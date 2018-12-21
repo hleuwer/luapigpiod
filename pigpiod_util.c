@@ -802,3 +802,32 @@ int utlSPITransfer(lua_State *L)
   luaL_pushresult(&lbuf);
   return 1;  
 }
+
+/*
+ * Lua binding: str = spibb:transfer(data)
+ */
+int utlSPIbbTransfer(lua_State *L)
+{
+  int pi, n, nbytes;
+  lua_Unsigned handle;
+  luaL_Buffer lbuf;
+  char *rxbuf, *txbuf;
+  pi = luaL_checkint(L, 1);
+  handle = luaL_checkunsigned(L, 2);
+  txbuf = (char *)luaL_checkstring(L, 3);
+  n = (int) luaL_checkunsigned(L, 4);
+  luaL_buffinit(L, &lbuf);
+  rxbuf = malloc(n * sizeof(char));
+  nbytes = bb_spi_xfer(pi, handle, txbuf, rxbuf, n);
+  if (nbytes < 0){
+    free(rxbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
+  luaL_addlstring(&lbuf, rxbuf, nbytes);
+  free(rxbuf);
+  luaL_pushresult(&lbuf);
+  return 1;  
+}
+

@@ -34,6 +34,7 @@
 %native (i2c_zip) int utlI2CZip(lua_State *L);
 %native (spi_read) int utlSPIRead(lua_State *L);
 %native (spi_xfer) int utlSPITransfer(lua_State *L);
+%native (bb_spi_xfer) int utlSPIbbTransfer(lua_State *L);
 
 // type mapping
 %typemap(in) uint_32_t {

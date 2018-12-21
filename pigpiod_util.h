@@ -106,4 +106,5 @@ int utlI2CReadDevice(lua_State *L);
 int utlI2CZip(lua_State *L);
 int utlSPIRead(lua_State *L);
 int utlSPITransfer(lua_State *L);
+int utlSPIbbTransfer(lua_State *L);
 #endif

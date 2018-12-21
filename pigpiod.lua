@@ -693,7 +693,7 @@ end
 --------------------------------------------------------------------------------
 -- <h3>SPI Device</h3>
 -- This is a master SPI device.<br>
--- Constructor: <code>dev=session:openSPI(spichannel, bitraate, flags, name)</code>
+-- Constructor: <code>dev=session:openSPI(spichannel, bitrate, flags, name)</code>
 -- @type cSPI
 --------------------------------------------------------------------------------
 local cSPI = {}
@@ -737,7 +737,7 @@ end
 
 ---
 -- Transfer (write and read) given data.
--- As much bytes are read as being written.
+-- The number of bytes read is equal to the number of bytes written.
 -- @param self Device.
 -- @param data Data to write in a Lua string.
 -- @return Data read in a Lua string on success, nil + errormsg on failure.
@@ -748,6 +748,40 @@ function cSPI.transfer(self, data)
    end
    return s
 end
+
+--------------------------------------------------------------------------------
+-- <h3>SPI Bit Banging Device</h3>
+-- This is a master SPI device using any set of GPIO pins.<br>
+-- Constructor: <code>dev=session:openSPIbb(cs, mosi, miso, bitrate, flags, name)</code>
+-- @type cSPIbb
+--------------------------------------------------------------------------------
+local cSPIbb = {}
+
+---
+-- Close SPI bit banging device.
+-- @param self Decvice.
+-- @return true on success, nil + errormsg on failure
+function cSPIbb.close(self)
+   local res, err = tryB(bb_spi_close(self.pihandle, self.cs))
+   if not res then return nil, err end
+   self.session.bbspidevs[self.handle] = nil
+   return true
+end
+
+---
+-- Transfer (write and read) given data.
+-- The number of bytes read is equal to the number of bytes written.
+-- @param self Device.
+-- @param data Data to write in a Lua string.
+-- @return Data read in a Lua string on success, nil + errormsg on failure.
+function cSPIbb.transfer(self, data)
+   local s, err = bb_spi_xfer(self.pihandle, self.cs, data, #data)
+   if not s then
+      return nil, perror(err)
+   end
+   return s
+end
+
 
 --------------------------------------------------------------------------------
 -- All GPIO control and status operations occurs in the context of a session.
@@ -773,6 +807,7 @@ cSession.close = function(self)
    for _, item in pairs(self.spidevs) do item:close() end
    for _, item in pairs(self.serialdevs) do item:close() end
    for _, item in pairs(self.bbi2cdevs) do item:close() end
+   for _, item in pairs(self.bbspidevs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
    pigpio_stop(self.handle)
    self.handle = nil
@@ -1476,6 +1511,44 @@ cSession.openSPI = function(self, spichannel, bitrate, flags, name)
    return spi
 end
 
+---
+-- Open SPI bit banging device.
+-- @param self Session.
+-- @param cs GPIO number to use for chip select CS.
+-- @param miso GPIO number to use for master-in-slave-out MISO.
+-- @param mosi GPIO number to use for master-out-slave-in MOSI.
+-- @param sclk GPIO number to use for serial clock SCLK.
+-- @param bitrate Bitrate 32 kbps to 30 Mbps - default: 32 kbps.
+-- @param flags Flags to control basic parameters of the device.
+-- @param name Name for device - default: spibbdev-<SPIHANDLE>.
+-- @return Device object on success, nil + errormsg on failure.
+cSession.openSPIbb = function(self, cs, miso, mosi, sclk, bitrate, flags, name)
+   local spi = {}
+   local bitrate = bitrate or 32000
+   local flags = flags or 0
+   -- 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+   -- 0  0  0  0  0  0  R  T  0  0  0  0  0  0  0  0  0  0  0  p  m  m
+   -- mask unused bits for bit banging device
+   flags = bit32.band(flags, 0x0c07)
+   spi.handle = bb_spi_open(self.handle, cs, miso, mosi, sclk, bitrate, flags)
+   if spi.handle < 0 then
+      return nil, perror(spi.handle)
+   end
+   spi.cs = cs
+   spi.mosi = mosi
+   spi.miso = miso
+   spi.sclk = sclk
+   spi.pihandle = self.handle
+   setmetatable(spi, {
+                   __index = cSPIbb,
+                   __gc = function(self) self.close() end
+   })
+   spi.name = name or ("spibbdev-" .. spi.handle)
+   spi.session = self
+   spi.session.bbspidevs[spi.handle] = spi
+   return spi
+end
+
 --------------------------------------------------------------------------------
 -- <h3>SPI Flags</h3>
 -- A set of "macros" (Lua functions) that can be used to assemble the <code>flags</code> parameter
@@ -1562,7 +1635,6 @@ function open(host, port, name)
    sess.host = tostring(host or "localhost")
    sess.port = tostring(port or 8888)
    sess.handle = pigpio_start(sess.host, sess.port)
-   print("#1#", sess.host, sess.port, sess.handle)
    if sess.handle < 0 then
       return nil, perror(sess.handle), sess.handle
    end
@@ -1582,6 +1654,7 @@ function open(host, port, name)
    sess.eventcallbacks={}
    sess.bbi2cdevs = {}
    sess.bbserialdevs = {}
+   sess.bbspidevs = {}
    return sess
 end
 

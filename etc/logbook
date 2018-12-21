@@ -1,8 +1,42 @@
-I2C - Logbook
-=============
+Logbook Luapigpiod
+==================
+Describes hardware connectivity for provided tests and other
+experiences.
+
+================================================================================
+GPIO
+================================================================================
+GPIO functions tested with 1 output and 1 input pin connected.
+Connectivity:
+Pin 40 GPIO21 (out) ==> Pin 38 GPIO 20 (in)
+
+Step motor connectivity:
+Pin 13 GPIO 27  Coil A1
+Pin 11 GPIO 17  Coil A2
+Pin 16 GPIO 23  Coil B1
+Pin 18 GPIO 24  Coil B2
+
+Sequence to use for stepping:
+   {0,0,0,1}, -- coils: A1, A2, B1, B2
+   {0,0,1,1},
+   {0,0,1,0},
+   {0,1,1,0},
+   {0,1,0,0},
+   {1,1,0,0},
+   {1,0,0,0},
+   {1,0,0,1}
+
+
+
+================================================================================
+I2C
+================================================================================
+I2C tested with Sensehat board using the standard I2C interface of Raspberry PI.
+Pins:
+SDA  Pin 3      (GPIO 2)
+SCL  Pin 5      (GPIO 3)
 
 ouput of i2cdetect -y 1:
-
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- 1c -- -- --
@@ -23,7 +57,6 @@ This is the humidity detector HTS221
       1011 1001 0xb9 read from device 0x5c
 This is the pressure sensor LPS25H
 
-
 0x6a  x110 1010
       1101 0100 0xd4 write to device 0x6a
       1101 0101 0xd5 read from device 0x6a
@@ -34,6 +67,40 @@ This is the accelerometer sensor in inertial module LSM9DS1
       0011 1001 0x39 read from device 0x1c
 This is the magnetometer sensor in inertial module LSM9DS1
 
+================================================================================
 Serial Logbook
-==============
+================================================================================
+Serial interface tested by connection two Raspberry PIs.
+Test script talkes to pigpiod on both boards using two sessions.
+
+Connectivity:
+Board 1          Board 2
+----------------------------
+Pin  8 TxD       Pin 10 RxD
+Pin 10 RxD       Pin  8 TxD
+
+Linux preparation:
+- Enable Serial interface via raspi-config
+- Use /dev/serial0 (aka /dev/ttyS0a on Raspberry PI 2)
+- Use /dev/serial0 (aka /dev/ttyAMA0 on Raspberry PI 3)
+- 
+
+================================================================================
+SPI Logbook
+================================================================================
+SPI interface tested by connecting MOSI and MISO.
+Connectivity:
+Pin 19 MOSI (GPIO 10) ==> Pin 21 MISO (GPIO 9)
+
+This setup makes only sense for service cSPI.transfer() since data sent
+is also received.
+cSPI.write() service not really tested since receive path not active.
+cSPI.read() service not really tested since only 0 are received.
+Both service only tested logically (API).
+Assumption: cSPI.transfer() test proofs physical operation.
+
+================================================================================
+Bit banging Serial
+================================================================================
+Connectivity:
 
