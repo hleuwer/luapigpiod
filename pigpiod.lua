@@ -947,7 +947,7 @@ end
 -- @param status Status to convert.
 -- @return Status as table.
 function cI2CSlave.convertStatus(self, status)
-   return = {
+   return {
       ncopy = bit32.rshift(status, 16),
       nrx = bit32.band(bit32.rshift(status, 11), 0x1f)
       ntx = bit32.band(bit32.rshift(status, 6), 0x1f)
