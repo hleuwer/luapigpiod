@@ -1,0 +1,6 @@
+/tmp/* u
+/home/leuwer/tmp/* u
+/home/leuwer/* u
+/usr/lib/* r
+/proc/* r
+/bin/* r

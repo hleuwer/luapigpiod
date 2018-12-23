@@ -223,7 +223,8 @@ baudrates = {
 local cWave = {}
 
 ---
--- Close given waveform.<br>
+-- Close given waveform.
+--
 -- This will delete all waveforms intermediately stored.
 -- @param self Waveform.
 -- @return true on success, nil + errormsg on failure.
@@ -256,6 +257,7 @@ end
 
 ---
 -- Send the given waveform with given mode.
+--
 -- The mode is by a textstring:<br>
 -- 'oneshot', 'repeat', 'oneshotsync', 'repeatsync'
 -- @param self Waveform.
@@ -281,7 +283,7 @@ end
 local cScript = {}
 
 ---
--- Run a script.<br>
+-- Run a script.
 -- @param self Script.
 -- @param param List of up to 10 parameters for the script.
 -- @return true on success, nil + errormsg on failure.
@@ -669,17 +671,6 @@ end
 local cI2Cbb = {}
 
 ---
--- Execute a sequence of I2C commands.
--- For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
--- @param self Device.
--- @param inbuf Lua String with data to be sent.
--- @param outlen Number of Byte to be returned.
--- @return Bytes read in a Lua string on success, nil + errormsg on failure.
-function cI2Cbb.zip(self, inbuf, outlen)
-   return tryV(bb_i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
-end
-
----
 -- Close I2C bit bang device.
 -- @param self Device.
 -- @return true on success, nil + errormsg on failure.
@@ -688,6 +679,17 @@ function cI2Cbb.close(self)
    if not res then return nil, err end
    self.session.bbi2cdevs[self.handle] = nil
    return res
+end
+
+---
+-- Execute a sequence of I2C commands.
+-- For details see <a href=http://abyz.me.uk/rpi/pigpio/pdif2.html#i2c_zip> I2C ZIP </a>
+-- @param self Device.
+-- @param inbuf Lua String with data to be sent.
+-- @param outlen Number of Byte to be returned.
+-- @return Bytes read in a Lua string on success, nil + errormsg on failure.
+function cI2Cbb.zip(self, inbuf, outlen)
+   return tryV(bb_i2c_zip(self.pihandle, self.handle, inbuf, #inbuf, outlen))
 end
 
 --------------------------------------------------------------------------------
@@ -762,7 +764,7 @@ local cSPIbb = {}
 -- @param self Decvice.
 -- @return true on success, nil + errormsg on failure
 function cSPIbb.close(self)
-   local res, err = tryB(bb_spi_close(self.pihandle, self.cs))
+   local res, err = tryB(bb_spi_close(self.pihandle, self.handle))
    if not res then return nil, err end
    self.session.bbspidevs[self.handle] = nil
    return true
@@ -775,13 +777,188 @@ end
 -- @param data Data to write in a Lua string.
 -- @return Data read in a Lua string on success, nil + errormsg on failure.
 function cSPIbb.transfer(self, data)
-   local s, err = bb_spi_xfer(self.pihandle, self.cs, data, #data)
+   local s, errcode = bb_spi_xfer(self.pihandle, self.handle, data, #data)
    if not s then
-      return nil, perror(err)
+      return nil, perror(errcode)
    end
    return s
 end
 
+--------------------------------------------------------------------------------
+-- <h3>Serial Bit Banging Read Device</h3>
+-- This is a receive only serial device using any of GPIO pins.<br>
+-- Constructor: <code>dev=session:openSerialRead(pin, bitrage, name)</code>
+-- @type cSerialRead 
+--------------------------------------------------------------------------------
+local cSerialRead = {}
+
+---
+-- Close serial read bit banging device.
+-- @param self Device.
+-- @return true on success, nil + errormsg on failure.
+function cSerialRead.close(self)
+   local res, err = tryB(bb_serial_read_close(self.pihandle, self.handle))
+   if not res then
+      return nil, err
+   end
+   self.session.bbserialdevs[self.handle] = nil
+   return true
+end
+
+---
+-- Read data from serial read bit banging device.
+-- @param self Device.
+-- @param nbytes Number of bytes to read.
+-- @return Data read in Lua string on success, nil + errormsg on failure.
+function cSerialRead.read(self, nbytes)
+   local s, errcode = bb_serial_read(self.pihandle, self.handle, nbytes)
+   if not s then
+      return nil, perror(errcode)
+   end
+   return s
+end
+
+---
+-- Invert data read from serial read bit banging device.
+-- @param self Device
+-- @param invert 0: do not invert, 1: do invert data.
+-- @return true on success, nil + errormsg on failure.
+function cSerialRead.invert(self, invert)
+   invert = invert or 0
+   local res, err = tryB(bb_serial_invert(self.pihandle, self.handle, invert))
+   if not res then
+      return nil, err
+   end
+   return true
+end
+
+--------------------------------------------------------------------------------
+-- <h3>Files</h3>
+-- File object allows managing storage in connected hosts.
+-- Constructor: <code>file=session:openFile(filename, mode, name)</code>
+-- @type cFile
+--------------------------------------------------------------------------------
+local cFile = {}
+
+---
+-- Close the file associated with given file object.
+-- @param self File.
+-- @return true on success, nil + errormsg on failure.
+function cFile.close(self)
+   local res, err = tryB(file_close(self.pihandle, self.handle))
+   if not res then return nil, err end
+   self.session.files[self.handle] = nil
+   return true
+end
+
+---
+-- Read the given number of bytes from the file.
+-- @param self File.
+-- @param nbytes Number of bytes to read.
+-- @return Data read in Lua string on success, nil + errormsg on failure.
+function cFile.read(self, nbytes)
+   local s, errcode = file_read(self.pihandle, self.handle, nbytes)
+   if not s then
+      return nil, perror(errcode)
+   end
+   return s
+end
+
+---
+-- Write the given data to the file.
+-- @param self File.
+-- @param data Data to be written.
+-- @return true on success, nil + errormsg on failure.
+function cFile.write(self, data)
+   return tryB(file_write(self.pihandle, self.handle, data, #data))
+end
+
+---
+-- Seeks into the file at position defined by offset and from.
+-- @param self File.
+-- @param offset Byte offset (positive or negative) agains ref position in from.
+-- @param from Reference position:<br>
+--             gpio.FROM_START (0), gpio.FROM_CURRENT (1) or gpio.FROM_END (2)
+-- @return New file position of success, nil + errormsg on failure.
+function cFile.seek(self, offset, from)
+   return tryV(file_seek(self.pihandle, self.handle, offset, from))
+end
+
+--------------------------------------------------------------------------------
+-- <h3>I2C Slave Device</h3>
+-- This is a slave I2C device.<br>
+-- Constructor: <code>dev=session:openI2CSlave(address, name)</code>
+-- @type cI2CSlave
+--------------------------------------------------------------------------------
+local cI2CSlave = {}
+---
+-- Close the given I2C device.
+-- @param self Device.
+-- @return I2C Slave interface instance as table, nil + errormsg on failure
+function cI2CSlave.close(self)
+   local data = ""
+   local res, errcode = bsc_i2c(self.pihandle, 0, data, #data)
+   if not res then
+      return nil, perror(errcode)
+   end
+   self.session.i2cslvs[self.handle] = nil
+   return res
+end
+
+-- 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+--  S  S  S  S  S  R  R  R  R  R  T  T  T  T  T RB TE RF TF RE TB
+-- SSSSS	number of bytes successfully copied to transmit FIFO
+-- RRRRR	number of bytes in receieve FIFO
+-- TTTTT	number of bytes in transmit FIFO
+-- RB	receive busy
+-- TE	transmit FIFO empty
+-- RF	receive FIFO full
+-- TF	transmit FIFO full
+-- RE	receive FIFO empty
+-- TB	transmit busy
+
+---
+-- Transfer data as I2C slave.
+-- @param self Device.
+-- @param data Data to transfer
+-- @return Data received as Lua string plus
+--         status word (as table and number)  on success,
+--         nil + errormsg on failure.
+function cI2CSlave.transfer(self, data)
+   local rdata, status = bsc_i2c(self.pihandle, self.address, data, #data)
+   if not rdata then
+      return nil, perror(status)
+   end
+   return rdata, tstatus, status
+end
+
+---
+-- Convert binary status into a table.
+--
+-- The table has the following components:
+-- <ul>
+-- <li> ncopy: Number of bytes copied to transmit fifo.
+-- <li> nrx, ntx: Number of bytes in recv/transmit fifo.
+-- <li> rxbusy, txbusy: Receiver/transmitter busy.
+-- <li> rxempty, txempty: Recv/transmit fifo empty.
+-- <li> rxfull, txfull: Recv/transmit fifo full.
+-- </ul>
+-- @param self Device.
+-- @param status Status to convert.
+-- @return Status as table.
+function cI2CSlave.convertStatus(self, status)
+   return = {
+      ncopy = bit32.rshift(status, 16),
+      nrx = bit32.band(bit32.rshift(status, 11), 0x1f)
+      ntx = bit32.band(bit32.rshift(status, 6), 0x1f)
+      rxbusy = bit32.band(status, 0x20) > 0
+      txbusy = bit32.band(status, 0x01) > 0
+      rxempty = bit32.band(status, 0x02) > 0
+      txempty = bit32.band(status, 0x10) > 0
+      rxfull = bit32.band(status, 0x08) > 0
+      txfull = bit32.band(status, 0x04) > 0
+   }
+end
 
 --------------------------------------------------------------------------------
 -- All GPIO control and status operations occurs in the context of a session.
@@ -797,7 +974,6 @@ local cSession = {}
 -- @param self Session.
 -- @return true on success, nil + errormsg on error.
 cSession.close = function(self)
-
    for _, item in pairs(self.waveforms) do item:close() end
    for _, item in pairs(self.scripts) do item:delete() end
    for _, item in pairs(self.notifychannels) do item:close() end
@@ -808,6 +984,8 @@ cSession.close = function(self)
    for _, item in pairs(self.serialdevs) do item:close() end
    for _, item in pairs(self.bbi2cdevs) do item:close() end
    for _, item in pairs(self.bbspidevs) do item:close() end
+   for _, item in pairs(self.files) do item:close() end
+   for _, item in pairs(self.i2cslvs) do item:close() end
    _G._PIGPIOD_SESSIONS[self.handle] = nil
    pigpio_stop(self.handle)
    self.handle = nil
@@ -1058,7 +1236,7 @@ cSession.getPinning = function(self, typ)
    return pinnings[typ]
 end
 
-cSession.getPigpioVersion = function(self)
+cSession.getVersion = function(self)
    return tryV(get_pigpio_version(self.handle))
 end
 
@@ -1075,7 +1253,8 @@ end
 --end
 
 ---
--- Open a waveform as defined by parameter 'waveform'.<br>
+-- Open a waveform as defined by parameter 'waveform'.
+--
 -- An optional user defined name can be provided. If nil, a name 'wave-<wave.handle>' is
 -- automatically created.
 -- @param self Session.
@@ -1338,31 +1517,6 @@ cSession.triggerEvent = function(self, event)
 end
 
 ---
--- Open serial device.
--- @param self Session.
--- @param baud Baudrate in bits per second.
--- @param tty Serial device file name starting with
---            /dev/serial or /dev/tty
--- @param name Name of the device.
--- @return Device object on success, nil + errormsg on failure.
-cSession.openSerial = function(self, baud, tty, name)
-   local serial = {}
-   local baud = baud or 9600
-   local tty = tty or "/dev/serial0"
-   local flags = 0
-   serial.handle = serial_open(self.handle, tty, baud, flags)
-   serial.pihandle = self.handle
-   setmetatable(serial, {
-                   __index = cSerial,
-                   __gc = function(self) self:close() end
-   })
-   self.serialdevs[serial.handle] = serial
-   serial.session = self
-   serial.name = name or ("serial-"..serial.handle)
-   return serial
-end
-
----
 -- Get a pads signal strength in mA.
 -- @param self Session.
 -- @param pad Pad (pin)
@@ -1416,6 +1570,34 @@ cSession.shell = function(self, name, scriptparam)
 end
 
 ---
+-- Open serial device.
+-- @param self Session.
+-- @param baud Baudrate in bits per second.
+-- @param tty Serial device file name starting with
+--            /dev/serial or /dev/tty
+-- @param name Name of the device.
+-- @return Device object on success, nil + errormsg on failure.
+cSession.openSerial = function(self, baud, tty, name)
+   local serial = {}
+   local baud = baud or 9600
+   local tty = tty or "/dev/serial0"
+   local flags = 0
+   serial.handle = serial_open(self.handle, tty, baud, flags)
+   if serial.handle < 0 then
+      return nil, perror(serial.handle)
+   end
+   serial.pihandle = self.handle
+   setmetatable(serial, {
+                   __index = cSerial,
+                   __gc = function(self) self:close() end
+   })
+   self.serialdevs[serial.handle] = serial
+   serial.session = self
+   serial.name = name or ("serial-"..serial.handle)
+   return serial
+end
+
+---
 -- Open I2C device.
 -- @param self Session.
 -- @param bus Bus index.
@@ -1439,21 +1621,6 @@ cSession.openI2C = function(self, bus, address, name)
    i2c.name = name or ("i2cdev-"..i2c.handle)
    i2c.session = self
    self.i2cdevs[i2c.handle] = i2c
-   return i2c
-end
-
-cSession.openI2Cbb = function(self, sda, scl, baud)
-   local i2c = {}
-   local res, err = tryB(bb_i2c_open(self.handle, sda, scl, baud))
-   if not res then return nil, err end
-   i2c.handle = sda
-   i2c.pihandle = i2c.handle
-   setmetatable(i2c, {
-                   __index = cI2Cbb,
-                   __gc = function(self) self:close() end
-   })
-   i2c.session = self
-   i2c.bbi2cdevs[i2c.handle] = i2c
    return i2c
 end
 
@@ -1512,6 +1679,54 @@ cSession.openSPI = function(self, spichannel, bitrate, flags, name)
 end
 
 ---
+-- Open serial read-only bit banging device.
+-- @param self Session.
+-- @param rxd Number of GPIO pio to use as RxD pin.
+-- @param baud Bitrage in bps.
+-- @param name Name of device.
+-- @return Instance of serial read device on success, nil + errormsg on failure
+cSession.openSerialRead = function(self, rxd, baud, name)
+   local serial = {}
+   local res = tryB(bb_serial_read_open(self.pihandle, rxd, baud))
+   if not res then
+      return nil, perror(res)
+   end
+   serial.handle = rxd
+   setmetatable(serial, {
+                   __index = cSerialRead,
+                   __gc = function(self) self:close() end
+   })
+   serial.name = name or ("serialreaddev-"..serial.handle)
+   serial.session = self
+   self.bbserialdefs[serial.handle] = serial
+   return serial
+end
+
+---
+-- Open I2C bit banging device.
+-- @param self Session.
+-- @param sda GPIO number of pin used for SDA.
+-- @param scl GPIO number of pin used for SCL.
+-- @param baud Bitrate
+-- @param name Name of device.
+-- @return Instance of I2C bit banging device, nil + errormsg on failure.
+cSession.openI2Cbb = function(self, sda, scl, baud, name)
+   local i2c = {}
+   local res, err = tryB(bb_i2c_open(self.handle, sda, scl, baud))
+   if not res then return nil, err end
+   i2c.handle = sda
+   i2c.pihandle = i2c.handle
+   setmetatable(i2c, {
+                   __index = cI2Cbb,
+                   __gc = function(self) self:close() end
+   })
+   i2c.name = name or ("i2cbb-"..i2c.handle)
+   i2c.session = self
+   i2c.bbi2cdevs[i2c.handle] = i2c
+   return i2c
+end
+
+---
 -- Open SPI bit banging device.
 -- @param self Session.
 -- @param cs GPIO number to use for chip select CS.
@@ -1530,11 +1745,12 @@ cSession.openSPIbb = function(self, cs, miso, mosi, sclk, bitrate, flags, name)
    -- 0  0  0  0  0  0  R  T  0  0  0  0  0  0  0  0  0  0  0  p  m  m
    -- mask unused bits for bit banging device
    flags = bit32.band(flags, 0x0c07)
-   spi.handle = bb_spi_open(self.handle, cs, miso, mosi, sclk, bitrate, flags)
-   if spi.handle < 0 then
-      return nil, perror(spi.handle)
+   local res, err = tryB(bb_spi_open(self.handle, cs, miso, mosi, sclk, bitrate, flags))
+   if not res then
+      return nil, err
    end
    spi.cs = cs
+   spi.handle = cs
    spi.mosi = mosi
    spi.miso = miso
    spi.sclk = sclk
@@ -1547,6 +1763,79 @@ cSession.openSPIbb = function(self, cs, miso, mosi, sclk, bitrate, flags, name)
    spi.session = self
    spi.session.bbspidevs[spi.handle] = spi
    return spi
+end
+
+---
+-- Open a file.
+--
+-- A file can be opened in the follwoing modes:<br>
+-- <ul>
+-- <li> FILE_READ, FILE_WRITE, FILE_RW optionally or'd with one of the following
+-- <li> FILE_APPEND, FILE_CREATE, FILE_TRUNC
+-- </ul>
+-- Note: Newly created file will have root as the owner
+--       with owner write permission.
+-- @param self Session.
+-- @param filename Filename.
+-- @param mode Filemode.
+-- @param name Optional name for the file object.
+-- @return File object on success, nil + errormsg on failure.
+cSession.openFile = function(self, filename, mode, name)
+   local file = {}
+   local mode = mode or gpio.FILE_READ
+   file.handle = file_open(self.handle, filename, mode)
+   if file.handle < 0 then
+      return nil, perror(file.handle)
+   end
+   file.pihandle = self.handle
+   setmetatable(file, {
+                   __index = cFile,
+                   __gc = function(self) self.close() end
+   })
+   file.session = self
+   self.files[file.handle] = file
+   file.name = name or ("file-" .. file.handle)
+   return file
+end
+
+---
+-- Retrieve a list of files matching the given pattern.
+-- The pattern must match an entry in <code>/opt/pigpio/access</code>.
+-- @param self Session.
+-- @param pattern Pattern used for file search.
+-- @return List with file names, nil + errormsg on failure.
+cSession.listFiles = function(self, pattern)
+   local buf, errcode = file_list(self.handle, pattern)
+   if not buf then
+      return nil, perror(errcode)
+   end
+   local t = {}
+   string.gsub(buf, "(.-)([\n\r]+)", function(a,b) table.insert(t, a) end)
+   return t, buf
+end
+
+---
+-- Open I2C Slave device.
+-- @param self Session.
+-- @param address I2C address.
+-- @param name Name of device.
+-- @return I2C Slave object on success, nil + errormsg on failure.
+cSession.openI2CSlave = function(self, address, name)
+   local slv = {}
+   if address <= 0 then
+      return nil, "Invalid I2C address"
+   end
+   slv.address = address
+   slv.handle = 0
+   slv.pihandle = self
+   setmetatable(slv, {
+                   __index = cI2CSlave,
+                   __gc = function(self) self:close() end
+   })
+   slv.name = name or ("i2cslvdev-"..slv.handle)
+   slv.session = self
+   self.i2cslvs[slv.handle] = slv
+   return slv
 end
 
 --------------------------------------------------------------------------------
@@ -1655,6 +1944,8 @@ function open(host, port, name)
    sess.bbi2cdevs = {}
    sess.bbserialdevs = {}
    sess.bbspidevs = {}
+   sess.files = {}
+   sess.i2cslvs = {}
    return sess
 end
 

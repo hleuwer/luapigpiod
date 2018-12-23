@@ -35,6 +35,10 @@
 %native (spi_read) int utlSPIRead(lua_State *L);
 %native (spi_xfer) int utlSPITransfer(lua_State *L);
 %native (bb_spi_xfer) int utlSPIbbTransfer(lua_State *L);
+%native (bb_serial_read) int utlSerialbbRead(lua_State *L);
+%native (file_read) int utlFileRead(lua_State *L);
+%native (file_list) int utlFileList(lua_State *L);
+%native (bsc_i2c) int utlI2CSlaveTransfer(lua_State *L);
 
 // type mapping
 %typemap(in) uint_32_t {

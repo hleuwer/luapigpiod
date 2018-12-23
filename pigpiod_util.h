@@ -18,6 +18,8 @@
 
 #define PIGPIO_SESSIONS "_PIGPIOD_SESSIONS"
 
+#define LIST_FILE_BUFSIZE 4096
+
 struct callbackfuncEx {
   CBFuncEx_t f;
   void *u;
@@ -107,4 +109,8 @@ int utlI2CZip(lua_State *L);
 int utlSPIRead(lua_State *L);
 int utlSPITransfer(lua_State *L);
 int utlSPIbbTransfer(lua_State *L);
+int utlSerialbbRead(lua_State *L);
+int utlFileRead(lua_State *L);
+int utlFileList(lua_State *L);
+int utlI2CSlaveTransfer(lua_State *L);
 #endif

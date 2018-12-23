@@ -3,7 +3,7 @@ Use Lua to control a Raspberry PI's GPIO pins from user space
 
 LuaPGPIO is a binding to the [pigpiod](https://github.com/joan2937/pigpio) library. 
 
-It provides indirect access to the GPIO pins of a Raspberry Pi connected via network interface (local or remote host). It talks to the GPIO daemon named `pigpiod` running in the connected platform.
+It provides indirect access to the GPIO pins of one or more Raspberry Pi boards connected via network interface (local or remote host). It talks to the GPIO daemon named `pigpiod` running in the connected platform.
 
 LuaPIGPIOD can produce approximately 12000 toggles per second when connected to localhost. This is about twice as fast as the Python frontend to pigpiod. 
 
@@ -17,13 +17,13 @@ All operations are executed in the context of sessions. A session is an instance
 
 Multiple session instances may exist in parallel allowing any host to control the GPIO pins of multiple Raspberry Pi boards:
 
-Basic GPIO operation are then performed in methods provided called as a method of such a session:
+Basic GPIO operations are then performed in the methods of a session object:
 
 `success, err = sess.write(sess, pin, level)` or
 `success, err = sess:write(pin, level)`.
 
 ## Advanced Features ##
-There are classes for advanced features like waveforms, scripts, callbacks, event callbacks, serial, I2C or SPI interfaces.
+There are classes for advanced features like waveforms, scripts, files, callbacks, event callbacks, serial, I2C or SPI interfaces.
 
 Instances are created by calling the corresponding constructor function within the running session, e.g.:
 
@@ -48,23 +48,18 @@ The event handling kernel monitors the size of the internal event FIFO and count
 
 ## Thread Handling
 The pigpiod c i/f library provides a simple interface for starting and stopping threads. LuaPIGPIOD associates a separate Lua state with each thread. The new state receives an arbitrary number of arguments which must be of type number, string or boolean. Tables and function must first be externally serialized into a string.
+Lua code to be executed in a thread must be passed as string to thread creation function `gpio.startThread()`.
 
 ## Status
-#### Done: 
-* GPIO 
-* Pin events and callbacks 
-* waves
-* scripts
-* serial i/f
-* i2c i/f
-* spi i/f
-* threads
 
-#### ToDo: 
-* Bit banging (software IO based) interfaces bbi2c, bbserial, bbspi
-* i2c and spi slave
-* Files (I used luaposix mostly)
+The following 
 
-#### Not tested
+#### Not implemented: 
+* I2C and SPI slave
+
+#### Implemented but not tested
 * Event callbacks - I wasn't able to bring them to work (not a luapigpiod issue probably).
+* serial read bit banging device
+* I2C bit banging device
+* Non default SPI modes using SpiFlags class
 

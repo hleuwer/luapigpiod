@@ -40,6 +40,9 @@
 <li><a href="#Class_cI2Cbb">Class cI2Cbb </a></li>
 <li><a href="#Class_cSPI">Class cSPI </a></li>
 <li><a href="#Class_cSPIbb">Class cSPIbb </a></li>
+<li><a href="#Class_cSerialRead">Class cSerialRead </a></li>
+<li><a href="#Class_cFile">Class cFile </a></li>
+<li><a href="#Class_cI2CSlave">Class cI2CSlave </a></li>
 <li><a href="#Class_cSession">Class cSession </a></li>
 <li><a href="#Class_spiFlags">Class spiFlags </a></li>
 <li><a href="#Module_functions">Module functions </a></li>
@@ -91,8 +94,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#cWave.close">cWave.close (self)</a></td>
-	<td class="summary">Close given waveform.<br>
- This will delete all waveforms intermediately stored.</td>
+	<td class="summary">Close given waveform.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#cWave.sendOnce">cWave.sendOnce (self)</a></td>
@@ -111,7 +113,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#cScript.run">cScript.run (self, param)</a></td>
-	<td class="summary">Run a script.<br></td>
+	<td class="summary">Run a script.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#cScript.update">cScript.update (self, param)</a></td>
@@ -265,12 +267,12 @@
 <h2><a href="#Class_cI2Cbb">Class cI2Cbb </a></h2>
 <table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#cI2Cbb.zip">cI2Cbb.zip (self, inbuf, outlen)</a></td>
-	<td class="summary">Execute a sequence of I2C commands.</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#cI2Cbb.close">cI2Cbb.close (self)</a></td>
 	<td class="summary">Close I2C bit bang device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cI2Cbb.zip">cI2Cbb.zip (self, inbuf, outlen)</a></td>
+	<td class="summary">Execute a sequence of I2C commands.</td>
 	</tr>
 </table>
 <h2><a href="#Class_cSPI">Class cSPI </a></h2>
@@ -301,6 +303,55 @@
 	<tr>
 	<td class="name" nowrap><a href="#cSPIbb.transfer">cSPIbb.transfer (self, data)</a></td>
 	<td class="summary">Transfer (write and read) given data.</td>
+	</tr>
+</table>
+<h2><a href="#Class_cSerialRead">Class cSerialRead </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#cSerialRead.close">cSerialRead.close (self)</a></td>
+	<td class="summary">Close serial read bit banging device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSerialRead.read">cSerialRead.read (self, nbytes)</a></td>
+	<td class="summary">Read data from serial read bit banging device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSerialRead.invert">cSerialRead.invert (self, invert)</a></td>
+	<td class="summary">Invert data read from serial read bit banging device.</td>
+	</tr>
+</table>
+<h2><a href="#Class_cFile">Class cFile </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#cFile.close">cFile.close (self)</a></td>
+	<td class="summary">Close the file associated with given file object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cFile.read">cFile.read (self, nbytes)</a></td>
+	<td class="summary">Read the given number of bytes from the file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cFile.write">cFile.write (self, data)</a></td>
+	<td class="summary">Write the given data to the file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cFile.seek">cFile.seek (self, offset, from)</a></td>
+	<td class="summary">Seeks into the file at position defined by offset and from.</td>
+	</tr>
+</table>
+<h2><a href="#Class_cI2CSlave">Class cI2CSlave </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#cI2CSlave.close">cI2CSlave.close (self)</a></td>
+	<td class="summary">Close the given I2C device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cI2CSlave.transfer">cI2CSlave.transfer (self, data)</a></td>
+	<td class="summary">Transfer data as I2C slave.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cI2CSlave.convertStatus">cI2CSlave.convertStatus (self, status)</a></td>
+	<td class="summary">Convert binary status into a table.</td>
 	</tr>
 </table>
 <h2><a href="#Class_cSession">Class cSession </a></h2>
@@ -379,8 +430,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#cSession.openWave">cSession.openWave (self, waveform, name)</a></td>
-	<td class="summary">Open a waveform as defined by parameter 'waveform'.<br>
- An optional user defined name can be provided.</td>
+	<td class="summary">Open a waveform as defined by parameter 'waveform'.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#cSession.waveClear">cSession.waveClear (self)</a></td>
@@ -403,10 +453,6 @@
 	<td class="summary">Wait for an edge to occur.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#cSession.openSerial">cSession.openSerial (self, baud, tty, name)</a></td>
-	<td class="summary">Open serial device.</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#cSession.getPadStrength">cSession.getPadStrength (self, pad)</a></td>
 	<td class="summary">Get a pads signal strength in mA.</td>
 	</tr>
@@ -417,6 +463,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#cSession.shell">cSession.shell (self, name, scriptparam)</a></td>
 	<td class="summary">Execute a shell script  on connected host.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSession.openSerial">cSession.openSerial (self, baud, tty, name)</a></td>
+	<td class="summary">Open serial device.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#cSession.openI2C">cSession.openI2C (self, bus, address, name)</a></td>
@@ -431,8 +481,28 @@
 	<td class="summary">Open SPI device.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#cSession.openSerialRead">cSession.openSerialRead (self, rxd, baud, name)</a></td>
+	<td class="summary">Open serial read-only bit banging device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSession.openI2Cbb">cSession.openI2Cbb (self, sda, scl, baud, name)</a></td>
+	<td class="summary">Open I2C bit banging device.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#cSession.openSPIbb">cSession.openSPIbb (self, cs, miso, mosi, sclk, bitrate, flags, name)</a></td>
 	<td class="summary">Open SPI bit banging device.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSession.openFile">cSession.openFile (self, filename, mode, name)</a></td>
+	<td class="summary">Open a file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSession.listFiles">cSession.listFiles (self, pattern)</a></td>
+	<td class="summary">Retrieve a list of files matching the given pattern.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cSession.openI2CSlave">cSession.openI2CSlave (self, address, name)</a></td>
+	<td class="summary">Open I2C Slave device.</td>
 	</tr>
 </table>
 <h2><a href="#Class_spiFlags">Class spiFlags </a></h2>
@@ -601,8 +671,8 @@
     <strong>cWave.close (self)</strong>
     </dt>
     <dd>
-    Close given waveform.<br>
- This will delete all waveforms intermediately stored.
+    Close given waveform.
+<p> This will delete all waveforms intermediately stored.
 
 
     <h3>Parameters:</h3>
@@ -678,7 +748,7 @@
     </dt>
     <dd>
     Send the given waveform with given mode.
- The mode is by a textstring:<br>
+<p> The mode is by a textstring:<br>
  'oneshot', 'repeat', 'oneshotsync', 'repeatsync'
 
 
@@ -719,7 +789,7 @@
     <strong>cScript.run (self, param)</strong>
     </dt>
     <dd>
-    Run a script.<br>
+    Run a script.
 
 
     <h3>Parameters:</h3>
@@ -1717,6 +1787,31 @@
           </div>
     <dl class="function">
     <dt>
+    <a name = "cI2Cbb.close"></a>
+    <strong>cI2Cbb.close (self)</strong>
+    </dt>
+    <dd>
+    Close I2C bit bang device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "cI2Cbb.zip"></a>
     <strong>cI2Cbb.zip (self, inbuf, outlen)</strong>
     </dt>
@@ -1742,31 +1837,6 @@
     <ol>
 
         Bytes read in a Lua string on success, nil + errormsg on failure.
-    </ol>
-
-
-
-
-</dd>
-    <dt>
-    <a name = "cI2Cbb.close"></a>
-    <strong>cI2Cbb.close (self)</strong>
-    </dt>
-    <dd>
-    Close I2C bit bang device.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">self</span>
-         Device.
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        true on success, nil + errormsg on failure.
     </ol>
 
 
@@ -1949,6 +2019,318 @@
     <ol>
 
         Data read in a Lua string on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_cSerialRead"></a>Class cSerialRead </h2>
+
+          <div class="section-description">
+          <h3>Serial Bit Banging Read Device</h3>
+ This is a receive only serial device using any of GPIO pins.<br>
+ Constructor: <code>dev=session:openSerialRead(pin, bitrage, name)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "cSerialRead.close"></a>
+    <strong>cSerialRead.close (self)</strong>
+    </dt>
+    <dd>
+    Close serial read bit banging device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSerialRead.read"></a>
+    <strong>cSerialRead.read (self, nbytes)</strong>
+    </dt>
+    <dd>
+    Read data from serial read bit banging device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read in Lua string on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSerialRead.invert"></a>
+    <strong>cSerialRead.invert (self, invert)</strong>
+    </dt>
+    <dd>
+    Invert data read from serial read bit banging device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device
+        </li>
+        <li><span class="parameter">invert</span>
+         0: do not invert, 1: do invert data.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_cFile"></a>Class cFile </h2>
+
+          <div class="section-description">
+          <h3>Files</h3>
+ File object allows managing storage in connected hosts.
+ Constructor: <code>file=session:openFile(filename, mode, name)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "cFile.close"></a>
+    <strong>cFile.close (self)</strong>
+    </dt>
+    <dd>
+    Close the file associated with given file object.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         File.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cFile.read"></a>
+    <strong>cFile.read (self, nbytes)</strong>
+    </dt>
+    <dd>
+    Read the given number of bytes from the file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         File.
+        </li>
+        <li><span class="parameter">nbytes</span>
+         Number of bytes to read.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Data read in Lua string on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cFile.write"></a>
+    <strong>cFile.write (self, data)</strong>
+    </dt>
+    <dd>
+    Write the given data to the file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         File.
+        </li>
+        <li><span class="parameter">data</span>
+         Data to be written.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cFile.seek"></a>
+    <strong>cFile.seek (self, offset, from)</strong>
+    </dt>
+    <dd>
+    Seeks into the file at position defined by offset and from.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         File.
+        </li>
+        <li><span class="parameter">offset</span>
+         Byte offset (positive or negative) agains ref position in from.
+        </li>
+        <li><span class="parameter">from</span>
+         Reference position:<br>
+             gpio.FROM_START (0), gpio.FROM_CURRENT (1) or gpio.FROM_END (2)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        New file position of success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_cI2CSlave"></a>Class cI2CSlave </h2>
+
+          <div class="section-description">
+          <h3>I2C Slave Device</h3>
+ This is a slave I2C device.<br>
+ Constructor: <code>dev=session:openI2CSlave(address, name)</code>
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "cI2CSlave.close"></a>
+    <strong>cI2CSlave.close (self)</strong>
+    </dt>
+    <dd>
+    Close the given I2C device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        I2C Slave interface instance as table, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cI2CSlave.transfer"></a>
+    <strong>cI2CSlave.transfer (self, data)</strong>
+    </dt>
+    <dd>
+    Transfer data as I2C slave.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">data</span>
+         Data to transfer
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+         Data received as Lua string plus
+         status word (as table and number)  on success,
+         nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cI2CSlave.convertStatus"></a>
+    <strong>cI2CSlave.convertStatus (self, status)</strong>
+    </dt>
+    <dd>
+    Convert binary status into a table.
+<p> The table has the following components:
+ <ul>
+ <li> ncopy: Number of bytes copied to transmit fifo.
+ <li> nrx, ntx: Number of bytes in recv/transmit fifo.
+ <li> rxbusy, txbusy: Receiver/transmitter busy.
+ <li> rxempty, txempty: Recv/transmit fifo empty.
+ <li> rxfull, txfull: Recv/transmit fifo full.
+ </ul>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Device.
+        </li>
+        <li><span class="parameter">status</span>
+         Status to convert.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Status as table.
     </ol>
 
 
@@ -2488,8 +2870,8 @@
     <strong>cSession.openWave (self, waveform, name)</strong>
     </dt>
     <dd>
-    Open a waveform as defined by parameter 'waveform'.<br>
- An optional user defined name can be provided.  If nil, a name 'wave-<wave.handle>' is
+    Open a waveform as defined by parameter 'waveform'.
+<p> An optional user defined name can be provided. If nil, a name 'wave-<wave.handle>' is
  automatically created.
 
 
@@ -2691,41 +3073,6 @@
 
 </dd>
     <dt>
-    <a name = "cSession.openSerial"></a>
-    <strong>cSession.openSerial (self, baud, tty, name)</strong>
-    </dt>
-    <dd>
-    Open serial device.
-
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">self</span>
-         Session.
-        </li>
-        <li><span class="parameter">baud</span>
-         Baudrate in bits per second.
-        </li>
-        <li><span class="parameter">tty</span>
-         Serial device file name starting with
-            /dev/serial or /dev/tty
-        </li>
-        <li><span class="parameter">name</span>
-         Name of the device.
-        </li>
-    </ul>
-
-    <h3>Returns:</h3>
-    <ol>
-
-        Device object on success, nil + errormsg on failure.
-    </ol>
-
-
-
-
-</dd>
-    <dt>
     <a name = "cSession.getPadStrength"></a>
     <strong>cSession.getPadStrength (self, pad)</strong>
     </dt>
@@ -2820,6 +3167,41 @@
     <ol>
 
         0 on success, nil + error message on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSession.openSerial"></a>
+    <strong>cSession.openSerial (self, baud, tty, name)</strong>
+    </dt>
+    <dd>
+    Open serial device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">baud</span>
+         Baudrate in bits per second.
+        </li>
+        <li><span class="parameter">tty</span>
+         Serial device file name starting with
+            /dev/serial or /dev/tty
+        </li>
+        <li><span class="parameter">name</span>
+         Name of the device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Device object on success, nil + errormsg on failure.
     </ol>
 
 
@@ -2929,6 +3311,77 @@
 
 </dd>
     <dt>
+    <a name = "cSession.openSerialRead"></a>
+    <strong>cSession.openSerialRead (self, rxd, baud, name)</strong>
+    </dt>
+    <dd>
+    Open serial read-only bit banging device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">rxd</span>
+         Number of GPIO pio to use as RxD pin.
+        </li>
+        <li><span class="parameter">baud</span>
+         Bitrage in bps.
+        </li>
+        <li><span class="parameter">name</span>
+         Name of device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Instance of serial read device on success, nil + errormsg on failure
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSession.openI2Cbb"></a>
+    <strong>cSession.openI2Cbb (self, sda, scl, baud, name)</strong>
+    </dt>
+    <dd>
+    Open I2C bit banging device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">sda</span>
+         GPIO number of pin used for SDA.
+        </li>
+        <li><span class="parameter">scl</span>
+         GPIO number of pin used for SCL.
+        </li>
+        <li><span class="parameter">baud</span>
+         Bitrate
+        </li>
+        <li><span class="parameter">name</span>
+         Name of device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        Instance of I2C bit banging device, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
     <a name = "cSession.openSPIbb"></a>
     <strong>cSession.openSPIbb (self, cs, miso, mosi, sclk, bitrate, flags, name)</strong>
     </dt>
@@ -2968,6 +3421,107 @@
     <ol>
 
         Device object on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSession.openFile"></a>
+    <strong>cSession.openFile (self, filename, mode, name)</strong>
+    </dt>
+    <dd>
+    Open a file.
+<p> A file can be opened in the follwoing modes:<br>
+ <ul>
+ <li> FILE_READ, FILE_WRITE, FILE_RW optionally or'd with one of the following
+ <li> FILE_APPEND, FILE_CREATE, FILE_TRUNC
+ </ul>
+ Note: Newly created file will have root as the owner
+       with owner write permission.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">filename</span>
+         Filename.
+        </li>
+        <li><span class="parameter">mode</span>
+         Filemode.
+        </li>
+        <li><span class="parameter">name</span>
+         Optional name for the file object.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        File object on success, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSession.listFiles"></a>
+    <strong>cSession.listFiles (self, pattern)</strong>
+    </dt>
+    <dd>
+    Retrieve a list of files matching the given pattern.
+ The pattern must match an entry in <code>/opt/pigpio/access</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">pattern</span>
+         Pattern used for file search.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        List with file names, nil + errormsg on failure.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cSession.openI2CSlave"></a>
+    <strong>cSession.openI2CSlave (self, address, name)</strong>
+    </dt>
+    <dd>
+    Open I2C Slave device.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+         Session.
+        </li>
+        <li><span class="parameter">address</span>
+         I2C address.
+        </li>
+        <li><span class="parameter">name</span>
+         Name of device.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        I2C Slave object on success, nil + errormsg on failure.
     </ol>
 
 
@@ -3419,7 +3973,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2018-12-21 15:30:46 </i>
+<i style="float:right;">Last updated 2018-12-23 23:36:45 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

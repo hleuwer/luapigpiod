@@ -1,22 +1,24 @@
-MODULE=pigpiod
-WRAPPER=$(MODULE)_wrap.c
-WOBJS=$(WRAPPER:.c=.o) pigpiod_util.o
-OBJS = $(WOBJS)
-CFLAGS= -ggdb -Wall -c -fpic
-LDFLAGS= -shared
-LIBS=-lpigpiod_if2 -lpthread
-LUAV=5.2
-INC=-I/usr/include/lua$(LUAV) -I/usr/local/include
-LIBDIR=-L/usr/local/lib 
-IFILE=$(MODULE).i
-HFILE=/usr/local/include/pigpiod_if2.h pigpio_const.h
+MODULE	= pigpiod
+WRAPPER	= $(MODULE)_wrap.c
+WOBJS	= $(WRAPPER:.c=.o) pigpiod_util.o
+OBJS 	= $(WOBJS)
+CFLAGS	= -ggdb -Wall -c -fpic
+LDFLAGS	= -shared
+LIBS	= -lpigpiod_if2 -lpthread
+LUAV	= 5.2
+INC	= -I/usr/include/lua$(LUAV) -I/usr/local/include
+LIBDIR	= -L/usr/local/lib 
+IFILE	= $(MODULE).i
+HFILE	= /usr/local/include/pigpiod_if2.h pigpio_const.h
 INDEXFILE=index.txt
-TARGET=$(MODULE)/core.so
-LUALIBDIR=/usr/local/lib/lua/$(LUAV)
-SWIG_IDIR=/usr/share/swig3.0
-SHELL_CMD=shell_example
+TARGET	= $(MODULE)/core.so
+LUALIBDIR = /usr/local/lib/lua/$(LUAV)
+SWIG_IDIR = /usr/share/swig3.0
+SHELL_CMD = shell_example
+PIGPIO_OPTDIR = /opt/pigpio
+ACCESS_FILE = access
 
-.SUFFIXES: .c .o
+.Suffixes: .c .o
 
 .c.o: 
 	gcc $(CFLAGS) $(INC) -o $@ $<
@@ -42,14 +44,25 @@ uclean:
 	$(MAKE) clean
 	rm -f $(WRAPPER)
 
-install: install_shell
+install:: install-shell install-file
 	mkdir -p $(LUALIBDIR) && cp -f $(TARGET) $(LUALIBDIR)
 
-uninstall:
+uninstall:: uninstall-shell uninstall-file
 	rm -rf $(LUALIBDIR)/$(TARGET)
 
-install-shell:
-	cp etc/$(SHELL_CMD) /opt/pigpio/cgi
+install-shell::
+	mkdir -p $(PIGPIO_OPTDIR)/cgi
+	cp etc/$(SHELL_CMD) $(PIGPIO_OPTDIR)/cgi
+
+uninstall-shell::
+	rm /opt/pigpio/cgi/$(SHELL_CMD)
+
+install-file::
+	mkdir -p $(PIGPIO_OPTDIR)
+	cp etc/$(ACCESS_FILE) $(PIGPIO_OPTDIR)
+
+uninstall-file::
+	rm -rf /opt/pigpio/access
 
 index::
 	lua -l $(MODULE) -e 'for k,v in pairs(pigpiod) do print(k,v) end' > etc/$(INDEXFILE)

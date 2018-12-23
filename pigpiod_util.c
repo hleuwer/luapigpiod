@@ -561,32 +561,10 @@ int utlEventCallback(lua_State *L)
   return 1;
 }
 
-#ifdef NOT_NEEDED
 /*
- * Lua binding: retval = serialWrite(pi, handle, array)
+ * Lua binding: str = serial<xx>:read(n)
  */
-int utlSerialWrite(lua_State *L)
-{
-  int pi, handle, n, retval;
-  char *buf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkint(L, 2);
-  if (lua_istable(L, 3) == 0){
-    luaL_error(L, "Table expected as arg 3, receive %s.", lua_typename(L, lua_type(L, 3)));
-  }
-  n = luaL_len(L, 3);
-  buf = table_to_buf(L, n);
-  retval = serial_write(pi, handle, buf, n);
-  free(buf);
-  lua_pushnumber(L, retval);
-  return 1;
-}
-#endif
-
-/*
- * Lua binding: str = serial:read(n)
- */
-int utlSerialRead(lua_State *L)
+static int _utlSerialRead(lua_State *L, int bb)
 {
   int pi, n, nbytes;
   lua_Unsigned handle;
@@ -597,7 +575,10 @@ int utlSerialRead(lua_State *L)
   n = (int) luaL_checkunsigned(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
-  nbytes = serial_read(pi, handle, cbuf, n);
+  if (bb == 1)
+    nbytes = bb_serial_read(pi, handle, cbuf, n);
+  else
+    nbytes = serial_read(pi, handle, cbuf, n);
   if (nbytes < 0){
     free(cbuf);
     lua_pushnil(L);
@@ -608,6 +589,22 @@ int utlSerialRead(lua_State *L)
   free(cbuf);
   luaL_pushresult(&lbuf);
   return 1;
+}
+
+/*
+ * Lua binding: str = serial:read(n)
+ */
+int utlSerialRead(lua_State *L)
+{
+  return _utlSerialRead(L, 0);
+}
+
+/*
+ * Lua binding: str = serial:read(n)
+ */
+int utlSerialbbRead(lua_State *L)
+{
+  return _utlSerialRead(L, 1);
 }
 
 /*
@@ -712,9 +709,9 @@ int utlI2CReadDevice(lua_State *L)
 }
 
 /*
- * Lua binding: str = i2c:zip(cmdbuf, nbytes)
+ * Lua binding: str = i2c<bb>:zip(cmdbuf, nbytes)
  */
-int utlI2CZip(lua_State *L)
+static int _utlI2CZip(lua_State *L, int bb)
 {
   int pi, nbytes, n, m;
   lua_Unsigned handle;
@@ -727,12 +724,32 @@ int utlI2CZip(lua_State *L)
   m = luaL_len(L, 3);
   n = (int) luaL_checkunsigned(L, 4);
   cbuf = malloc(n * sizeof(char));
-  nbytes = i2c_zip(pi, handle, inbuf, m, cbuf, n);
+  if (bb == 1)
+    nbytes = bb_i2c_zip(pi, handle, inbuf, m, cbuf, n);
+  else
+    nbytes = i2c_zip(pi, handle, inbuf, m, cbuf, n);
   luaL_addlstring(&lbuf, cbuf, nbytes);
   free(cbuf);
   luaL_pushresult(&lbuf);
   return 1;
 }
+
+/*
+ * Lua binding: str = i2c:zip(cmdbuf, nbytes)
+ */
+int utlI2CZip(lua_State *L)
+{
+  return _utlI2CZip(L, 0);
+}
+
+/*
+ * Lua binding: str = i2c:zip(cmdbuf, nbytes)
+ */
+int utlI2CbbZip(lua_State *L)
+{
+  return _utlI2CZip(L, 1);
+}
+
 
 struct eventstat *get_event_statistics(void)
 {
@@ -776,9 +793,9 @@ int utlSPIRead(lua_State *L)
 }
 
 /*
- * Lua binding: str = spi:transfer(data)
+ * Lua binding: str = spi<bb>:transfer(data)
  */
-int utlSPITransfer(lua_State *L)
+static int _utlSPITransfer(lua_State *L, int bb)
 {
   int pi, n, nbytes;
   lua_Unsigned handle;
@@ -790,7 +807,10 @@ int utlSPITransfer(lua_State *L)
   n = (int) luaL_checkunsigned(L, 4);
   luaL_buffinit(L, &lbuf);
   rxbuf = malloc(n * sizeof(char));
-  nbytes = spi_xfer(pi, handle, txbuf, rxbuf, n);
+  if (bb == 1)
+    nbytes = bb_spi_xfer(pi, handle, txbuf, rxbuf, n);
+  else
+    nbytes = spi_xfer(pi, handle, txbuf, rxbuf, n);
   if (nbytes < 0){
     free(rxbuf);
     lua_pushnil(L);
@@ -804,30 +824,102 @@ int utlSPITransfer(lua_State *L)
 }
 
 /*
+ * Lua binding: str = spi:transfer(data)
+ */
+int utlSPITransfer(lua_State *L)
+{
+  return _utlSPITransfer(L, 0);
+}
+
+/*
  * Lua binding: str = spibb:transfer(data)
  */
 int utlSPIbbTransfer(lua_State *L)
 {
+  return _utlSPITransfer(L, 1);
+}
+
+/*
+ * Lua binding: str = file:read(n)
+ */
+int utlFileRead(lua_State *L)
+{
   int pi, n, nbytes;
   lua_Unsigned handle;
   luaL_Buffer lbuf;
-  char *rxbuf, *txbuf;
+  char *cbuf;
   pi = luaL_checkint(L, 1);
   handle = luaL_checkunsigned(L, 2);
-  txbuf = (char *)luaL_checkstring(L, 3);
-  n = (int) luaL_checkunsigned(L, 4);
+  n = (int) luaL_checkunsigned(L, 3);
   luaL_buffinit(L, &lbuf);
-  rxbuf = malloc(n * sizeof(char));
-  nbytes = bb_spi_xfer(pi, handle, txbuf, rxbuf, n);
+  cbuf = malloc(n * sizeof(char));
+  nbytes = file_read(pi, handle, cbuf, n);
   if (nbytes < 0){
-    free(rxbuf);
+    free(cbuf);
     lua_pushnil(L);
     lua_pushnumber(L, nbytes);
     return 2;
   }
-  luaL_addlstring(&lbuf, rxbuf, nbytes);
-  free(rxbuf);
+  luaL_addlstring(&lbuf, cbuf, nbytes);
+  free(cbuf);
+  luaL_pushresult(&lbuf);
+  return 1;
+}
+
+/*
+ * Lua binding: files = session:listFiles(pattern)
+ */
+int utlFileList(lua_State *L)
+{
+  int pi, n = LIST_FILE_BUFSIZE, nbytes;
+  luaL_Buffer lbuf;
+  char *cbuf, *pattern;
+  pi = luaL_checkint(L, 1);
+  pattern = (char *)luaL_checkstring(L, 2);
+  luaL_buffinit(L, &lbuf);
+  cbuf = malloc(n * sizeof(char));
+  nbytes = file_list(pi, pattern, cbuf, n);
+  if (nbytes < 0){
+    free(cbuf);
+    lua_pushnil(L);
+    lua_pushnumber(L, nbytes);
+    return 2;
+  }
+  luaL_addlstring(&lbuf, cbuf, nbytes);
+  free(cbuf);
   luaL_pushresult(&lbuf);
   return 1;  
+}
+
+/*
+ * Lua binding: str = i2cslv:transfer(address, txdata, txbytes)
+ * xbuf.control: not relevant for bsc_i2c().
+ * 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+ *  a  a  a  a  a  a  a  -  - IT HC TF IR RE TE BK EC ES PL PH I2 SP EN
+ */
+int utlI2CSlaveTransfer(lua_State *L)
+{
+  int pi, address, status;
+  luaL_Buffer lbuf;
+  bsc_xfer_t xbuf;
+  char *txbuf;
+  
+  pi = luaL_checkint(L, 1);
+  address = (int)luaL_checkinteger(L, 2);
+  txbuf = (char *)luaL_checkstring(L, 3);
+  xbuf.txCnt = (int) luaL_checkunsigned(L, 4);
+  memcpy(xbuf.txBuf, txbuf, xbuf.txCnt);
+  luaL_buffinit(L, &lbuf);
+  /* Note: xbuf.control not required for bsc_i2c */
+  status = bsc_i2c(pi, address, &xbuf);
+  if (status < 0){
+    lua_pushnil(L);
+    lua_pushnumber(L, status);
+    return 2;
+  }
+  luaL_addlstring(&lbuf, xbuf.rxBuf, xbuf.rxCnt);
+  luaL_pushresult(&lbuf);
+  luaL_pushnumber(L, status);
+  return 2;  
 }
 
