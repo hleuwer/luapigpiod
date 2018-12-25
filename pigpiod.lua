@@ -949,13 +949,13 @@ end
 function cI2CSlave.convertStatus(self, status)
    return {
       ncopy = bit32.rshift(status, 16),
-      nrx = bit32.band(bit32.rshift(status, 11), 0x1f)
-      ntx = bit32.band(bit32.rshift(status, 6), 0x1f)
-      rxbusy = bit32.band(status, 0x20) > 0
-      txbusy = bit32.band(status, 0x01) > 0
-      rxempty = bit32.band(status, 0x02) > 0
-      txempty = bit32.band(status, 0x10) > 0
-      rxfull = bit32.band(status, 0x08) > 0
+      nrx = bit32.band(bit32.rshift(status, 11), 0x1f),
+      ntx = bit32.band(bit32.rshift(status, 6), 0x1f),
+      rxbusy = bit32.band(status, 0x20) > 0,
+      txbusy = bit32.band(status, 0x01) > 0,
+      rxempty = bit32.band(status, 0x02) > 0,
+      txempty = bit32.band(status, 0x10) > 0,
+      rxfull = bit32.band(status, 0x08) > 0,
       txfull = bit32.band(status, 0x04) > 0
    }
 end

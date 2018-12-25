@@ -919,7 +919,7 @@ int utlI2CSlaveTransfer(lua_State *L)
   }
   luaL_addlstring(&lbuf, xbuf.rxBuf, xbuf.rxCnt);
   luaL_pushresult(&lbuf);
-  luaL_pushnumber(L, status);
+  lua_pushnumber(L, status);
   return 2;  
 }
 
