@@ -929,7 +929,7 @@ function cI2CSlave.transfer(self, data)
    if not rdata then
       return nil, perror(status)
    end
-   return rdata, tstatus, status
+   return rdata, status
 end
 
 ---
@@ -948,7 +948,7 @@ end
 -- @return Status as table.
 function cI2CSlave.convertStatus(self, status)
    return {
-      ncopy = bit32.rshift(status, 16),
+      ncopy = bit32.band(bit32.rshift(status, 16), 0x1f),
       nrx = bit32.band(bit32.rshift(status, 11), 0x1f),
       ntx = bit32.band(bit32.rshift(status, 6), 0x1f),
       rxbusy = bit32.band(status, 0x20) > 0,
@@ -1827,7 +1827,7 @@ cSession.openI2CSlave = function(self, address, name)
    end
    slv.address = address
    slv.handle = 0
-   slv.pihandle = self
+   slv.pihandle = self.handle
    setmetatable(slv, {
                    __index = cI2CSlave,
                    __gc = function(self) self:close() end
