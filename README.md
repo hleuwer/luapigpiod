@@ -52,13 +52,11 @@ Lua code to be executed in a thread must be passed as string to thread creation 
 
 ## Status
 
-The following 
-
 #### Not implemented: 
-* I2C and SPI slave
+* SPI slave
 
 #### Implemented but not tested
-* Event callbacks - I wasn't able to bring them to work (not a luapigpiod issue probably).
+* Event callbacks - I wasn't able to bring them to work (not a luapigpiod issue probably). Event 31 for I2C slave works fine.
 * serial read bit banging device
 * I2C bit banging device
 * Non default SPI modes using SpiFlags class

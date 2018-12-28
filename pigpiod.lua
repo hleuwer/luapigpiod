@@ -929,6 +929,7 @@ end
 --         status word (as table and number)  on success,
 --         nil + errormsg on failure.
 function cI2CSlave.transfer(self, data)
+   if data == nil then data = "" end
    local rdata, status = bsc_i2c(self.pihandle, self.address, data, #data)
    if not rdata then
       return nil, perror(status)

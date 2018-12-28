@@ -102,5 +102,24 @@ Assumption: cSPI.transfer() test proofs physical operation.
 ================================================================================
 Bit banging Serial
 ================================================================================
-Connectivity:
+Not tested.
+Usage is restricted in my view because only receive interface supported.
 
+================================================================================
+I2C Slave
+================================================================================
+Connectivity
+Signal  Master board    Slave Board
+SDA     Pin 3 GPIO 2    Pin 12 GPIO 18
+SCL     Pin 5 GPIO 3    Pin 34 GPIO 19
+
+Notes:
+Slave device has no notion of device registers. Hence, bytes designating
+a register in a master appears as normal receive data in the slave.
+Therefore: Use cI2C:readDevice() and cI2C:writeDevice() services in the master
+board when talking to a slave.
+
+The test shows missing receive data messages.
+Possible reason: Master is connected remotely. The execution may be thus be delayed
+and the corresponding slave transfer() (receive) call may appear before the
+master's send call in the remote board. This leads to an empty receive transfer.
