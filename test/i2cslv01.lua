@@ -14,14 +14,15 @@ local dev = sess:openI2CSlave(0x13,"myslave")
 
 while true do
    printf("Start slave transfer ...")
-   local rdata, status = dev:transfer("ab")
+   local rdata, status = dev:transfer(string.char(0xa0, 0xa1, 0xa2, 0xa3, 0xa4))
    if rdata == nil then
       printf("ERROR: %s", status)
    else
       printf("len rdata: %d; status: 0x%04x", #rdata, status)
+      print(string.byte(rdata, 1, #rdata))
+      local t = dev:convertStatus(status)
+      printf("status: %s", pretty.write(t))
    end
-   local t = dev:convertStatus(status)
-   printf("status: %s", pretty.write(t))
    io.stdout:write("Hit return ...")
    s = io.stdin:read("*l")
    if s == "exit" then break end

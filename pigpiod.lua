@@ -639,7 +639,11 @@ end
 -- @param nbytes Number of bytes to be read.
 -- @return Lua string with read data.
 function cI2C.readDevice(self, nbytes)
-   return tryV(i2c_read_device(self.pihandle, self.handle))
+   local res, errno = i2c_read_device(self.pihandle, self.handle, nbytes)
+   if not res then
+      return nil, perror(errno)
+   end
+   return res
 end
 
 ---
@@ -948,7 +952,7 @@ end
 -- @return Status as table.
 function cI2CSlave.convertStatus(self, status)
    return {
-      ncopy = bit32.band(bit32.rshift(status, 16), 0x1f),
+      ntxcopy = bit32.band(bit32.rshift(status, 16), 0x1f),
       nrx = bit32.band(bit32.rshift(status, 11), 0x1f),
       ntx = bit32.band(bit32.rshift(status, 6), 0x1f),
       rxbusy = bit32.band(status, 0x20) > 0,
