@@ -65,7 +65,6 @@ uclean::
 	$(MAKE) clean
 	rm -f $(WRAPPER)
 	rm -rf makefile.deps
-	rm -f pigpiod_if2.h pigpio_const.h command.c
 
 install:: install-shell install-file
 	mkdir -p $(LUALIBDIR) && cp -f $(TARGET) $(LUALIBDIR)
