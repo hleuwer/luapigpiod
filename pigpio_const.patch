@@ -1,0 +1,33 @@
+378a379
+> #ifndef SWIG
+390a392,393
+> #endif /* no SWIG */
+> 
+395c398,400
+< typedef struct
+---
+> #ifndef SWIG
+> 
+>   typedef struct
+554c559,560
+< 
+---
+> #endif /* no SWIG */
+>   
+556d561
+< 
+915a921,922
+> #ifndef SWIG
+> 
+6058a6066,6068
+> #endif /* no SWIG */
+> 
+> #ifndef SWIG
+6260a6271,6273
+> #endif /* no SWIG */
+> 
+> #ifdef SWIG
+6445c6458
+< 
+---
+> #endif /* SWIG */

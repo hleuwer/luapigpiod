@@ -45,7 +45,11 @@
 }
 
 // Headers to parse
+#if SYSTEM == Darwin
+%include ../pigpio.git/pigpiod_if2.h
+#else
 %include /usr/local/include/pigpiod_if2.h
+#endif
 %include pigpio_const.h
 struct eventstat {
   unsigned long maxcount;

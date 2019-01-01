@@ -1,0 +1,6 @@
+34c34,36
+< 
+---
+> #if SYSTEM == Darwin
+> #define clock_nanosleep(clock_id, flags, req, rem) nanosleep(req, rem)
+> #endif
