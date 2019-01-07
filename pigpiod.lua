@@ -1137,7 +1137,7 @@ end
 -- @return Notifcation channel handle.
 cSession.openNotify = function(self)
    local notify = {}
-   notify.handle = notify_open(self.handle)
+   notify.handle = math.floor(notify_open(self.handle))
    notify.pihandle = self.handle
    if notify.handle < 0  then
       return nil, perror(notify.handle), notify.handle
@@ -1290,7 +1290,7 @@ cSession.openWave = function(self, waveform, name)
       end
    end
    -- 2. create waveform
-   wave.handle = wave_create(self.handle)
+   wave.handle = math.floor(wave_create(self.handle))
    if wave.handle < 0 then
       return nil, perror(wave.handle), wave.handle
    end
@@ -1437,7 +1437,7 @@ end
 -- @return Script object on success; nil + errormsg on failure.
 cSession.openScript = function(self, code)
    local script = {}
-   script.handle = store_script(self.handle, code)
+   script.handle = math.floor(store_script(self.handle, code))
    script.pihandle = self.handle
    if script.handle < 0 then
       return nil, perror(script.handle), script.handle
@@ -1587,7 +1587,7 @@ cSession.openSerial = function(self, baud, tty, name)
    local baud = baud or 9600
    local tty = tty or "/dev/serial0"
    local flags = 0
-   serial.handle = serial_open(self.handle, tty, baud, flags)
+   serial.handle = math.floor(serial_open(self.handle, tty, baud, flags))
    if serial.handle < 0 then
       return nil, perror(serial.handle)
    end
@@ -1614,7 +1614,7 @@ cSession.openI2C = function(self, bus, address, name)
    local flags = 0
    if bus < 0 then return nil, "invalid bus index." end
    if address < 0 or address > 0x7f then return nil, "invalid address." end
-   i2c.handle = i2c_open(self.handle, bus, address, flags)
+   i2c.handle = math.floor(i2c_open(self.handle, bus, address, flags))
    if i2c.handle < 0 then
       return nil, perror(i2c.handle)
    end
@@ -1668,7 +1668,7 @@ cSession.openSPI = function(self, spichannel, bitrate, flags, name)
    local spichannel = spichannel or 0
    local bitrate = bitrate or 32000
    local flags = flags or 0
-   spi.handle = spi_open(self.handle, spichannel, bitrate, flags)
+   spi.handle = math.floor(spi_open(self.handle, spichannel, bitrate, flags))
    if spi.handle < 0 then
       return nil, perror(spi.handle)
    end
@@ -1788,7 +1788,7 @@ end
 cSession.openFile = function(self, filename, mode, name)
    local file = {}
    local mode = mode or gpio.FILE_READ
-   file.handle = file_open(self.handle, filename, mode)
+   file.handle = math.floor(file_open(self.handle, filename, mode))
    if file.handle < 0 then
       return nil, perror(file.handle)
    end
@@ -1928,7 +1928,7 @@ function open(host, port, name)
    local sess = {}
    sess.host = tostring(host or "localhost")
    sess.port = tostring(port or 8888)
-   sess.handle = pigpio_start(sess.host, sess.port)
+   sess.handle = math.floor(pigpio_start(sess.host, sess.port))
    if sess.handle < 0 then
       return nil, perror(sess.handle), sess.handle
    end

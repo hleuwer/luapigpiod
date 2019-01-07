@@ -233,7 +233,7 @@ int utlWaveAddGeneric(lua_State *L)
   int res, i, pi, n;
   gpioPulse_t *pulses;
 
-  pi = luaL_checkint(L, 1);
+  pi = (int) luaL_checkinteger(L, 1);
   
   if (!lua_istable(L, 2)){
     luaL_error(L, "Table expected as arg %d 'pulses', received %s.", 2,
@@ -289,8 +289,8 @@ static uint32_t *get_params(lua_State *L, int arg, int *nparam)
 
 static void get_ids(lua_State *L, int arg, int *pi, int *id)
 {
-  *pi = luaL_checkint(L, arg);
-  *id = luaL_checkint(L, arg + 1);
+  *pi = (int) luaL_checkinteger(L, arg);
+  *id = (int) luaL_checkinteger(L, arg + 1);
 }
 /*
  * Lua binding: succ = runScript(pi, id, params)
@@ -489,7 +489,7 @@ int utlCallback(lua_State *L)
   callbackfuncEx_t *cbfunc;
   int pi, retval;
   
-  pi = luaL_checkint(L, 1);
+  pi = (int) luaL_checkinteger(L, 1);
   gpio = (int) get_numarg(L, 2, 0, MAX_CALLBACKS - 1);
   edge = get_numarg(L, 3, RISING_EDGE, EITHER_EDGE);
   if (lua_isfunction(L, 4) == 0){
@@ -537,7 +537,7 @@ int utlEventCallback(lua_State *L)
   unsigned int event;
   eventcallbackfuncEx_t *cbfunc;
 
-  pi = luaL_checkint(L, 1);
+  pi = (int) luaL_checkinteger(L, 1);
   event = get_numarg(L, 2, 0, MAX_EVENTCALLBACKS - 1);
   if (lua_isfunction(L, 3) == 0){
     luaL_error(L, "Function expected as arg 2, received %s.", lua_typename(L, lua_type(L, 2)));
@@ -570,9 +570,9 @@ static int _utlSerialRead(lua_State *L, int bb)
   lua_Unsigned handle;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  n = (int) luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  n = (int) luaL_checkinteger(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
   if (bb == 1)
@@ -616,9 +616,9 @@ int utlI2CReadBlockData(lua_State *L)
   lua_Unsigned handle, reg;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  reg = luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  reg = (lua_Unsigned) luaL_checkinteger(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(32 * sizeof(char));
   nbytes = i2c_read_block_data(pi, handle, reg, cbuf);
@@ -644,9 +644,9 @@ int utlI2CBlockProcessCall(lua_State *L)
   luaL_Buffer lbuf;
   char *cbuf;
   const char *instr;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  reg = luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  reg = (lua_Unsigned) luaL_checkinteger(L, 3);
   instr = luaL_checkstring(L, 4);
   n = luaL_len(L, 4);
   luaL_buffinit(L, &lbuf);
@@ -668,10 +668,10 @@ int utlI2CReadI2CBlockData(lua_State *L)
   lua_Unsigned handle, reg;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  reg = luaL_checkunsigned(L, 3);
-  n = (int) luaL_checkunsigned(L, 4);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  reg = (lua_Unsigned) luaL_checkinteger(L, 3);
+  n = (int) luaL_checkinteger(L, 4);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(32 * sizeof(char));
   nbytes = i2c_read_i2c_block_data(pi, handle, reg, cbuf, n);
@@ -696,9 +696,9 @@ int utlI2CReadDevice(lua_State *L)
   lua_Unsigned handle;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  n = (int) luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  n = (int) luaL_checkinteger(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
   nbytes = i2c_read_device(pi, handle, cbuf, n);
@@ -724,11 +724,11 @@ static int _utlI2CZip(lua_State *L, int bb)
   luaL_Buffer lbuf;
   char *inbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
   inbuf = (char *) luaL_checkstring(L, 3);
   m = luaL_len(L, 3);
-  n = (int) luaL_checkunsigned(L, 4);
+  n = (int) luaL_checkinteger(L, 4);
   cbuf = malloc(n * sizeof(char));
   if (bb == 1)
     nbytes = bb_i2c_zip(pi, handle, inbuf, m, cbuf, n);
@@ -780,9 +780,9 @@ int utlSPIRead(lua_State *L)
   lua_Unsigned handle;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  n = (int) luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  n = (int) luaL_checkinteger(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
   nbytes = spi_read(pi, handle, cbuf, n);
@@ -807,10 +807,10 @@ static int _utlSPITransfer(lua_State *L, int bb)
   lua_Unsigned handle;
   luaL_Buffer lbuf;
   char *rxbuf, *txbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
   txbuf = (char *)luaL_checkstring(L, 3);
-  n = (int) luaL_checkunsigned(L, 4);
+  n = (int) luaL_checkinteger(L, 4);
   luaL_buffinit(L, &lbuf);
   rxbuf = malloc(n * sizeof(char));
   if (bb == 1)
@@ -854,9 +854,9 @@ int utlFileRead(lua_State *L)
   lua_Unsigned handle;
   luaL_Buffer lbuf;
   char *cbuf;
-  pi = luaL_checkint(L, 1);
-  handle = luaL_checkunsigned(L, 2);
-  n = (int) luaL_checkunsigned(L, 3);
+  pi = (int) luaL_checkinteger(L, 1);
+  handle = (lua_Unsigned) luaL_checkinteger(L, 2);
+  n = (int) luaL_checkinteger(L, 3);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
   nbytes = file_read(pi, handle, cbuf, n);
@@ -880,7 +880,7 @@ int utlFileList(lua_State *L)
   int pi, n = LIST_FILE_BUFSIZE, nbytes;
   luaL_Buffer lbuf;
   char *cbuf, *pattern;
-  pi = luaL_checkint(L, 1);
+  pi = (int) luaL_checkinteger(L, 1);
   pattern = (char *)luaL_checkstring(L, 2);
   luaL_buffinit(L, &lbuf);
   cbuf = malloc(n * sizeof(char));
@@ -910,10 +910,10 @@ int utlI2CSlaveTransfer(lua_State *L)
   bsc_xfer_t xbuf;
   char *txbuf;
   
-  pi = luaL_checkint(L, 1);
-  address = (int)luaL_checkinteger(L, 2);
+  pi = (int) luaL_checkinteger(L, 1);
+  address = (int) luaL_checkinteger(L, 2);
   txbuf = (char *)luaL_checkstring(L, 3);
-  xbuf.txCnt = (int) luaL_checkunsigned(L, 4);
+  xbuf.txCnt = (int) luaL_checkinteger(L, 4);
   memcpy(xbuf.txBuf, txbuf, xbuf.txCnt);
   luaL_buffinit(L, &lbuf);
   /* Note: xbuf.control not required for bsc_i2c */

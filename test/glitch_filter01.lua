@@ -25,7 +25,7 @@ local function alert(pi, pin, level, tick)
    local tsnd = tick
    local tdel = trcv - tsnd
    local tper = tick - last_tick
-   printf("ALERT callback %d: tsnd=%d us, trcv=%d us, tdel=%d us, tper=%d us, gpio=%d (ok=%s), level=%d gc=%.1f (%d)",
+   printf("ALERT callback %d: tsnd=%d us, trcv=%d us, tdel=%d us, tper=%d us, gpio=%d (ok=%s), level=%d gc=%.1f",
           cbcnt, tsnd, trcv, tdel, tper, pin, tostring(pin==pinp), level, collectgarbage("count"))
    if level == last_level then
       printf("   NOTE: level change not detected - input frequency probably too high!")

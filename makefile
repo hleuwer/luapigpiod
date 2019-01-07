@@ -6,7 +6,7 @@ OBJS 	= $(WOBJS)
 HDRS    = pigpiod_if2.h pigpio_const.h
 OPT     = -ggdb
 CFLAGS	= -DSYSTEM='$(SYSTEM)' $(OPT) -Wall -c -fPIC
-LUAV	= 5.2
+LUAV	= 5.3
 ifeq ($(SYSTEM), Darwin)
   PIGPIODIR = ../pigpio.git
   INC	= -I/usr/local/include/lua/$(LUAV) -I/usr/local/include -I../pigpio.git
